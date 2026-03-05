@@ -1,14 +1,48 @@
-# Physical Fitness & Training Web App (COMP2850)
+# Physical Fitness & Training Web Application
 
-## Project Overview
-A web application for tracking physical exercise, planning workouts, viewing training statistics and recording race participation/result. Built as a group project for COMP2850 Software Engineering (University of Leeds)
+This project is developed for the COMP2850 Software Engineering module at the University of Leeds.
 
-## Technologies Used
+The system is a web application that allows users to track and monitor their physical exercise activities. It is designed to support both casual users who want to maintain a healthy lifestyle and competitive users training for events such as races.
 
-## Project Documentation (at Wiki)
+## Features
+
+The application is planned to support the following core features:
+
+- User registration and login
+- Logging physical activities (running, cycling, gym, etc.)
+- Viewing activity history
+- Tracking planned workouts
+- Viewing exercise statistics
+- Recording race participation and results
+
+## Project Structure
+
+The project is organised using GitHub tools:
+
+- **Wiki** – Project documentation including requirements, wireframes, system design, and testing plan.
+- **Project Board** – Kanban board used to manage development tasks.
+- **Issues** – Used to track individual tasks and features.
+
+## Technologies
+
+The final technology stack is still being confirmed, but the system will include:
+
+- Backend web framework
+- Relational database
+- HTML/CSS frontend interface
+- GitHub for version control and project management
 
 ## Team Members
 
+- Omar  
+- Ben  
+- Justin  
+- Ibrahim  
+- Safyan  
+
+## Documentation
+
+Detailed documentation for the project can be found in the GitHub Wiki.
 
 
 
