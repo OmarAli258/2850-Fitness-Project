@@ -35,7 +35,7 @@ def login_submit():
     # Correct - save to session so they stay logged in
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
-    return redirect("/dashboard")
+    return redirect("/login")
 
 
 # -------------------------------------------------------
@@ -131,7 +131,6 @@ def login_form(error=None):
 
                 <!-- Header -->
                 <div class="auth-header">
-                    <span class="auth-logo">⚡</span>
                     <h1>Welcome back</h1>
                     <p class="auth-sub">Log in to track your training.</p>
                 </div>
@@ -188,8 +187,7 @@ def signup_form(error=None, prefill_name="", prefill_email=""):
             <div class="auth-card">
 
                 <!-- Header -->
-                <div class="auth-header">
-                    <span class="auth-logo">⚡</span>
+                <div class="auth-header">=
                     <h1>Create account</h1>
                     <p class="auth-sub">Start tracking your fitness today.</p>
                 </div>
