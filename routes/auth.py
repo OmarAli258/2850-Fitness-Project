@@ -187,7 +187,7 @@ def signup_form(error=None, prefill_name="", prefill_email=""):
             <div class="auth-card">
 
                 <!-- Header -->
-                <div class="auth-header">=
+                <div class="auth-header">
                     <h1>Create account</h1>
                     <p class="auth-sub">Start tracking your fitness today.</p>
                 </div>
