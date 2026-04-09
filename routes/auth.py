@@ -35,7 +35,7 @@ def login_submit():
     # Correct - save to session so they stay logged in
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
-    return redirect("/login")
+    return redirect("/dashboard")
 
 
 # -------------------------------------------------------

@@ -157,3 +157,65 @@ h1 {
     color: var(--accent);
     font-weight: 600;
 }
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 5%;
+    background: rgba(13, 13, 15, 0.85);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+}
+
+.nav-brand a {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--text);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--border);
+}
+
+.btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Stat cards */
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.stat-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.stat-value { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+.stat-label { font-size: 0.85rem; font-weight: 600; }
+.stat-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+/* Footer */
+.site-footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 5%;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
