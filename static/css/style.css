@@ -80,3 +80,47 @@ nav ul a:hover {
     border: 2px solid var(--yellow);
     color: var(--yellow);
 }
+.banner{
+    background: #222222;
+    color: #f5c518;
+    font-family: 'Rubik Storm', sans-serif;
+    padding: 2rem;
+    width: 50%;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    text-align: center
+    ; 
+}
+.activities{ 
+    display: flex;
+}
+.activitesRight{ 
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+.activitiesLeft{
+    width: 70%;
+}
+.activitybtn{
+    background: #f5c518;
+    padding: 0.8rem;
+    border-radius: 6px;
+    color: #000000; 
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+.exerciseCards{
+    display: flex; 
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 1rem 5%;
+}
+.exerciseCard img{
+    width: 400px;
+    height: 300px
+}
