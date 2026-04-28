@@ -1,16 +1,16 @@
-from flask import Blueprint, session, redirect
+from flask import Blueprint, session, redirect, render_template
 
 dashboard = Blueprint("dashboard", __name__)
 
 
 @dashboard.route("/dashboard")
 def show_dashboard():
-    # If the user is not logged in, send them to the login page
     if "user_id" not in session:
         return redirect("/login")
 
-    # Get the user's name from the session
     user_name = session.get("user_name", "User")
+
+    return render_template("dashboard.html", user_name=user_name)
 
     return f"""
     <!DOCTYPE html>
