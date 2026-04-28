@@ -14,8 +14,6 @@ app.register_blueprint(races)
 
 @app.route("/")
 def home():
-    if "user_id" in session:
-        return redirect("/dashboard")
 
     return render_template("home.html")
 
