@@ -196,6 +196,24 @@ nav ul a:hover {
     background: #f5c518;
     border-radius: 999px;
 }
+/* Dashboard header */
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 5%;
+    border-bottom: 1px solid var(--border);
+}
+
+.dash-header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.dash-header p {
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+}
 /* The search bar stuff*/
 .searchbar{
     padding: 1.5rem 5%;
@@ -218,15 +236,21 @@ nav ul a:hover {
     cursor: pointer;
 }
 /* recent activity area*/
-.recentActivity{
+.recentActivity {
     display: flex;
-    padding: 0.5rem 5%;
+    padding: 1rem 5%;
+    gap: 2rem;
+    margin-top: 0;
+    align-items: flex-start;
 }
 .activityLeft{
-    width: 50%;
+    width: 70%;
+}
+.activityLeft h2 {
+    margin-bottom: 1rem;
 }
 .activityRight{
-    width: 70%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -287,47 +311,67 @@ nav ul a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    align-self: center;
 }
 /* The stats section*/
 
-.stats{
-    display: flex;
-    padding: 0.5rem 2%;
-}
-.statsLeft{
-    width: 50%
-}
-.statsLeft h2 {
-    padding: 0 5%;
-}
-.statsRight{
-    display: none;
-    width: 50%;
-    padding 3rem 10%;
-    border: 3px solid var(--border);
-    border-radius: 8px;
+/* Statsrow */
+.statsRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 2rem 5%;
 }
 
-.statsRight.active {
-    display: flex;
-}
-.statspage{
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-.statscard{
+.statscard {
     background: var(--card);
     padding: 1.5rem;
     border-radius: 8px;
     border: 2px solid var(--border);
-    cursor: pointer; 
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: border-color 0.2s;
 }
+
 .statscard:hover {
     border-color: var(--yellow);
 }
-#chart{width: 100% !important; height: 300px !important;}
+
+.stat-icon { font-size: 1.5rem; }
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--yellow);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Chart stuff */
+#chartArea {
+    display: none;
+    padding: 1rem 5%;
+    margin: 0 5%;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    max-height: 400px;
+}
+
+#chartArea.active {
+    display: block;
+}
+
+#chart {
+    width: 100% !important;
+    height: 350px !important;
+    max-height: 350px !important;
+}
 
 /* Racetracker*/
 .racetracker{

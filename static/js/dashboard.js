@@ -46,7 +46,7 @@ function showchart(type){
         currentchart.destroy()
         currentchart = null
         currenttype = null
-        document.querySelector('.statsRight').classList.remove('active')
+        document.querySelector('#chartArea').classList.remove('active')
         return
     }
     if (currentchart != null) {
@@ -98,6 +98,6 @@ function showchart(type){
             }]
         }
     })
-    document.querySelector('.statsRight').classList.add('active')
+    document.querySelector('#chartArea').classList.add('active')
     currenttype=type
 }
