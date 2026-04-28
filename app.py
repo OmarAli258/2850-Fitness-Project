@@ -13,8 +13,6 @@ app.register_blueprint(dashboard)
 
 @app.route("/")
 def home():
-    if "user_id" in session:
-        return redirect("/dashboard")
 
     return render_template("home.html")
 
