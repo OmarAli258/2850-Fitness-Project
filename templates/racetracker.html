@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Racetracker</title>
+</head>
+<body>
+    <nav>
+        <a href="/">FitTrack</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/activities">Activities</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/racetracker">Racetracker</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="racetracker">
+            <h1>Racetracker</h1> 
+            <a href="/addrace" class="btn btna">+ Add Race</a>
+        </div>
+        <section class="upcomingraces">
+            <h2>Upcoming Races</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Length</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Running</th>
+                        <td>Leeds</td>
+                        <td>10th May</td>
+                        <td>10K</td>
+                        <td><a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                    </tr>
+                    <tr>
+                        <td>Swimming</td>
+                        <td>Leeds</td>
+                        <td>17th May</td>
+                        <td>5K</td>
+                        <td><a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                    </tr>
+                    <tr>
+                        <td>Cycling</td>
+                        <td>Leeds</td>
+                        <td>10th May</td>
+                        <td>15K</td>
+                        <td><a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>  
+        <section class="pastraces">
+            <h2>Past Races</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sport</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Length</th>
+                        <th>Time</th>
+                        <th>Record</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Running</td>
+                        <td>Leeds</td>
+                        <td>5th April</td>
+                        <td>10k</td>
+                        <td>50m</td>
+                        <td></td>
+                        <td> <a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                    </tr>
+                    <tr class="pbrow">
+                        <td>Swimming</td>
+                        <td>London</td>
+                        <td>1st April</td>
+                        <td>10k</td>
+                        <td>150m</td>
+                        <td class="pbcol">🥇 PB</td>
+                        <td> <a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                    </tr>
+                    <tr>
+                        <td>Running</td>
+                        <td>Manchester</td>
+                        <td>28th March</td>
+                        <td>10k</td>
+                        <td>55m</td>
+                        <td></td>
+                        <td> <a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+
+</body>
+</html>

@@ -1,0 +1,376 @@
+:root {
+    --bg: #0a0a0a;
+    --yellow: #f5c518;
+    --text: #ffffff;
+    --text-muted: #888888;
+    --card: #111111;
+    --border: #222222;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    border-bottom: 1px solid var(--border);
+}
+
+nav a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+nav ul a:hover {
+    color: var(--yellow);
+}
+.hero {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    gap: 0;
+    min-height: 90vh;
+}
+.hero-text {
+    width: 50%;
+    padding: 4rem 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.hero-image {
+    width: 50%;
+    height: 90vh;
+    overflow: hidden;
+    padding: 2rem;
+}
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.hero span {
+    color: var(--yellow);
+}
+
+.hero p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.btn {
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btna {
+    background: var(--yellow);
+    color: #0a0a0a;
+}
+
+.btna:hover { background: #d4a800; }
+
+.btnb {
+    border: 2px solid var(--yellow);
+    color: var(--yellow);
+    background: transparent;
+}
+
+.btnb:hover {
+    background: var(--yellow);
+    color: #0a0a0a;
+}
+
+/* banner segment*/
+.banner {
+    background: var(--card);
+    color: var(--yellow);
+    font-family: Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 1.2rem 5%;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+/* explore activites section*/
+.activities {
+    display: flex;
+    padding: 2rem 5%;
+}
+.activitesRight{ 
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+.activitesRight p {
+    font-size: 1rem;
+    font-weight: bold;
+}
+.activitiesLeft{
+    width: 70%;
+}
+.activitiesLeft h2{
+    padding: 0 3.5rem;
+
+}
+.activitybtn{
+    background: #f5c518;
+    padding: 0.8rem;
+    border-radius: 6px;
+    color: #000000; 
+    text-decoration: none;
+}
+/* the scrolling cards  */
+.exerciseCards{
+    display: flex; 
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 1rem 5%;
+    gap: 1rem;
+}
+.exerciseCard{
+    border-radius: 6px;
+    background: var(--card);
+    border: 3px solid var(--border);
+}
+.exerciseCard img{
+        width: 300px;
+        height: 200px;
+        object-fit: cover;
+}
+
+.exerciseCard p{
+    color: #f5c518;
+    padding: 0 0.5rem;
+    font-weight: bold;
+}
+.exerciseCards::-webkit-scrollbar{
+    height: 6px;
+}
+.exerciseCards::-webkit-scrollbar-track{
+    background: var(--border);
+}
+.exerciseCards::-webkit-scrollbar-thumb{
+    background: #f5c518;
+    border-radius: 999px;
+}
+/* The search bar stuff*/
+.searchbar{
+    padding: 1.5rem 5%;
+    background: var(--bg);
+    width: 100%;
+    display: flex;
+}
+.searchbar input{
+    background: var(--card);
+    width: 500px;
+    border: 1px solid var(--yellow);
+    border-radius: 8px 0 0 8px;
+    padding: 0.5rem;
+    color: var(--text)
+}
+.searchbar button{
+    padding: 0.5rem;
+    background: var(--yellow);
+    border-radius:  0 8px 8px 0;
+    cursor: pointer;
+}
+/* recent activity area*/
+.recentActivity{
+    display: flex;
+    padding: 0.5rem 5%;
+}
+.activityLeft{
+    width: 50%;
+}
+.activityRight{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.recentCard img{
+    width: 400px;
+    height: 300px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+.recentfooter p{
+    font-size: 1.3rem;
+
+}
+.recentfooter{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    
+}
+.recentfooter a{
+    color: var(--yellow);
+    cursor: pointer; 
+    font-size: 1rem;
+}
+.recentCard {
+    display: none;
+}
+
+.recentCard.active {
+    display: block;
+}
+.carousel{
+    display: flex;
+    width: 400px;
+}
+.carouselbtn{
+    background: var(--yellow);
+    border: none;
+    color:#000000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+}
+.carouselbtn:hover {
+    background: var(--bg);
+    color: var(--yellow);
+    border: 2px solid var(--yellow);
+}
+.carouselall{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+/* The stats section*/
+
+.stats{
+    display: flex;
+    padding: 0.5rem 2%;
+}
+.statsLeft{
+    width: 50%
+}
+.statsLeft h2 {
+    padding: 0 5%;
+}
+.statsRight{
+    display: none;
+    width: 50%;
+    padding 3rem 10%;
+    border: 3px solid var(--border);
+    border-radius: 8px;
+}
+
+.statsRight.active {
+    display: flex;
+}
+.statspage{
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.statscard{
+    background: var(--card);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    cursor: pointer; 
+}
+.statscard:hover {
+    border-color: var(--yellow);
+}
+#chart{width: 100% !important; height: 300px !important;}
+
+/* Racetracker*/
+.racetracker{
+    padding: 3rem;
+    display: flex;
+    gap: 5rem;
+}
+.upcomingraces, .pastraces{
+    padding: 2rem 5%;
+    border: 3px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    width: 70%;
+    margin: 1rem 2%
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+th{
+    color: var(--yellow);
+}
+td{
+    text-align: center;
+}
+.pbrow{
+    background: rgb(198, 198, 20);
+}
+.deletebtn {
+    background: rgba(162, 10, 10, 0.15);
+    color: #ff4d4d;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.deletebtn:hover {
+    background: #ff4d4d;
+    color: white;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <nav>
+        <a href="/">FitTrack</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/activities">Activities</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/racetracker">Racetracker</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section class="searchbar">
+            <input type="text" placeholder="Search">
+            <button>Search</button>
+        </section>
+        <section class="recentActivity">
+            <div class="activityLeft">
+                <h2>Recent Activity</h2>
+                <div class="carouselall">
+                    <button class="carouselbtn" id="previous"><</button>
+                    <div class="carousel">
+                        <div class="recentCard active">
+                            <h3>🏃 Running</h3>
+                            <img src="/static/images/Pic1.jpg"> 
+                            <div class='recentfooter'>
+                                <p>10th April| 30 min | 3km</p>
+                                <a href="/activity/1">See more</a>
+                            </div>
+                        </div>
+                        <div class="recentCard">
+                            <h3>🏊 Swimming </h3>
+                            <img src="/static/images/Pic2.jpg"> 
+                            <div class='recentfooter'>
+                                <p>10th April| 20 min | 2km</p>
+                                <a href="/activity/2">See more</a>
+                            </div>
+                        </div>
+                        <div class="recentCard">
+                            <h3>🏃 Running</h3>
+                            <img src="/static/images/Pic1.jpg"> 
+                            <div class="recentfooter">
+                                <p>9th April| 30 min | 3km</p>
+                                <a href="/activity/3">See more</a>
+                            </div>
+                        </div>
+                        <div class="recentCard">
+                            <h3>🏋️ Weightlifting</h3>
+                            <img src="/static/images/Pic5.jpg"> 
+                            <div class="recentfooter">
+                                <p>8th April| 1:30 min | 15sets </p>
+                                <a href="/activity/4">See more</a>
+                            </div> 
+                        </div>
+                    </div>
+                    <button class="carouselbtn" id="next">></button>
+                </div>
+            </div>
+            <div class="activityRight">
+                <h2>View All Activities</h2>
+                <a href="/activities" class="btn btna">View All</a>
+            </div>
+        </section>
+    <section class="stats">
+        <div class="statsLeft">
+            <h2>Statistics</h2>
+            <div class="statspage">
+                <div class="statscard" id="workouts">
+                    <h3>Total Workouts 🏃‍➡️</h3>
+                    <p>12(temp)</p>
+                </div>
+                <div class="statscard" id="time">
+                    <h3>Total Time 🕙</h3>
+                    <p>14:30h(temp)</p>
+                </div>
+                <div class="statscard" id="streak">
+                    <h3>Current Streak 🔥</h3>
+                    <p>14 days(Temp)</p>
+                </div>
+                <div class="statscard" id="favorite">
+                    <h3>Favorite Exercise</h3>
+                    <p>Swimming(temp)</p>
+                </div>
+            </div>
+        </div>
+        <div class="statsRight">
+            <canvas id="chart"></canvas>
+        </div>
+    </section>
+    </main>
+
+    <script src="/static/js/dashboard.js"> </script>
+</body>
+</html>
