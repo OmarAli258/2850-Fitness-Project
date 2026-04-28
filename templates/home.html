@@ -13,6 +13,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/activities">Activities</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/racetracker">Racetracker</a></li>
             <li><a href="/login">Login</a></li>
             <li><a href="/signup">Sign Up</a></li>
         </ul>
@@ -22,14 +23,21 @@
                 <p id="quotes">One Day Or Day One</p>
             </section>
             <section class="hero">
-                   <h1> <span>Your fitness journey</span></h1>
-                   <p> Track Workouts, develop new skills, level up.</p>
-                   <a href="/signup">SignUp</a>
-                   <a href="/login">Login</a>
-            </section> 
+                <div class="hero-text">
+                    <h1>Your fitness <span>journey</span></h1>
+                    <p>Track Workouts, develop new skills, level up.</p>
+                    <div class="hero-buttons">
+                        <a href="/signup" class="btn btna">Sign Up</a>
+                        <a href="/login" class="btn btnb">Login</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="/static/images/Hero.jpg" alt="Fitness">
+                </div>
+            </section>
             <section class="activities">
                 <div class="activitiesLeft">
-                    <h2>Explore Activites</h2>
+                    <h2>Explore Activities</h2>
                     <div class="exerciseCards" >
                         <div class="exerciseCard">
                             <img src="/static/images/Pic1.jpg" alt="Running">
@@ -59,11 +67,11 @@
                 </div>
                 <div class ="activitesRight">
                     <p>Track your workouts here</p>
-                    <a href="/log" class="activitybtn">Log Activity</a>
+                    <a href="/activities" class="activitybtn">Log Activity</a>
                 </div>
             </section>
     </main>
-    <script src="/static/js/main.js"></script>"
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
 
