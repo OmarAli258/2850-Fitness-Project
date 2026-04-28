@@ -33,4 +33,5 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/
+.vscode/__pycache__/
+*.pyc
