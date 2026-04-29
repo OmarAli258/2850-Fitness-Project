@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FitTrack | {{ heading }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <a href="/">FitTrack</a>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/activities">Activities</a></li>
+            <li><a href="/dashboard">Stats</a></li>
+            {% if session.get('user_id') %}
+            <li>
+                <form action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btnb" style="padding:0.6rem 1rem;">Logout</button>
+                </form>
+            </li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main class="auth-page">
+        <section class="auth-card">
+            <div class="auth-header">
+                <span class="auth-logo">FitTrack</span>
+                <h1>{{ heading }}</h1>
+                <p class="auth-sub">Save or update your workout details here.</p>
+            </div>
+
+            {% if error %}
+            <div class="auth-error">{{ error }}</div>
+            {% endif %}
+
+            <form action="{{ action }}" method="post" class="auth-form">
+                <label class="form-group">
+                    Activity Type
+                    <select name="activity_type">
+                        <option value="">Select one</option>
+                        {% for type in activity_types %}
+                        <option value="{{ type }}" {% if form_data.activity_type == type %}selected{% endif %}>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label class="form-group">
+                    Date
+                    <input type="date" name="date" value="{{ form_data.date }}">
+                </label>
+
+                <label class="form-group">
+                    Duration (minutes)
+                    <input type="text" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45">
+                </label>
+
+                <label class="form-group">
+                    Distance (optional)
+                    <input type="text" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5 km">
+                </label>
+
+                <label class="form-group">
+                    Notes (optional)
+                    <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
+                </label>
+
+                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                    <button class="btn btn-primary btn-full" type="submit">{{ submit_label }}</button>
+                    <a class="btn btn-ghost" href="/activities">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

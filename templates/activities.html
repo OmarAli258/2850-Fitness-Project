@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FitTrack | Activities</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <a href="/">FitTrack</a>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/activities">Activities</a></li>
+            <li><a href="/dashboard">Stats</a></li>
+            {% if session.get('user_id') %}
+            <li>
+                <form action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btnb" style="padding:0.6rem 1rem;">Logout</button>
+                </form>
+            </li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div style="padding: 1rem 5%;">
+        <span class="btn btnb" style="padding: 0.6rem 1rem; font-weight: 700;">Activities Page</span>
+    </div>
+
+    <main>
+        <section class="hero" style="padding: 3rem 5% 2rem; min-height: auto;">
+            <div class="hero-text" style="max-width: 680px;">
+                <h1>Activities</h1>
+                <p>Track your workouts here with search, filter and quick management tools.</p>
+            </div>
+            <a href="/activities/new" class="btn btna" style="margin-top: 1rem;">Log Activity</a>
+        </section>
+
+        <section style="padding: 0 5%; margin-bottom: 1.5rem; display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between;">
+            <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
+                <label style="display:flex; align-items:center; gap:0.75rem;">
+                    <span style="color: var(--text-muted);">Search:</span>
+                    <input type="text" name="search" form="activities-filter" placeholder="Search activities..." value="{{ search }}" style="padding:0.85rem 1rem; border-radius:12px; border:1px solid var(--border); background: var(--bg-card); color: var(--text); min-width:260px;">
+                </label>
+                <label style="display:flex; align-items:center; gap:0.75rem;">
+                    <span style="color: var(--text-muted);">Filter:</span>
+                    <select name="type" form="activities-filter" style="padding:0.85rem 1rem; border-radius:12px; border:1px solid var(--border); background: var(--bg-card); color: var(--text); min-width:170px;">
+                        <option value="">All</option>
+                        {% for type in activity_types %}
+                        <option value="{{ type }}" {% if filter_type == type %}selected{% endif %}>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+                <button class="btn btna" type="submit" form="activities-filter" style="padding:0.85rem 1.25rem;">Apply</button>
+                <a class="btn btnb" href="/activities" style="padding:0.85rem 1.25rem;">Clear</a>
+            </div>
+        </section>
+
+        <form id="activities-filter" action="/activities" method="get" style="display:none;"></form>
+
+        <section style="padding: 0 5%; margin-bottom: 3rem;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow-x:auto;">
+                <table style="min-width: 820px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left; padding-left: 1.2rem;">Date</th>
+                            <th>Type</th>
+                            <th>Duration</th>
+                            <th>Distance</th>
+                            <th>Edit</th>
+                            <th>Del</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if activities|length == 0 %}
+                        <tr>
+                            <td colspan="6" style="padding: 2rem; text-align:center; color: var(--text-muted);">No activities found. Add one using Log Activity.</td>
+                        </tr>
+                        {% else %}
+                        {% for activity in activities %}
+                        <tr>
+                            <td style="text-align:left; padding-left: 1.2rem;">{{ activity.date }}</td>
+                            <td>{{ activity.type }}</td>
+                            <td>{{ activity.duration }} min</td>
+                            <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
+                            <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
+                            <td>
+                                <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0; display:inline;">
+                                    <button type="submit" class="deletebtn" style="border:none; background:none; padding:0.5rem 0.9rem;">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
