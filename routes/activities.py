@@ -1,5 +1,6 @@
 from flask import Blueprint, request, session, redirect, render_template
 from data import activity_store
+from datetime import date
 
 activities = Blueprint("activities", __name__)
 
@@ -163,11 +164,24 @@ def show_activities():
         search=search or None,
     )
 
+    today_str = date.today().isoformat()
+    upcoming_activities = []
+    past_activities = []
+
+    for activity in activities_list:
+        activity_date = activity.get("date", "")
+        
+        if activity_date >= today_str:
+            upcoming_activities.append(activity)
+        else:
+            past_activities.append(activity)
+
     return render_template(
         "activities.html",
         user_name=user_name,
         activity_types=activity_store.ACTIVITY_TYPES,
-        activities=activities_list,
+        upcoming_activities=upcoming_activities,
+        past_activities=past_activities,
         summary=activity_store.get_activity_summary(session["user_id"]),
         filter_type=filter_type,
         search=search,
