@@ -5,7 +5,8 @@ import datetime
 activities = Blueprint("activities", __name__)
 
 
-@activities.route("/activities/new", methods=["GET"])
+@activities.route("/activities/create" \
+"", methods=["GET"])
 def show_activity_form():
     if "user_id" not in session:
         return redirect("/login")
@@ -13,7 +14,7 @@ def show_activity_form():
     return activity_form()
 
 
-@activities.route("/activities/new", methods=["POST"])
+@activities.route("/activities/create", methods=["POST"])
 def save_activity():
     if "user_id" not in session:
         return redirect("/login")
@@ -82,7 +83,7 @@ def edit_activity_form(activity, error=""):
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/racetracker">Racetracker</a></li>
                 <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Sign Up</a></li>
+                <li><a href="/signup">Sign up</a></li>
             </ul>
         </nav>
         <main style="padding: 2rem 5%; display: flex; justify-content: center; align-items: center; min-height: 80vh;">
@@ -290,7 +291,7 @@ def show_activities():
         <div class="empty-state">
             <h2>Log your first activity</h2>
             <p>Start tracking workouts, runs, and strength sessions to build your activity history.</p>
-            <a href="/activities/new" class="btn btna">Add an activity</a>
+            <a href="/activities/create" class="btn btna">Add an activity</a>
         </div>
         """
     else:
@@ -317,8 +318,8 @@ def show_activities():
                 <li><a href="/activities">Activities</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/racetracker">Racetracker</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Sign Up</a></li>
+                <li><a href="/login"></a></li>
+                <li><a href="/signup"></a></li>
             </ul>
         </nav>
         <main class="activities-page">
@@ -335,7 +336,7 @@ def show_activities():
                         </select>
                         <button type="submit" class="btn btn-ghost">Filter</button>
                     </form>
-                    <a href="/activities/new" class="btn btna">Log a new activity</a>
+                    <a href="/activities/create" class="btn btna">Log a new activity</a>
                 </div>
             </section>
             <section class="activities-summary">
@@ -382,8 +383,8 @@ def activity_form(error=""):
                 <li><a href="/activities">Activities</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/racetracker">Racetracker</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Sign Up</a></li>
+                <li><a href="/login"></a></li>
+                <li><a href="/signup"></a></li>
             </ul>
         </nav>
         <main style="padding: 2rem 5%; display: flex; justify-content: center; align-items: center; min-height: 80vh;">
@@ -393,7 +394,7 @@ def activity_form(error=""):
 
                 {error_html}
 
-                <form action="/activities/new" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
+                <form action="/activities/create" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <label for="activity_type" style="font-weight: bold;">Activity Type</label>
                         <select name="activity_type" id="activity_type" style="padding: 0.8rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text);">
