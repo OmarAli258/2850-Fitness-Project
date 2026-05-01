@@ -1,26 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FitTrack | {{ heading }}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+{% extends "base.html" %}
+
+{% block title %} | {{ heading }}{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="/static/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
-</head>
-<body>
-    <nav>
-        <a href="/">FitTrack</a>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/activities">Activities</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/racetracker">Racetracker</a></li>
-            {% if not session.get('user_id') %}
-            <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Sign Up</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+{% endblock %}
+
+{% block content %}
 
     <main class="auth-page">
         <section class="auth-card">
@@ -72,5 +58,4 @@
             </form>
         </section>
     </main>
-</body>
-</html>
+{% endblock %}
