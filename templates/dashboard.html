@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link href="/static/css/style.css" rel="stylesheet">
+{% extends "base.html" %}
+
+{% block title %} | Dashboard{% endblock %}
+
+{% block extra_head %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-<body>
-    <nav>
-        <a href="/">FitTrack</a>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/activities">Activities</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/racetracker">Racetracker</a></li>
-            {% if not session.get("user_id") %}
-            <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Sign Up</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+{% endblock %}
+
+{% block content %}
 <main>
     <section class="searchbar">
         <input type="text" placeholder="Search activities...">
@@ -109,9 +96,8 @@
         </div>
     </section>
 </main>
+{% endblock %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/static/js/dashboard.js"></script>
-    <script src="/static/js/dashboard.js"> </script>
-</body>
-</html>
+{% block scripts %}
+    <script src="/static/js/dashboard.js"></script>
+{% endblock %}
