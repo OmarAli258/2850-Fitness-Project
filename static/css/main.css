@@ -1,11 +1,11 @@
 :root {
-    --bg: #0d0d0f; 
-    --bg-card: #141417;
-    --bg-raised: #1a1a1f;
-    --border: #2a2a32;
-    --text: #e8e8ec;
-    --text-muted: #7a7a8a;
-    --accent: #c8f135;
+    --bg: #0a0a0a; 
+    --bg-card: #111111;
+    --bg-raised: #1a1a1a;
+    --border: #222222;
+    --text: #ffffff;
+    --text-muted: #888888;
+    --accent: #f5c518;
     --red: #ff4d4d;
     --radius: 12px;
     --radius-sm: 6px;
@@ -18,7 +18,7 @@
 }
 
 body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -58,7 +58,7 @@ a {
 }
 
 h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 1.8rem;
     font-weight: 800;
     margin-bottom: 0.4rem;
@@ -100,19 +100,23 @@ h1 {
 }
 
 /* Input fields */
-.form-group input {
+.form-group input,
+.form-group select,
+.form-group textarea {
     background: var(--bg-raised);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     padding: 0.65rem 0.9rem;
     width: 100%;
 }
 
 /* Input glows lime when clicked */
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
     border-color: var(--accent);
     outline: none;
 }
@@ -124,7 +128,7 @@ h1 {
     justify-content: center;
     padding: 0.65rem 1.4rem;
     border-radius: var(--radius-sm);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 0.9rem;
     border: 2px solid transparent;
@@ -133,12 +137,12 @@ h1 {
 
 .btn-primary {
     background: var(--accent);
-    color: #0d0d0f;
+    color: #0a0a0a;
     border-color: var(--accent);
 }
 
 .btn-primary:hover {
-    background: #a8d020;
+    background: #d4a800;
 }
 
 .btn-full {
@@ -178,7 +182,7 @@ h1 {
 }
 
 .nav-brand a {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 800;
     font-size: 1.3rem;
     color: var(--text);
@@ -207,7 +211,7 @@ h1 {
 }
 
 .stat-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
-.stat-value { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+.stat-value { font-family: 'Inter', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
 .stat-label { font-size: 0.85rem; font-weight: 600; }
 .stat-sub { font-size: 0.78rem; color: var(--text-muted); }
 

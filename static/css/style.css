@@ -16,7 +16,7 @@
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 nav {
@@ -24,24 +24,27 @@ nav {
     align-items: center;
     padding: 1rem 5%;
     border-bottom: 1px solid var(--border);
-    gap: 2rem;
 }
-.nav-brand {
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--yellow);
-    text-decoration: none;
-}
+
 nav a {
     color: var(--text);
     text-decoration: none;
+    letter-spacing: -0.5px;
 }
 
 nav ul {
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
     list-style: none;
     margin-left: auto
+}
+
+nav ul a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.05rem;
+    transition: color 0.2s ease;
 }
 
 nav ul a:hover {
@@ -133,7 +136,7 @@ nav ul a:hover {
 .banner {
     background: var(--card);
     color: var(--yellow);
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: 0.05em;
@@ -345,11 +348,12 @@ nav ul a:hover {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background-color 0.2s;
 }
 
 .statscard:hover {
     border-color: var(--yellow);
+    background-color: #2a2a2a;
 }
 
 .stat-icon { font-size: 1.5rem; }

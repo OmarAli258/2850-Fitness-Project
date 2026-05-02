@@ -1,30 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FitTrack | {{ heading }}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
-</head>
-<body>
-    <nav>
-        <a href="/">FitTrack</a>
-        <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/activities">Activities</a></li>
-            <li><a href="/dashboard">Stats</a></li>
-            {% if session.get('user_id') %}
-            <li>
-                <form action="/logout" method="post" style="display:inline;">
-                    <button type="submit" class="btn btnb" style="padding:0.6rem 1rem;">Logout</button>
-                </form>
-            </li>
-            {% else %}
-            <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Sign Up</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+{% extends "base.html" %}
+
+{% block title %} | {{ heading }}{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="/static/css/main.css">
+{% endblock %}
+
+{% block content %}
 
     <main class="auth-page">
         <section class="auth-card">
@@ -39,35 +21,42 @@
             {% endif %}
 
             <form action="{{ action }}" method="post" class="auth-form">
-                <label class="form-group">
-                    Activity Type
+                <div class="form-group">
+                    <label>Activity Type</label>
                     <select name="activity_type">
                         <option value="">Select one</option>
                         {% for type in activity_types %}
                         <option value="{{ type }}" {% if form_data.activity_type == type %}selected{% endif %}>{{ type }}</option>
                         {% endfor %}
                     </select>
-                </label>
+                </div>
 
-                <label class="form-group">
-                    Date
+                <div class="form-group">
+                    <label>Date</label>
                     <input type="date" name="date" value="{{ form_data.date }}">
-                </label>
+                </div>
 
-                <label class="form-group">
-                    Duration (minutes)
+                <div class="form-group">
+                    <label>Duration (minutes)</label>
                     <input type="text" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45">
-                </label>
+                </div>
 
+<<<<<<< HEAD
+                <div class="form-group">
+                    <label>Distance (optional)</label>
+                    <input type="text" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5 km">
+                </div>
+=======
                 <label class="form-group">
                     Distance (optional)
-                    <input type="text" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5 km">
+                    <input type="text" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5">
                 </label>
+>>>>>>> f6cda48 (Add SQlite database and real dashboard stats)
 
-                <label class="form-group">
-                    Notes (optional)
+                <div class="form-group">
+                    <label>Notes (optional)</label>
                     <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
-                </label>
+                </div>
 
                 <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                     <button class="btn btn-primary btn-full" type="submit">{{ submit_label }}</button>
@@ -76,5 +65,4 @@
             </form>
         </section>
     </main>
-</body>
-</html>
+{% endblock %}

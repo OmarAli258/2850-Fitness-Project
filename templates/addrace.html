@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav>
-        <a href="/"class="nav-brand"> FitTrack</a>
+        <a href="/" class="nav-brand">FitTrack</a>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/activities">Activities</a></li>
@@ -21,15 +21,20 @@
         <a href="/racetracker" class="btn btnb">← Back</a>
         <h1>Add Race</h1>
     </div>
+
+    {% if error %}
+    <div class="form-error">{{ error }}</div>
+    {% endif %}
+
     <div class="addrace-right">
-        <form method="POST" action="{{ url_for('races.addrace_post') }}" class="addrace-form"> 
+        <form method="POST" action="/addrace" class="addrace-form"> 
             <div class="formSection">
                 <p class="formLabel">RACE DETAILS</p>
                 
                 <div class="form-grid">
                     <div class="form-area">
-                        <label for="sport">Sport</label>
-                        <select id="sport" name="sport" required>
+                        <label for="name">Sport</label>
+                        <select id="name" name="name" required>
                             <option value="" disabled selected>Select a sport</option>
                             <option value="Running">Running</option>
                             <option value="Swimming">Swimming</option>
@@ -49,8 +54,17 @@
                     </div>
 
                     <div class="form-area">
-                        <label for="length">Length</label>
-                        <input type="text" id="length" name="length" placeholder="e.g. 10K" required>
+                        <label for="race_type">Length</label>
+                        <input type="text" id="race_type" name="race_type" placeholder="e.g. 10K" required>
+                    </div>
+
+                    <div class="form-area">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="" disabled selected>Upcoming or past?</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="past">Past</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -63,11 +77,11 @@
                         <label for="finish_time">Finish Time</label>
                         <input type="text" id="finish_time" name="finish_time" placeholder="e.g. 00:50:00">
                     </div>
+                </div>
 
-                    <div class="form-area checkbox-field">
-                        <input type="checkbox" id="is_pb" name="is_pb">
-                        <label for="is_pb">Mark as Personal Best</label>
-                    </div>
+                <div class="checkbox-field">
+                    <input type="checkbox" id="is_pb" name="is_pb">
+                    <label for="is_pb">Mark as Personal Best</label>
                 </div>
             </div>
 
@@ -78,7 +92,7 @@
         </form>
         <div class="movingpics">
             <img id="raceimg" src="/static/images/Pic1.jpg" alt="Sport">
-            <p class="race-img-label" id="race-label"> Your Sport</p>
+            <p class="race-img-label" id="race-label">Your Sport</p>
         </div>
     </div>
 </main>

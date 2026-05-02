@@ -1,4 +1,4 @@
-const sportInput = document.getElementById('sport');
+const sportInput = document.getElementById('name');
 const raceImg = document.getElementById('raceimg');
 const raceLabel = document.getElementById('race-label');
 
