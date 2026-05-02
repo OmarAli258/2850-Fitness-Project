@@ -24,6 +24,17 @@ nav {
     align-items: center;
     padding: 1rem 5%;
     border-bottom: 1px solid var(--border);
+    background-color: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--yellow);
+    gap: 2rem;
 }
 
 nav a {
@@ -435,7 +446,7 @@ td{
     background: #ff4d4d;
     color: white;
 }
-/*addraces css*\ 
+/*addraces css*/
 /* Add Race page */
 .addracehead {
     display: flex;

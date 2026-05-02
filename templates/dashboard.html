@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,7 @@
 </head>
 <body>
     <nav>
-        <a href="/"class="nav-brand"> FitTrack</a>
+        <a href="/" class="nav-brand">FitTrack</a>
         <form class="nav-search" method="GET" action="/dashboard">
             <input type="text" name="q" placeholder="Search activities...">
             <button type="submit">Search</button>
@@ -25,25 +24,8 @@
             {% endif %}
         </ul>
     </nav>
+
 <main> 
-=======
-{% extends "base.html" %}
-
-{% block title %} | Dashboard{% endblock %}
-
-{% block extra_head %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-{% endblock %}
-
-{% block content %}
-
-<main>
-    <form class="searchbar" action="/activities" method="get">
-        <input type="text" name="search" placeholder="Search activities...">
-        <button type="submit">Search</button>
-    </form>
-
->>>>>>> a2ed8bb322150c1bb9d06694a869e99190463fe8
     <section class="dash-header">
         <div>
             <h1>Welcome back, {{ user_name }} 👋</h1>
@@ -58,32 +40,16 @@
             <span class="stat-number">{{ summary.total_workouts }}</span>
             <span class="stat-label">Total Workouts</span>
         </div>
-
         <div class="statscard" id="time">
-<<<<<<< HEAD
-            <span class="stat-icon">⏰</span>
-            <span class="stat-number">14:30h</span>
-=======
             <span class="stat-icon">⏱️</span>
             <span class="stat-number">{{ summary.total_minutes }} min</span>
->>>>>>> a2ed8bb322150c1bb9d06694a869e99190463fe8
             <span class="stat-label">Total Time</span>
         </div>
-
         <div class="statscard" id="distance">
             <span class="stat-icon">📍</span>
             <span class="stat-number">{{ summary.total_distance }} km</span>
             <span class="stat-label">Total Distance</span>
         </div>
-<<<<<<< HEAD
-        <div class="statscard" id="races">
-            <span class="stat-icon">🏁</span>
-            <span class="stat-number">5</span>
-            <span class="stat-label">Completed Races</span>
-        </div>
-=======
-
->>>>>>> a2ed8bb322150c1bb9d06694a869e99190463fe8
         <div class="statscard" id="favorite">
             <span class="stat-icon">🏆</span>
             <span class="stat-number">{{ summary.favorite_activity }}</span>
@@ -101,8 +67,7 @@
 
             {% if recent_activities %}
             <div class="carouselall">
-                <button class="carouselbtn" id="previous" type="button">&lt;</button>
-
+                <button class="carouselbtn" id="previous" type="button"><</button>
                 <div class="carousel">
                     {% for activity in recent_activities %}
                     <div class="recentCard {% if loop.first %}active{% endif %}">
@@ -117,9 +82,7 @@
                         {% else %}
                             <img src="/static/images/Pic3.jpg" alt="Activity">
                         {% endif %}
-
                         <h3>{{ activity.type }}</h3>
-
                         <div class="recentfooter">
                             <p>
                                 {{ activity.date }} |
@@ -135,8 +98,7 @@
                     </div>
                     {% endfor %}
                 </div>
-
-                <button class="carouselbtn" id="next" type="button">&gt;</button>
+                <button class="carouselbtn" id="next" type="button">></button>
             </div>
             {% else %}
                 <p>No recent activities yet.</p>
@@ -153,5 +115,5 @@
 </main>
 
 <script src="/static/js/dashboard.js"></script>
-
-{% endblock %}
+</body>
+</html>
