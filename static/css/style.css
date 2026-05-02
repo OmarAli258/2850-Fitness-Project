@@ -81,7 +81,7 @@ nav ul a:hover {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 1rem;
 }
 .hero h1 {
     font-size: 4rem;
@@ -96,7 +96,7 @@ nav ul a:hover {
 .hero p {
     color: var(--text-muted);
     font-size: 1.1rem;
-    max-width: 500px;
+    max-width: 31.25rem;
 }
 
 .hero-buttons {
@@ -107,7 +107,7 @@ nav ul a:hover {
 
 .btn {
     padding: 0.8rem 2rem;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     text-decoration: none;
     font-weight: 700;
 }
@@ -172,7 +172,7 @@ nav ul a:hover {
 .activitybtn{
     background: #f5c518;
     padding: 0.8rem;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     color: #000000; 
     text-decoration: none;
 }
@@ -186,13 +186,13 @@ nav ul a:hover {
     gap: 1rem;
 }
 .exerciseCard{
-    border-radius: 6px;
+    border-radius: 0.375rem;
     background: var(--card);
     border: 3px solid var(--border);
 }
 .exerciseCard img{
-        width: 300px;
-        height: 200px;
+        width: 18.75rem;
+        height: 12.5rem;
         object-fit: cover;
 }
 
@@ -202,14 +202,14 @@ nav ul a:hover {
     font-weight: bold;
 }
 .exerciseCards::-webkit-scrollbar{
-    height: 6px;
+    height: 0.375rem;
 }
 .exerciseCards::-webkit-scrollbar-track{
     background: var(--border);
 }
 .exerciseCards::-webkit-scrollbar-thumb{
     background: #f5c518;
-    border-radius: 999px;
+    border-radius: 99rem;
 }
 /* Dashboard header */
 .dash-header {
@@ -238,16 +238,16 @@ nav ul a:hover {
 }
 .searchbar input{
     background: var(--card);
-    width: 500px;
+    width: 31.25rem;
     border: 1px solid var(--yellow);
-    border-radius: 8px 0 0 8px;
+    border-radius: 0.5rem 0 0 0.5rem;
     padding: 0.5rem;
     color: var(--text)
 }
 .searchbar button{
     padding: 0.5rem;
     background: var(--yellow);
-    border-radius:  0 8px 8px 0;
+    border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
 }
 /* recent activity area*/
@@ -273,9 +273,9 @@ nav ul a:hover {
     gap: 2rem;
 }
 .recentCard img{
-    width: 400px;
-    height: 300px;
-    border-radius: 16px;
+    width: 25rem;
+    height: 18.75rem;
+    border-radius: 1rem;
     border: 1px solid var(--border);
 }
 .recentfooter p{
@@ -303,15 +303,15 @@ nav ul a:hover {
 }
 .carousel{
     display: flex;
-    width: 400px;
+    width: 25rem;
 }
 .carouselbtn{
     background: var(--yellow);
     border: none;
     color:#000000;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
     font-size: 1.5rem;
     cursor: pointer;
     font-weight: bold;
@@ -341,7 +341,7 @@ nav ul a:hover {
 .statscard {
     background: var(--card);
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     border: 2px solid var(--border);
     cursor: pointer;
     display: flex;
@@ -374,9 +374,9 @@ nav ul a:hover {
     padding: 1rem 5%;
     margin: 0 5%;
     border: 2px solid var(--border);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     background: var(--card);
-    max-height: 400px;
+    max-height: 25rem;
 }
 
 #chartArea.active {
@@ -385,8 +385,8 @@ nav ul a:hover {
 
 #chart {
     width: 100% !important;
-    height: 350px !important;
-    max-height: 350px !important;
+    height: 21.875rem !important;
+    max-height: 21.875rem !important;
 }
 
 /* Racetracker*/
@@ -398,7 +398,7 @@ nav ul a:hover {
 .upcomingraces, .pastraces{
     padding: 2rem 5%;
     border: 3px solid var(--border);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     background: var(--card);
     width: 70%;
     margin: 1rem 2%
@@ -425,7 +425,7 @@ td{
     background: rgba(162, 10, 10, 0.15);
     color: #ff4d4d;
     padding: 0.3rem 0.6rem;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     text-decoration: none;
     font-size: 1rem;
 }
