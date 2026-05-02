@@ -5,10 +5,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    <link rel="icon" href="/static/images/favicon.ico">
 </head>
 <body>
     <nav>
-        <a href="/">FitTrack</a>
+        <a href="/"class="nav-brand"> FitTrack</a>
+        <form class="nav-search" method="GET" action="/dashboard">
+            <input type="text" name="q" placeholder="Search activities...">
+            <button type="submit">Search</button>
+        </form>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/activities">Activities</a></li>
@@ -16,15 +21,10 @@
             <li><a href="/racetracker">Racetracker</a></li>
             {% if not session.get("user_id") %}
             <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Sign Up</a></li>
             {% endif %}
         </ul>
     </nav>
-<main>
-    <section class="searchbar">
-        <input type="text" placeholder="Search activities...">
-        <button>Search</button>
-    </section>    
+<main> 
     <section class="dash-header">
         <div>
             <h1>Welcome back 👋</h1>
@@ -40,7 +40,7 @@
             <span class="stat-label">Total Workouts</span>
         </div>
         <div class="statscard" id="time">
-            <span class="stat-icon">⏱️</span>
+            <span class="stat-icon">⏰</span>
             <span class="stat-number">14:30h</span>
             <span class="stat-label">Total Time</span>
         </div>
@@ -48,6 +48,11 @@
             <span class="stat-icon">🔥</span>
             <span class="stat-number">14</span>
             <span class="stat-label">Day Streak</span>
+        </div>
+        <div class="statscard" id="races">
+            <span class="stat-icon">🏁</span>
+            <span class="stat-number">5</span>
+            <span class="stat-label">Completed Races</span>
         </div>
         <div class="statscard" id="favorite">
             <span class="stat-icon">🏆</span>

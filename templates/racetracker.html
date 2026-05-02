@@ -4,17 +4,16 @@
     <link href="/static/css/style.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Racetracker</title>
+    <link rel="icon" href="/static/images/favicon.ico">
 </head>
 <body>
     <nav>
-        <a href="/">FitTrack</a>
+        <a href="/"class="nav-brand"> FitTrack</a>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/activities">Activities</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/racetracker">Racetracker</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Sign Up</a></li>
         </ul>
     </nav>
     <main>
@@ -35,27 +34,24 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for race in upcoming %}
                     <tr>
-                        <td>Running</th>
-                        <td>Leeds</td>
-                        <td>10th May</td>
-                        <td>10K</td>
-                        <td><a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                        <td>{{ race['sport'] }}</td>
+                        <td>{{ race['location'] }}</td>
+                        <td>{{ race['date'] }}</td>
+                        <td>{{ race['length'] }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('races.delete_race', race_id=race['id']) }}"
+                                onsubmit="return confirm('Delete this race?')">
+                                <button type="submit" class="delete-btn">🗑️</button>
+                            </form>
+                        </td>
                     </tr>
+                    {% else %}
                     <tr>
-                        <td>Swimming</td>
-                        <td>Leeds</td>
-                        <td>17th May</td>
-                        <td>5K</td>
-                        <td><a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                        <td colspan="5">No upcoming races</td>
                     </tr>
-                    <tr>
-                        <td>Cycling</td>
-                        <td>Leeds</td>
-                        <td>10th May</td>
-                        <td>15K</td>
-                        <td><a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>  
@@ -74,33 +70,28 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for race in past %}
+                    <tr class="{{ 'pbrow' if race['is_pb'] == 1 else '' }}">
+                        <td>{{ race['sport'] }}</td>
+                        <td>{{ race['location'] }}</td>
+                        <td>{{ race['date'] }}</td>
+                        <td>{{ race['length'] }}</td>
+                        <td>{{ race['finish_time'] }}</td>
+                        <td class="{{ 'pbcol' if race['is_pb'] == 1 else '' }}">
+                            {{ '🥇 PB' if race['is_pb'] == 1 else '' }}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('races.delete_race', race_id=race['id']) }}"
+                                onsubmit="return confirm('Delete this race?')">
+                                <button type="submit" class="delete-btn">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
                     <tr>
-                        <td>Running</td>
-                        <td>Leeds</td>
-                        <td>5th April</td>
-                        <td>10k</td>
-                        <td>50m</td>
-                        <td></td>
-                        <td> <a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
+                        <td colspan="7">No past races</td>
                     </tr>
-                    <tr class="pbrow">
-                        <td>Swimming</td>
-                        <td>London</td>
-                        <td>1st April</td>
-                        <td>10k</td>
-                        <td>150m</td>
-                        <td class="pbcol">🥇 PB</td>
-                        <td> <a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
-                    </tr>
-                    <tr>
-                        <td>Running</td>
-                        <td>Manchester</td>
-                        <td>28th March</td>
-                        <td>10k</td>
-                        <td>55m</td>
-                        <td></td>
-                        <td> <a href="tempdeletebtn" class="deletebtn">🗑️</a></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>

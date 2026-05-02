@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Add Race</title>
+    <link rel="icon" href="/static/images/favicon.ico">
+</head>
+<body>
+    <nav>
+        <a href="/"class="nav-brand"> FitTrack</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/activities">Activities</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/racetracker">Racetracker</a></li>
+        </ul>
+    </nav>
+    <main>
+    <div class="addracehead">
+        <a href="/racetracker" class="btn btnb">← Back</a>
+        <h1>Add Race</h1>
+    </div>
+    <div class="addrace-right">
+        <form method="POST" action="{{ url_for('races.addrace_post') }}" class="addrace-form"> 
+            <div class="formSection">
+                <p class="formLabel">RACE DETAILS</p>
+                
+                <div class="form-grid">
+                    <div class="form-area">
+                        <label for="sport">Sport</label>
+                        <select id="sport" name="sport" required>
+                            <option value="" disabled selected>Select a sport</option>
+                            <option value="Running">Running</option>
+                            <option value="Swimming">Swimming</option>
+                            <option value="Rowing">Rowing</option>
+                            <option value="Cycling">Cycling</option>
+                        </select>
+                    </div>
+
+                    <div class="form-area">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" placeholder="e.g. Leeds">
+                    </div>
+
+                    <div class="form-area">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-area">
+                        <label for="length">Length</label>
+                        <input type="text" id="length" name="length" placeholder="e.g. 10K" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSection">
+                <p class="formLabel">RESULT (Optional)</p>
+
+                <div class="form-grid">
+                    <div class="form-area">
+                        <label for="finish_time">Finish Time</label>
+                        <input type="text" id="finish_time" name="finish_time" placeholder="e.g. 00:50:00">
+                    </div>
+
+                    <div class="form-area checkbox-field">
+                        <input type="checkbox" id="is_pb" name="is_pb">
+                        <label for="is_pb">Mark as Personal Best</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/racetracker" class="btn btnb">Cancel</a>
+                <button type="submit" class="btn btna">Save Race</button>
+            </div>
+        </form>
+        <div class="movingpics">
+            <img id="raceimg" src="/static/images/Pic1.jpg" alt="Sport">
+            <p class="race-img-label" id="race-label"> Your Sport</p>
+        </div>
+    </div>
+</main>
+<script src="/static/js/races.js"></script>
+</body>
+</html>

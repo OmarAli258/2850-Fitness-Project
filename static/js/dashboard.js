@@ -24,8 +24,12 @@ function carousel(index) {
 const workoutbtn=document.getElementById("workouts")
 const timebtn=document.getElementById("time")
 const streakbtn=document.getElementById("streak")
+const racesbtn = document.getElementById("races")
 const favoritebtn=document.getElementById("favorite")
 const mycanvas =document.getElementById("chart")
+racesbtn.addEventListener("click",function(){
+    showchart("races")
+}) 
 workoutbtn.addEventListener("click",function(){
     showchart("workouts")
 })
@@ -37,7 +41,6 @@ streakbtn.addEventListener("click",function(){
 })
 favoritebtn.addEventListener("click",function(){
     showchart("favorite")
-
 })
 let currenttype =null 
 let currentchart = null
@@ -77,7 +80,14 @@ function showchart(type){
             type: 'line'
         }
     }
-
+    if (type == "races") {
+        chartData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: [1, 0, 2, 1, 0, 1],
+            label: "Races Completed",
+            type: 'bar'
+        }
+    }
     if (type == "favorite") {
         chartData = {
             labels: ['Running', 'Swimming', 'Cycling', 'Weightlifting', 'Crossfit'],
