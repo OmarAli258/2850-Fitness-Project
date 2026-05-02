@@ -41,6 +41,7 @@ favoritebtn.addEventListener("click",function(){
 })
 let currenttype =null 
 let currentchart = null
+
 function showchart(type){
     if (currenttype == type && currentchart != null) {
         currentchart.destroy()
@@ -86,6 +87,28 @@ function showchart(type){
             type: 'doughnut'
         }
     }
+
+    let chartColours = "#f5c518"
+    let borderColours = "#f5c518"
+
+    if (type == "favorite") {
+        chartColours = [
+            "#f5c518", // Running
+            "#3498db", // Swimming
+            "#2ecc71", // Cycling
+            "#e74c3c", // Weightlifting
+            "#9b59b6"  // Crossfit
+        ]
+
+        borderColours = [
+            "#0a0a0a",
+            "#0a0a0a",
+            "#0a0a0a",
+            "#0a0a0a",
+            "#0a0a0a"
+        ]
+    }
+
     currentchart = new Chart(mycanvas, {
         type: chartData.type,
         data: {
@@ -93,8 +116,8 @@ function showchart(type){
             datasets: [{
                 label: chartData.label,
                 data: chartData.data,
-                backgroundColor: '#f5c518',
-                borderColor: '#f5c518'
+                backgroundColor: chartColours,
+                borderColor: borderColours
             }]
         }
     })

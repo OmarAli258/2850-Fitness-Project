@@ -4,14 +4,29 @@
 
 {% block extra_head %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-{% endblock %}
-
-{% block content %}
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <nav>
+        <a href="/">FitTrack</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/activities">Activities</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/racetracker">Racetracker</a></li>
+            {% if not session.get("user_id") %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 <main>
     <section class="searchbar">
         <input type="text" placeholder="Search activities...">
         <button>Search</button>
     </section>    
+
     <section class="dash-header">
         <div>
             <h1>Welcome back 👋</h1>
@@ -23,22 +38,24 @@
     <section class="statsRow">
         <div class="statscard" id="workouts">
             <span class="stat-icon">🏃</span>
-            <span class="stat-number">12</span>
+            <span class="stat-number">{{ summary.total_workouts }}</span>
             <span class="stat-label">Total Workouts</span>
         </div>
+
         <div class="statscard" id="time">
             <span class="stat-icon">⏱️</span>
-            <span class="stat-number">14:30h</span>
+            <span class="stat-number">{{ summary.total_minutes }} min</span>
             <span class="stat-label">Total Time</span>
         </div>
+
         <div class="statscard" id="streak">
             <span class="stat-icon">🔥</span>
-            <span class="stat-number">14</span>
+            <span class="stat-number">{{ summary.total_distance }} km</span>
             <span class="stat-label">Day Streak</span>
         </div>
         <div class="statscard" id="favorite">
             <span class="stat-icon">🏆</span>
-            <span class="stat-number">Swimming</span>
+            <span class="stat-number">{{ summary.favorite_activity }}</span>
             <span class="stat-label">Favourite</span>
         </div>
     </section>
@@ -48,56 +65,65 @@
     </section>
 
     <section class="recentActivity">
-        <div class="activityLeft">
-            <h2>Recent Activity</h2>
-            <div class="carouselall">
-                <button class="carouselbtn" id="previous"><</button>
-                <div class="carousel">
-                    <div class="recentCard active">
+    <div class="activityLeft">
+        <h2>Recent Activity</h2>
+
+        {% if recent_activities %}
+        <div class="carouselall">
+            <button class="carouselbtn" id="previous"><</button>
+
+            <div class="carousel">
+                {% for activity in recent_activities %}
+                <div class="recentCard {% if loop.first %}active{% endif %}">
+                    {% if activity.type == "Running" %}
                         <img src="/static/images/Pic1.jpg">
-                        <h3>🏃 Running</h3>
-                        <div class="recentfooter">
-                            <p>10th April | 30 min | 3km</p>
-                            <a href="/activity/1">See more</a>
-                        </div>
-                    </div>
-                    <div class="recentCard">
+                    {% elif activity.type == "Swimming" %}
                         <img src="/static/images/Pic2.jpg">
-                        <h3>🏊 Swimming</h3>
-                        <div class="recentfooter">
-                            <p>10th April | 20 min | 2km</p>
-                            <a href="/activity/2">See more</a>
-                        </div>
-                    </div>
-                    <div class="recentCard">
-                        <img src="/static/images/Pic1.jpg">
-                        <h3>🏃 Running</h3>
-                        <div class="recentfooter">
-                            <p>9th April | 30 min | 3km</p>
-                            <a href="/activity/3">See more</a>
-                        </div>
-                    </div>
-                    <div class="recentCard">
+                    {% elif activity.type == "Cycling" %}
+                        <img src="/static/images/Pic4.jpg">
+                    {% elif activity.type == "Gym" %}
                         <img src="/static/images/Pic5.jpg">
-                        <h3>🏋️ Weightlifting</h3>
-                        <div class="recentfooter">
-                            <p>8th April | 1:30 min | 15 sets</p>
-                            <a href="/activity/4">See more</a>
-                        </div>
+                    {% else %}
+                        <img src="/static/images/Pic3.jpg">
+                    {% endif %}
+
+                    <h3>{{ activity.type }}</h3>
+
+                    <div class="recentfooter">
+                        <p>
+                            {{ activity.date }} |
+                            {{ activity.duration }} min |
+                            {% if activity.distance %}
+                                {{ activity.distance }} km
+                            {% else %}
+                                No distance
+                            {% endif %}
+                        </p>
+                        <a href="/activities/{{ activity.id }}/edit">Edit</a>
                     </div>
                 </div>
-                <button class="carouselbtn" id="next">></button>
+                {% endfor %}
             </div>
+
+            <button class="carouselbtn" id="next">></button>
         </div>
-        <div class="activityRight">
-            <h2>View All Activities</h2>
-            <p>See your full workout history</p>
-            <a href="/activities" class="btn btna">View All</a>
-        </div>
-    </section>
+        {% else %}
+            <p>No recent activities yet.</p>
+            <a href="/activities/new" class="btn btna">Log your first activity</a>
+        {% endif %}
+    </div>
+
+    <div class="activityRight">
+        <h2>View All Activities</h2>
+        <p>See your full workout history</p>
+        <a href="/activities" class="btn btna">View All</a>
+    </div>
+</section>
 </main>
 {% endblock %}
 
-{% block scripts %}
-    <script src="/static/js/dashboard.js"></script>
-{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/dashboard.js"> </script>
+</body>
+</html>

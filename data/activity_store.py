@@ -1,116 +1,173 @@
-import re
 import uuid
+from data.database import get_connection
 
-ACTIVITY_TYPES = [
-    "Running",
-    "Walking",
-    "Cycling",
-    "Swimming",
-    "Gym",
-    "Yoga",
-    "Hiking",
-    "Rowing",
-]
-
-# This list keeps all activities for now
-all_activities = []
+ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Gym"]
 
 
 def create_activity(user_id, activity_type, date, duration, distance, notes):
-    activity = {
-        "id": str(uuid.uuid4()),
+    activity_id = str(uuid.uuid4())
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO activities (id, user_id, type, date, duration, distance, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (activity_id, user_id, activity_type, date, int(duration), distance, notes)
+    )
+
+    connection.commit()
+    connection.close()
+
+    return {
+        "id": activity_id,
         "user_id": user_id,
         "type": activity_type,
         "date": date,
-        "duration": duration,
+        "duration": int(duration),
         "distance": distance,
-        "notes": notes,
+        "notes": notes
     }
-
-    all_activities.append(activity)
-    return activity
 
 
 def get_activities_for_user(user_id, activity_type=None, search=None):
-    results = []
+    connection = get_connection()
+    cursor = connection.cursor()
 
-    for activity in all_activities:
-        if activity["user_id"] != user_id:
-            continue
+    query = """
+        SELECT * FROM activities
+        WHERE user_id = ?
+    """
 
-        if activity_type and activity["type"] != activity_type:
-            continue
+    values = [user_id]
 
-        if search:
-            lower_search = search.lower()
-            fields = " ".join([
-                activity["type"],
-                activity["date"],
-                activity["distance"],
-                activity["notes"],
-            ]).lower()
-            if lower_search not in fields:
-                continue
+    if activity_type:
+        query += " AND type = ?"
+        values.append(activity_type)
 
-        results.append(activity)
+    if search:
+        query += " AND (type LIKE ? OR date LIKE ? OR notes LIKE ?)"
+        search_text = f"%{search}%"
+        values.extend([search_text, search_text, search_text])
 
-    results.sort(key=lambda item: item["date"], reverse=True)
-    return results
+    query += " ORDER BY date DESC"
+
+    rows = cursor.execute(query, values).fetchall()
+    connection.close()
+
+    activities = []
+
+    for row in rows:
+        activities.append({
+            "id": row["id"],
+            "user_id": row["user_id"],
+            "type": row["type"],
+            "date": row["date"],
+            "duration": row["duration"],
+            "distance": row["distance"],
+            "notes": row["notes"]
+        })
+
+    return activities
 
 
 def get_activity(user_id, activity_id):
-    for activity in all_activities:
-        if activity["user_id"] == user_id and activity["id"] == activity_id:
-            return activity
-    return None
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    row = cursor.execute(
+        """
+        SELECT * FROM activities
+        WHERE user_id = ? AND id = ?
+        """,
+        (user_id, activity_id)
+    ).fetchone()
+
+    connection.close()
+
+    if row is None:
+        return None
+
+    return {
+        "id": row["id"],
+        "user_id": row["user_id"],
+        "type": row["type"],
+        "date": row["date"],
+        "duration": row["duration"],
+        "distance": row["distance"],
+        "notes": row["notes"]
+    }
 
 
 def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes):
-    activity = get_activity(user_id, activity_id)
-    if activity is None:
-        return None
+    connection = get_connection()
+    cursor = connection.cursor()
 
-    activity["type"] = activity_type
-    activity["date"] = date
-    activity["duration"] = duration
-    activity["distance"] = distance
-    activity["notes"] = notes
-    return activity
+    cursor.execute(
+        """
+        UPDATE activities
+        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?
+        WHERE id = ? AND user_id = ?
+        """,
+        (activity_type, date, int(duration), distance, notes, activity_id, user_id)
+    )
+
+    connection.commit()
+    connection.close()
 
 
 def delete_activity(activity_id, user_id):
-    global all_activities
-    before_count = len(all_activities)
-    all_activities = [
-        activity for activity in all_activities
-        if not (activity["user_id"] == user_id and activity["id"] == activity_id)
-    ]
-    return len(all_activities) < before_count
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        DELETE FROM activities
+        WHERE id = ? AND user_id = ?
+        """,
+        (activity_id, user_id)
+    )
+
+    connection.commit()
+    connection.close()
 
 
 def get_activity_summary(user_id):
     activities = get_activities_for_user(user_id)
-    total_duration = 0
+
+    total_workouts = len(activities)
+    total_minutes = 0
     total_distance = 0.0
-    type_counts = {}
+    activity_counts = {}
 
     for activity in activities:
-        if activity["duration"].isdigit():
-            total_duration += int(activity["duration"])
+        total_minutes += int(activity["duration"])
 
-        distance_match = re.search(r"([0-9]+(?:\.[0-9]+)?)", activity["distance"])
-        if distance_match:
-            total_distance += float(distance_match.group(1))
+        activity_type = activity["type"]
 
-        type_counts[activity["type"]] = type_counts.get(activity["type"], 0) + 1
+        if activity_type in activity_counts:
+            activity_counts[activity_type] += 1
+        else:
+            activity_counts[activity_type] = 1
 
-    favorite_type = "N/A"
-    if type_counts:
-        favorite_type = max(type_counts, key=type_counts.get)
+        distance = activity["distance"]
+
+        if distance:
+            try:
+                total_distance += float(distance)
+            except ValueError:
+                pass
+
+    favorite_activity = "None yet"
+
+    if activity_counts:
+        favorite_activity = max(activity_counts, key=activity_counts.get)
 
     return {
-        "total_workouts": len(activities),
-        "total_duration": total_duration,
-        "total_distance": round(total_distance, 1),
-        "favorite_type": favorite_type,
+        "total_workouts": total_workouts,
+        "total_minutes": total_minutes,
+        "total_distance": round(total_distance, 2),
+        "favorite_activity": favorite_activity
     }
