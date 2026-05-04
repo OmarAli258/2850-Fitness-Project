@@ -19,30 +19,6 @@ if (forwardbtn && backbtn && cards.length > 0) {
         }
     })
 }
-<<<<<<< HEAD
-const workoutbtn=document.getElementById("workouts")
-const timebtn=document.getElementById("time")
-const streakbtn=document.getElementById("streak")
-const racesbtn = document.getElementById("races")
-const favoritebtn=document.getElementById("favorite")
-const mycanvas =document.getElementById("chart")
-racesbtn.addEventListener("click",function(){
-    showchart("races")
-}) 
-workoutbtn.addEventListener("click",function(){
-    showchart("workouts")
-})
-timebtn.addEventListener("click",function(){
-    showchart("time")
-})
-streakbtn.addEventListener("click",function(){
-    showchart("streak")
-})
-favoritebtn.addEventListener("click",function(){
-    showchart("favorite")
-})
-let currenttype =null 
-=======
 
 function carousel(index) {
     cards.forEach(function (card) {
@@ -56,11 +32,11 @@ function carousel(index) {
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
 const distancebtn = document.getElementById("distance")
+const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
 
 let currenttype = null
->>>>>>> a2ed8bb322150c1bb9d06694a869e99190463fe8
 let currentchart = null
 
 if (workoutbtn) {
@@ -78,6 +54,12 @@ if (timebtn) {
 if (distancebtn) {
     distancebtn.addEventListener("click", function () {
         showchart("distance")
+    })
+}
+
+if (racesbtn) {
+    racesbtn.addEventListener("click", function () {
+        showchart("races")
     })
 }
 
@@ -160,6 +142,11 @@ function showchart(type) {
     if (type == "distance") {
         chartColours = "#2ecc71"
         borderColours = "#2ecc71"
+    }
+
+    if (type == "races") {
+        chartColours = "#ff9f40"
+        borderColours = "#ff9f40"
     }
 
     if (type == "favorite") {
