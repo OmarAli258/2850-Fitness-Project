@@ -14,6 +14,35 @@
             <h1>Racetracker</h1> 
             <a href="/addrace" class="btn btna">+ Add Race</a>
         </div>
+
+        {% if personal_bests %}
+        <section class="upcomingraces">
+            <h2>Personal Bests</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Race</th>
+                        <th>Sport</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pb in personal_bests %}
+                    <tr class="pbrow">
+                        <td>{{ pb['name'] }}</td>
+                        <td>{{ pb['race_type'] }}</td>
+                        <td>{{ pb['location'] }}</td>
+                        <td>{{ pb['date'] }}</td>
+                        <td>{{ pb['finish_time'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        {% endif %}
+
         <section class="upcomingraces">
             <h2>Upcoming Races</h2>
             <table>

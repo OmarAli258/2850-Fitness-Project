@@ -35,6 +35,16 @@ const distancebtn = document.getElementById("distance")
 const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
+const chartArea = document.getElementById("chartArea")
+
+let liveData = {}
+if (chartArea && chartArea.dataset.chart) {
+    try {
+        liveData = JSON.parse(chartArea.dataset.chart)
+    } catch (e) {
+        console.error("Failed to parse chart data:", e)
+    }
+}
 
 let currenttype = null
 let currentchart = null
@@ -87,84 +97,66 @@ function showchart(type) {
     }
 
     let chartData = {}
+    let chartColours = "#f5c518"
+    let borderColours = "#f5c518"
 
-    if (type == "workouts") {
+    if (type === "workouts" && liveData.workouts) {
         chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [1, 0, 2, 0, 1, 2, 0],
+            labels: liveData.workouts.labels,
+            data: liveData.workouts.data,
             label: "Workouts This Week",
             type: "bar"
         }
     }
 
-    if (type == "time") {
+    if (type === "time" && liveData.time) {
         chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [45, 0, 60, 0, 30, 50, 0],
+            labels: liveData.time.labels,
+            data: liveData.time.data,
             label: "Minutes Spent This Week",
             type: "bar"
         }
-    }
-
-    if (type == "distance") {
-        chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [5, 0, 8, 0, 3, 6, 0],
-            label: "Distance This Week (km)",
-            type: "line"
-        }
-    }
-    if (type == "races") {
-        chartData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            data: [1, 0, 2, 1, 0, 1],
-            label: "Races Completed",
-            type: 'bar'
-        }
-    }
-    if (type == "favorite") {
-        chartData = {
-            labels: ["Running", "Swimming", "Cycling", "Weightlifting", "Crossfit"],
-            data: [12, 8, 5, 3, 2],
-            label: "Exercise Breakdown",
-            type: "doughnut"
-        }
-    }
-
-    let chartColours = "#f5c518"
-    let borderColours = "#f5c518"
-
-    if (type == "time") {
         chartColours = "#36a2eb"
         borderColours = "#36a2eb"
     }
 
-    if (type == "distance") {
+    if (type === "distance" && liveData.distance) {
+        chartData = {
+            labels: liveData.distance.labels,
+            data: liveData.distance.data,
+            label: "Distance This Week (km)",
+            type: "line"
+        }
         chartColours = "#2ecc71"
         borderColours = "#2ecc71"
     }
 
-    if (type == "races") {
+    if (type === "races" && liveData.races) {
+        chartData = {
+            labels: liveData.races.labels,
+            data: liveData.races.data,
+            label: "Races Completed",
+            type: "bar"
+        }
         chartColours = "#ff9f40"
         borderColours = "#ff9f40"
     }
 
-    if (type == "favorite") {
-        chartColours = [
-            "#f5c518", // Running
-            "#3498db", // Swimming
-            "#2ecc71", // Cycling
-            "#e74c3c", // Weightlifting
-            "#9b59b6"  // Crossfit
+    if (type === "favorite" && liveData.favorite) {
+        const doughnutColors = [
+            "#f5c518", "#3498db", "#2ecc71", "#e74c3c", "#9b59b6", "#ff9f40",
+            "#1abc9c", "#34495e", "#e67e22", "#95a5a6"
         ]
+        const doughnutBorders = ["#0a0a0a"] * liveData.favorite.labels.length
 
-        borderColours = [
-            "#0a0a0a",
-            "#0a0a0a",
-            "#0a0a0a",
-            "#0a0a0a",
-            "#0a0a0a"
-        ]
+        chartData = {
+            labels: liveData.favorite.labels,
+            data: liveData.favorite.data,
+            label: "Exercise Breakdown",
+            type: "doughnut"
+        }
+        chartColours = doughnutColors.slice(0, liveData.favorite.labels.length)
+        borderColours = doughnutBorders
     }
 
     currentchart = new Chart(mycanvas, {

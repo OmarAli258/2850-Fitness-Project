@@ -52,5 +52,30 @@ def setup_database():
         )
     """)
 
+    # Stores exercise plans
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS plans (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            exercise_type TEXT NOT NULL,
+            frequency TEXT NOT NULL,
+            target_duration INTEGER,
+            target_distance TEXT,
+            notes TEXT,
+            created_at TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'active',
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     connection.commit()
+
+    # Add plan_id column to activities if it doesn't exist
+    try:
+        cursor.execute("ALTER TABLE activities ADD COLUMN plan_id TEXT")
+        connection.commit()
+    except Exception:
+        pass
+
     connection.close()

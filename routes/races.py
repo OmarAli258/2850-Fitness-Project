@@ -11,8 +11,9 @@ def racetracker():
 
     user_races = race_store.get_races_for_user(session["user_id"])
     summary = race_store.get_race_summary(session["user_id"])
+    personal_bests = race_store.get_personal_bests(session["user_id"])
 
-    return render_template("racetracker.html", races=user_races, summary=summary)
+    return render_template("racetracker.html", races=user_races, summary=summary, personal_bests=personal_bests)
 
 
 @races.route("/addrace", methods=["GET"])
