@@ -30,7 +30,7 @@ function carousel(index) {
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
 const distancebtn = document.getElementById("distance")
-const streakbtn = document.getElementById("streak")
+const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
 
@@ -55,9 +55,9 @@ if (distancebtn) {
     })
 }
 
-if (streakbtn) {
-    streakbtn.addEventListener("click", function () {
-        showchart("streak")
+if (racesbtn) {
+    racesbtn.addEventListener("click", function () {
+        showchart("races")
     })
 }
 
@@ -144,9 +144,9 @@ function showchart(type) {
         borderColours = "#2ecc71"
     }
 
-    if (type == "streak") {
-        chartColours = "#e74c3c"
-        borderColours = "#e74c3c"
+    if (type == "races") {
+        chartColours = "#ff9f40"
+        borderColours = "#ff9f40"
     }
 
     if (type == "favorite") {

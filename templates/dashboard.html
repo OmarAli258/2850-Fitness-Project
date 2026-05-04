@@ -8,22 +8,7 @@
     <link rel="icon" href="/static/images/favicon.ico">
 </head>
 <body>
-    <nav>
-        <a href="/" class="nav-brand">FitTrack</a>
-        <form class="nav-search" method="GET" action="/dashboard">
-            <input type="text" name="q" placeholder="Search activities...">
-            <button type="submit">Search</button>
-        </form>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/activities">Activities</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/racetracker">Racetracker</a></li>
-            {% if not session.get("user_id") %}
-            <li><a href="/login">Login</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+    {% include "navbar.html" %}
 
 <main> 
     <section class="dash-header">
@@ -31,7 +16,13 @@
             <h1>Welcome back, {{ user_name }} 👋</h1>
             <p>Here's your fitness summary</p>
         </div>
-        <a href="/activities/new" class="btn btna">+ Log Activity</a>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <form class="nav-search" method="GET" action="/dashboard">
+                <input type="text" name="q" placeholder="   Search activities...">
+                <button type="submit">Search</button>
+            </form>
+            <a href="/activities/new" class="btn btna">+ Log Activity</a>
+        </div>
     </section>
 
     <section class="statsRow">

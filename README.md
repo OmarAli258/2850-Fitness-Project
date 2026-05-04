@@ -2,35 +2,62 @@
 
 This project is developed for the COMP2850 Software Engineering module at the University of Leeds.
 
-The system is a web application that allows users to track and monitor their physical exercise activities. It is designed to support both casual users who want to maintain a healthy lifestyle and competitive users training for events such as races.
+FitTrack is a web application designed to help users plan, record, and monitor their physical fitness activities. The system supports both casual users who want to maintain a healthy lifestyle and more competitive users who may be training for events such as races.
 
 ## Features
 
-The application is planned to support the following core features:
+The application currently supports:
 
 - User registration and login
-- Logging physical activities (running, cycling, gym, etc.)
+- SQLite database storage for users and activities
+- Logging physical activities such as running, cycling, swimming, and gym workouts
 - Viewing activity history
-- Tracking planned workouts
-- Viewing exercise statistics
-- Recording race participation and results
+- Searching and filtering activity records
+- Editing and deleting logged activities
+- Dashboard statistics based on real activity data
+- Recent activity preview on the dashboard
+- Dashboard charts and visualisations
+- Race tracker pages for future competition support
 
-## Project Structure
+Planned or developing features include:
 
-The project is organised using GitHub tools:
-
-- **Wiki** – Project documentation including requirements, wireframes, system design, and testing plan.
-- **Project Board** – Kanban board used to manage development tasks.
-- **Issues** – Used to track individual tasks and features.
+- Adding and saving race details
+- Recording race results and personal bests
+- Training plan support
+- Improved dashboard visualisations using live activity data
+- Further UI consistency across all pages
 
 ## Technologies
 
-The final technology stack is still being confirmed, but the system will include:
+The project uses:
 
-- Backend web framework
-- Relational database
-- HTML/CSS frontend interface
-- GitHub for version control and project management
+- Python
+- Flask
+- SQLite
+- HTML
+- CSS
+- JavaScript
+- Chart.js
+- GitHub for version control, issues, pull requests, and project management
+
+## Database
+
+The system uses SQLite to store application data persistently. The current database includes tables for:
+
+- Users
+- Activities
+- Races
+
+This allows user accounts and activity records to remain saved after the application is restarted.
+
+## Project Management
+
+The project is organised using GitHub tools:
+
+- Wiki – Project documentation including requirements, personas, user stories, job stories, wireframes, system design, and testing plan.
+- Project Board – Kanban board used to manage development tasks.
+- Issues – Used to track individual tasks, bugs, and feature development.
+- Branches and Pull Requests – Used to manage individual contributions before merging into the main branch.
 
 ## Team Members
 
