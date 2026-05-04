@@ -4,7 +4,7 @@ from data.database import get_connection
 ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Gym"]
 
 
-def create_activity(user_id, activity_type, date, duration, distance, notes):
+def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None):
     activity_id = str(uuid.uuid4())
 
     connection = get_connection()
@@ -12,10 +12,10 @@ def create_activity(user_id, activity_type, date, duration, distance, notes):
 
     cursor.execute(
         """
-        INSERT INTO activities (id, user_id, type, date, duration, distance, notes)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (activity_id, user_id, activity_type, date, int(duration), distance, notes)
+        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data)
     )
 
     connection.commit()
@@ -67,7 +67,8 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
             "date": row["date"],
             "duration": row["duration"],
             "distance": row["distance"],
-            "notes": row["notes"]
+            "notes": row["notes"],
+            "route_data": row["route_data"]
         })
 
     return activities
@@ -97,7 +98,8 @@ def get_activity(user_id, activity_id):
         "date": row["date"],
         "duration": row["duration"],
         "distance": row["distance"],
-        "notes": row["notes"]
+        "notes": row["notes"],
+        "route_data": row["route_data"]
     }
 
 

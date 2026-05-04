@@ -31,6 +31,7 @@ def setup_database():
             duration INTEGER NOT NULL,
             distance TEXT,
             notes TEXT,
+            route_data TEXT,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)

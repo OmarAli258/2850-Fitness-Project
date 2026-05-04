@@ -23,7 +23,7 @@
             <div class="auth-error">{{ error }}</div>
             {% endif %}
 
-            <form action="{{ action }}" method="post" class="auth-form">
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" class="auth-form">
                 <div class="form-group">
                     <label>Activity Type</label>
                     <select name="activity_type">
@@ -51,6 +51,11 @@
                 </div>
 
             
+
+                <div class="form-group">
+                    <label>Upload GPX File (Optional, auto-fills details & adds map)</label>
+                    <input type="file" name="gpx_file" accept=".gpx">
+                </div>
 
                 <div class="form-group">
                     <label>Notes (optional)</label>
