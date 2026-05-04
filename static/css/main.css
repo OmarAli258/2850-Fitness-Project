@@ -8,8 +8,8 @@
     --accent: #f5c518;
     --accent-hover: #d4a800;
     --red: #ff4d4d;
-    --radius: 16px;
-    --radius-sm: 8px;
+    --radius: 0.75rem;
+    --radius-sm: 0.375rem;
 }
 
 * {
@@ -44,7 +44,7 @@ a {
     border-radius: var(--radius);
     padding: 3rem;
     width: 100%;
-    max-width: 520px;
+    max-width: 26.25rem;
 }
 
 .auth-header {
