@@ -355,7 +355,7 @@ nav ul a:hover {
     padding: 1.5rem;
     border-radius: 0.5rem;
     border: 2px solid var(--border);
-    cursor: pointer;
+    cursor: default;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -440,11 +440,32 @@ td{
     border-radius: 0.25rem;
     text-decoration: none;
     font-size: 1rem;
+    cursor: default;
 }
 
 .deletebtn:hover {
     background: #ff4d4d;
     color: white;
+    cursor: pointer;
+}
+
+.deletebtn-upcoming {
+    background: rgba(162, 10, 10, 0.15);
+    color: #ff6b6b;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.deletebtn-upcoming:hover {
+    background: #ff6b6b;
+    color: white;
+    cursor: pointer;
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
 }
 /*addraces css*/
 /* Add Race page */
