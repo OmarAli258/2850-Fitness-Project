@@ -1,3 +1,5 @@
+import gpxpy
+import json
 from flask import Blueprint, request, session, redirect, render_template
 from data import activity_store
 from datetime import date
@@ -65,6 +67,37 @@ def save_activity():
     form_data = _build_form_data(request.form)
     error = _validate_activity(form_data)
 
+    route_data_json = None
+    gpx_file = request.files.get("gpx_file")
+    if gpx_file and gpx_file.filename.endswith('.gpx'):
+        try:
+            gpx = gpxpy.parse(gpx_file)
+            route_points = []
+            for track in gpx.tracks:
+                for segment in track.segments:
+                    for point in segment.points:
+                        route_points.append([point.latitude, point.longitude])
+            
+            if route_points:
+                route_data_json = json.dumps(route_points)
+                
+                # Auto-fill duration and distance if they are empty
+                # Using basic gpxpy properties
+                moving_data = gpx.get_moving_data()
+                if moving_data and form_data["distance"] == "":
+                    distance_km = moving_data.moving_distance / 1000.0
+                    form_data["distance"] = str(round(distance_km, 2))
+                
+                if form_data["duration"] == "":
+                    # approximate duration in minutes
+                    duration_min = gpx.get_duration() / 60.0 if gpx.get_duration() else 0
+                    form_data["duration"] = str(int(duration_min))
+                
+                # Re-validate after auto-fill
+                error = _validate_activity(form_data)
+        except Exception as e:
+            error = f"Error parsing GPX file: {str(e)}"
+
     if error:
         return render_template(
             "activity_form.html",
@@ -83,10 +116,25 @@ def save_activity():
         duration=form_data["duration"],
         distance=form_data["distance"],
         notes=form_data["notes"],
+        route_data=route_data_json
     )
 
     return redirect("/activities")
 
+
+@activities.route("/activities/<activity_id>", methods=["GET"])
+def view_activity(activity_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    activity = activity_store.get_activity(session["user_id"], activity_id)
+    if activity is None:
+        return redirect("/activities")
+
+    return render_template(
+        "activity_detail.html",
+        activity=activity
+    )
 
 @activities.route("/activities/<activity_id>/edit", methods=["GET"])
 def edit_activity(activity_id):
