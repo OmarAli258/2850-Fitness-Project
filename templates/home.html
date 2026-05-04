@@ -1,62 +1,82 @@
-{% extends "base.html" %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8">
+    <title>FitTrack</title> 
+    <link rel="icon" href="/static/images/favicon.ico">
+</head>
+<body>
+    {% include "navbar.html" %}
     <main>  
-            <section class="banner">
-                <p id="quotes">One Day Or Day One</p>
-            </section>
-            <section class="hero">
-                <div class="hero-text">
-                    <h1>Your fitness <span>journey</span></h1>
-                    <p>Track Workouts, develop new skills, level up.</p>
-                    <div class="hero-buttons">
-                        <a href="/signup" class="btn btna">Sign Up</a>
-                        <a href="/login" class="btn btnb">Login</a>
+        <section class="banner">
+            <p id="quotes">One Day Or Day One</p>
+        </section>
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Your fitness <span>journey</span></h1>
+                <p>Track Workouts, develop new skills, level up.</p>
+                <div class="hero-buttons">
+                    <a href="/signup" class="btn btna">Sign Up</a>
+                    <a href="/login" class="btn btnb">Login</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/static/images/Hero.jpg" alt="Fitness">
+            </div>
+        </section>
+        <section class="activities">
+            <div class="activitiesLeft">
+                <h2>Explore Activities</h2>
+                <div class="exerciseCards">
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic1.jpg" alt="Running">
+                        <p>Running</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic2.jpg" alt="Swimming">
+                        <p>Swimming</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic3.jpg" alt="Crossfit">
+                        <p>Crossfit</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic4.jpg" alt="Cycling">
+                        <p>Cycling</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic5.jpg" alt="Weight Lifting">
+                        <p>Weight Lifting</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic6.jpg" alt="Football">
+                        <p>Football</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic10.jpg" alt="Walking">
+                        <p>Walking</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic7.jpg" alt="Yoga">
+                        <p>Yoga</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic8.jpg" alt="Hiking">
+                        <p>Hiking</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic9.jpg" alt="Rowing">
+                        <p>Rowing</p>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <img src="/static/images/Hero.jpg" alt="Fitness">
-                </div>
-            </section>
-            <section class="activities">
-                <div class="activitiesLeft">
-                    <h2>Explore Activities</h2>
-                    <div class="exerciseCards" >
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic1.jpg" alt="Running">
-                            <p>Running</p>
-                        </div>
-                        <div class ="exerciseCard">
-                            <img src="/static/images/Pic2.jpg" alt="Swimmming">
-                            <p>Swimming</p>
-                        </div>
-                        <div class ="exerciseCard">
-                            <img src="/static/images/Pic3.jpg" alt="Crossfit">
-                            <p>Crossfit</p>
-                        </div>
-                        <div class ="exerciseCard">
-                            <img src="/static/images/Pic4.jpg" alt="Cycling">
-                            <p>Cycling</p>
-                        </div>
-                        <div class ="exerciseCard">
-                            <img src="/static/images/Pic5.jpg" alt="Weight Lifting">
-                            <p>Weight Lifting</p>
-                        </div>
-                        <div class ="exerciseCard">
-                            <img src="/static/images/Pic6.jpg" alt="Football">
-                            <p>Football</p>
-                        </div>                    
-                    </div>
-                </div>
-                <div class ="activitesRight">
-                    <p>Track your workouts here</p>
-                    <a href="/activities" class="activitybtn">Log Activity</a>
-                </div>
-            </section>
+            </div>
+            <div class="activitesRight">
+                <p>Track your workouts here</p>
+                <a href="/activities" class="activitybtn">Log Activity</a>
+            </div>
+        </section>
     </main>
-{% endblock %}
-
-{% block scripts %}
     <script src="/static/js/main.js"></script>
-{% endblock %}
-
+</body>
+</html>

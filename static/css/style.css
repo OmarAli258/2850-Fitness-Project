@@ -2,9 +2,9 @@
     --bg: #0a0a0a;
     --yellow: #f5c518;
     --text: #ffffff;
-    --text-muted: #888888;
+    --text-muted: #aaaaaa;
     --card: #111111;
-    --border: #222222;
+    --border: #333333;
 }
 
 * {
@@ -21,7 +21,6 @@ body {
 
 nav {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 1rem 5%;
     border-bottom: 1px solid var(--border);
@@ -35,6 +34,11 @@ nav {
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--yellow);
+    gap: 2rem;
+}
+
+nav a {
+    color: var(--text);
     text-decoration: none;
     letter-spacing: -0.5px;
 }
@@ -43,6 +47,7 @@ nav ul {
     display: flex;
     gap: 2.5rem;
     list-style: none;
+    margin-left: auto
 }
 
 nav ul a {
@@ -104,20 +109,28 @@ nav ul a:hover {
     gap: 1rem;
     margin-top: 0.5rem;
 }
-
+/*website wide buttons */
 .btn {
     padding: 0.8rem 2rem;
     border-radius: 0.375rem;
     text-decoration: none;
     font-weight: 700;
+    display: inline-block;
+    box-sizing: border-box;
 }
 
 .btna {
     background: var(--yellow);
     color: #0a0a0a;
+    cursor: pointer;
+    border: 2px solid transparent;
 }
 
-.btna:hover { background: #d4a800; }
+.btna:hover { 
+    background: transparent;
+    color: var(--yellow);
+    border: 2px solid var(--yellow);
+}
 
 .btnb {
     border: 2px solid var(--yellow);
@@ -230,13 +243,10 @@ nav ul a:hover {
     margin-top: 0.3rem;
 }
 /* The search bar stuff*/
-.searchbar{
-    padding: 1.5rem 5%;
-    background: var(--bg);
-    width: 100%;
-    display: flex;
+.nav-search {
+    display: flex; 
 }
-.searchbar input{
+.nav-search input {
     background: var(--card);
     width: 31.25rem;
     border: 1px solid var(--yellow);
@@ -244,11 +254,13 @@ nav ul a:hover {
     padding: 0.5rem;
     color: var(--text)
 }
-.searchbar button{
-    padding: 0.5rem;
+.nav-search button {
+    padding: 0.5rem 0.8rem;
     background: var(--yellow);
     border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
+    font-weight: 700;
+    border: none;
 }
 /* recent activity area*/
 .recentActivity {
@@ -333,7 +345,7 @@ nav ul a:hover {
 /* Statsrow */
 .statsRow {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
     padding: 2rem 5%;
 }
@@ -433,4 +445,130 @@ td{
 .deletebtn:hover {
     background: #ff4d4d;
     color: white;
+}
+/*addraces css*/
+/* Add Race page */
+.addracehead {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 5%;
+}
+.addrace-form{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.formSection {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.formLabel {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+}
+.form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.form-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.form-area select {
+    background: var(--bg);
+    border: 3px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.form-area select:focus {
+    outline: none;
+    border-color: var(--yellow);
+}
+
+.form-area label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+.form-area input[type="text"],
+.form-area input[type="date"] {
+    background: var(--bg);
+    border: 3px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.90rem;
+}
+.form-area input:focus {
+    outline: none;
+    border-color: var(--yellow);
+}
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-field input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--yellow);
+    cursor: pointer;
+}
+
+.checkbox-field label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+/* moving pics section*/
+.addrace-right {
+    display: flex;
+    gap: 2rem;
+    padding: 0 5%;
+    align-items: flex-start;
+}
+.movingpics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card);
+    border: 3px solid var(--yellow);
+    border-radius: 10px;
+    padding: 1rem;
+    gap: 1rem;
+    position: sticky;
+    top: 2rem;
+    width: 350px;
+}
+
+.movingpics img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.race-img-label {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
