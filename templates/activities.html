@@ -67,6 +67,7 @@
                             <th>Type</th>
                             <th>Duration</th>
                             <th>Distance</th>
+                            <th>View</th>
                             <th>Edit</th>
                             <th>Del</th>
                         </tr>
@@ -74,7 +75,7 @@
                     <tbody>
                         {% if upcoming_activities|length == 0 %}
                         <tr>
-                            <td colspan="6" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities.</td>
+                            <td colspan="7" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities.</td>
                         </tr>
                         {% else %}
                         {% for activity in upcoming_activities %}
@@ -83,6 +84,7 @@
                             <td>{{ activity.type }}</td>
                             <td>{{ activity.duration }} min</td>
                             <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
+                            <td><a class="btn btna" href="/activities/{{ activity.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
                             <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
                             <td>
                                 <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0; display:inline;">
@@ -107,6 +109,7 @@
                             <th>Type</th>
                             <th>Duration</th>
                             <th>Distance</th>
+                            <th>View</th>
                             <th>Edit</th>
                             <th>Del</th>
                         </tr>
@@ -114,7 +117,7 @@
                     <tbody>
                         {% if past_activities|length == 0 %}
                         <tr>
-                            <td colspan="6" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities.</td>
+                            <td colspan="7" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities.</td>
                         </tr>
                         {% else %}
                         {% for activity in past_activities %}
@@ -123,6 +126,7 @@
                             <td>{{ activity.type }}</td>
                             <td>{{ activity.duration }} min</td>
                             <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
+                            <td><a class="btn btna" href="/activities/{{ activity.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
                             <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
                             <td>
                                 <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0; display:inline;">
