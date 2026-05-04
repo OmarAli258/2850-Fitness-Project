@@ -19,48 +19,22 @@ if (forwardbtn && backbtn && cards.length > 0) {
         }
     })
 }
-<<<<<<< HEAD
-const workoutbtn=document.getElementById("workouts")
-const timebtn=document.getElementById("time")
-const streakbtn=document.getElementById("streak")
-const racesbtn = document.getElementById("races")
-const favoritebtn=document.getElementById("favorite")
-const mycanvas =document.getElementById("chart")
-racesbtn.addEventListener("click",function(){
-    showchart("races")
-}) 
-workoutbtn.addEventListener("click",function(){
-    showchart("workouts")
-})
-timebtn.addEventListener("click",function(){
-    showchart("time")
-})
-streakbtn.addEventListener("click",function(){
-    showchart("streak")
-})
-favoritebtn.addEventListener("click",function(){
-    showchart("favorite")
-})
-let currenttype =null 
-=======
 
 function carousel(index) {
     cards.forEach(function (card) {
         card.style.display = "none"
     })
-
     cards[index].style.display = "block"
 }
-
 
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
 const distancebtn = document.getElementById("distance")
+const streakbtn = document.getElementById("streak")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
 
 let currenttype = null
->>>>>>> a2ed8bb322150c1bb9d06694a869e99190463fe8
 let currentchart = null
 
 if (workoutbtn) {
@@ -78,6 +52,12 @@ if (timebtn) {
 if (distancebtn) {
     distancebtn.addEventListener("click", function () {
         showchart("distance")
+    })
+}
+
+if (streakbtn) {
+    streakbtn.addEventListener("click", function () {
+        showchart("streak")
     })
 }
 
@@ -132,14 +112,16 @@ function showchart(type) {
             type: "line"
         }
     }
-    if (type == "races") {
+
+    if (type == "streak") {
         chartData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            data: [1, 0, 2, 1, 0, 1],
-            label: "Races Completed",
-            type: 'bar'
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            data: [1, 1, 1, 0, 1, 1, 1],
+            label: "Active Days This Week",
+            type: "bar"
         }
     }
+
     if (type == "favorite") {
         chartData = {
             labels: ["Running", "Swimming", "Cycling", "Weightlifting", "Crossfit"],
@@ -162,15 +144,19 @@ function showchart(type) {
         borderColours = "#2ecc71"
     }
 
+    if (type == "streak") {
+        chartColours = "#e74c3c"
+        borderColours = "#e74c3c"
+    }
+
     if (type == "favorite") {
         chartColours = [
-            "#f5c518", // Running
-            "#3498db", // Swimming
-            "#2ecc71", // Cycling
-            "#e74c3c", // Weightlifting
-            "#9b59b6"  // Crossfit
+            "#f5c518",
+            "#3498db",
+            "#2ecc71",
+            "#e74c3c",
+            "#9b59b6"
         ]
-
         borderColours = [
             "#0a0a0a",
             "#0a0a0a",
@@ -203,20 +189,12 @@ function showchart(type) {
             },
             scales: chartData.type === "doughnut" ? {} : {
                 x: {
-                    ticks: {
-                        color: "#ffffff"
-                    },
-                    grid: {
-                        color: "#222222"
-                    }
+                    ticks: { color: "#ffffff" },
+                    grid: { color: "#222222" }
                 },
                 y: {
-                    ticks: {
-                        color: "#ffffff"
-                    },
-                    grid: {
-                        color: "#222222"
-                    }
+                    ticks: { color: "#ffffff" },
+                    grid: { color: "#222222" }
                 }
             }
         }

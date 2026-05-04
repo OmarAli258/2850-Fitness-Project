@@ -244,14 +244,15 @@ nav ul a:hover {
 }
 /* The search bar stuff*/
 .nav-search {
-    display: flex; 
+    display: flex;
+    margin-left: 1rem;
 }
 .nav-search input {
     background: var(--card);
     width: 400px;
     border: 1px solid var(--yellow);
     border-radius: 8px 0 0 8px;
-    padding: rem;
+    padding: 0.5rem;
     color: var(--text);
 }
 .nav-search button {
