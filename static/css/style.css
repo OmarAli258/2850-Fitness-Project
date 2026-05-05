@@ -86,7 +86,7 @@ nav ul a:hover {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 1rem;
 }
 .hero h1 {
     font-size: 4rem;
@@ -101,7 +101,7 @@ nav ul a:hover {
 .hero p {
     color: var(--text-muted);
     font-size: 1.1rem;
-    max-width: 500px;
+    max-width: 31.25rem;
 }
 
 .hero-buttons {
@@ -112,7 +112,7 @@ nav ul a:hover {
 /*website wide buttons */
 .btn {
     padding: 0.8rem 2rem;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     text-decoration: none;
     font-weight: 700;
     display: inline-block;
@@ -185,7 +185,7 @@ nav ul a:hover {
 .activitybtn{
     background: #f5c518;
     padding: 0.8rem;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     color: #000000; 
     text-decoration: none;
 }
@@ -199,13 +199,13 @@ nav ul a:hover {
     gap: 1rem;
 }
 .exerciseCard{
-    border-radius: 6px;
+    border-radius: 0.375rem;
     background: var(--card);
     border: 3px solid var(--border);
 }
 .exerciseCard img{
-        width: 300px;
-        height: 200px;
+        width: 18.75rem;
+        height: 12.5rem;
         object-fit: cover;
 }
 
@@ -215,14 +215,14 @@ nav ul a:hover {
     font-weight: bold;
 }
 .exerciseCards::-webkit-scrollbar{
-    height: 6px;
+    height: 0.375rem;
 }
 .exerciseCards::-webkit-scrollbar-track{
     background: var(--border);
 }
 .exerciseCards::-webkit-scrollbar-thumb{
     background: #f5c518;
-    border-radius: 999px;
+    border-radius: 99rem;
 }
 /* Dashboard header */
 .dash-header {
@@ -244,20 +244,21 @@ nav ul a:hover {
 }
 /* The search bar stuff*/
 .nav-search {
-    display: flex; 
+    display: flex;
+    margin-left: 1rem;
 }
 .nav-search input {
     background: var(--card);
-    width: 400px;
+    width: 31.25rem;
     border: 1px solid var(--yellow);
-    border-radius: 8px 0 0 8px;
-    padding: rem;
-    color: var(--text);
+    border-radius: 0.5rem 0 0 0.5rem;
+    padding: 0.5rem;
+    color: var(--text)
 }
 .nav-search button {
     padding: 0.5rem 0.8rem;
     background: var(--yellow);
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
     font-weight: 700;
     border: none;
@@ -284,22 +285,22 @@ nav ul a:hover {
     justify-content: center;
     gap: 2rem;
 }
-.recentCard img{
-    width: 350px;
-    height: 250px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
+.recentMeta {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.recentbtn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+}
+.recentfooter {
+    display: flex;
+    gap: 0.8rem;
 }
 .recentfooter p{
     font-size: 1.3rem;
 
-}
-.recentfooter{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    
 }
 .recentfooter a{
     color: var(--yellow);
@@ -308,19 +309,38 @@ nav ul a:hover {
 }
 .recentCard {
     display: none;
+    width: 25rem
 }
 
 .recentCard.active {
     display: block;
 }
+.recentCard img{
+    width: 100%;
+    height: 300px;
+    border-radius: 10px ;
+    border: 1px solid var(--border);
+    object-fit: cover;
+}
+.recentCardBody {
+    padding: 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recentCardBody h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
 .carousel{
     display: flex;
-    width: 400px;
+    width: 25rem;
 }
-.carouselbtn{
+.carouselbtn {
     background: var(--yellow);
     border: none;
-    color:#000000;
+    color: #000000;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -328,17 +348,17 @@ nav ul a:hover {
     cursor: pointer;
     font-weight: bold;
     line-height: 1;
+    margin-top: 125px;
 }
 .carouselbtn:hover {
     background: var(--bg);
     color: var(--yellow);
     border: 2px solid var(--yellow);
 }
-.carouselall{
+.carouselall {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
-    align-self: center;
 }
 /* The stats section*/
 
@@ -353,9 +373,9 @@ nav ul a:hover {
 .statscard {
     background: var(--card);
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     border: 2px solid var(--border);
-    cursor: pointer;
+    cursor: default;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -386,9 +406,9 @@ nav ul a:hover {
     padding: 1rem 5%;
     margin: 0 5%;
     border: 2px solid var(--border);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     background: var(--card);
-    max-height: 400px;
+    max-height: 25rem;
 }
 
 #chartArea.active {
@@ -397,8 +417,8 @@ nav ul a:hover {
 
 #chart {
     width: 100% !important;
-    height: 350px !important;
-    max-height: 350px !important;
+    height: 21.875rem !important;
+    max-height: 21.875rem !important;
 }
 
 /* Racetracker*/
@@ -407,13 +427,13 @@ nav ul a:hover {
     display: flex;
     gap: 5rem;
 }
-.upcomingraces, .pastraces{
+.upcomingraces, .pastraces {
     padding: 2rem 5%;
     border: 3px solid var(--border);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     background: var(--card);
-    width: 70%;
-    margin: 1rem 2%
+    width: 100%;
+    margin: 0;
 }
 table {
     width: 100%;
@@ -433,18 +453,114 @@ td{
 .pbrow{
     background: rgb(198, 198, 20);
 }
-.deletebtn {
-    background: rgba(162, 10, 10, 0.15);
-    color: #ff4d4d;
-    padding: 0.3rem 0.6rem;
+.delete-btn {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.4rem 0.7rem;
     border-radius: 4px;
-    text-decoration: none;
     font-size: 1rem;
+    cursor: default;
 }
 
-.deletebtn:hover {
-    background: #ff4d4d;
+.deletebtn-upcoming {
+    background: rgba(162, 10, 10, 0.15);
+    color: #ff6b6b;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.deletebtn-upcoming:hover {
+    background: #ff6b6b;
     color: white;
+    cursor: pointer;
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.delete-btn:hover {
+    background: rgba(245, 197, 24, 0.15);
+    color: var(--yellow);
+    border-color: var(--yellow);
+    box-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
+}
+.countdown {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--yellow);
+    font-weight: 700;
+    margin-top: 2px;
+}
+.racetracker-layout {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2%;
+    align-items: flex-start;
+}
+
+.racetracker-tables {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nextrace-panel {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: sticky;
+    top: 2rem;
+}
+.nextrace-panel:hover {
+    border-color: var(--yellow);
+}
+tr {
+    transition: all 0.2s;
+}
+tr:hover td  {
+    border-bottom: 1px solid var(--yellow);
+    color: var(--yellow);
+}
+.nextrace-label {
+    color: var(--yellow);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.nextrace-sport {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+}
+.nextrace-detail {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.nextrace-countdown {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--yellow);
+    margin-top: 0.5rem;
+}
+
+.nextrace-empty {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 /*addraces css*/
 /* Add Race page */
