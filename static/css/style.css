@@ -266,22 +266,35 @@ nav form {
 .nav-search {
     display: flex;
     margin-left: 1rem;
+    align-items: stretch;
+    height: 3.75rem;
 }
 .nav-search input {
     background: var(--card);
     width: 31.25rem;
     border: 1px solid var(--yellow);
     border-radius: 0.5rem 0 0 0.5rem;
-    padding: 0.5rem;
+    height: 100%;
+    padding: 0 1rem;
     color: var(--text)
 }
 .nav-search button {
-    padding: 0.5rem 0.8rem;
+    height: 100%;
+    padding: 0 1.4rem;
     background: var(--yellow);
     border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
     font-weight: 700;
     border: none;
+}
+
+.dash-header .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.75rem;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .search-wrapper {
     position: relative;
@@ -341,25 +354,46 @@ nav form {
 }
 /* recent activity area*/
 .recentActivity {
-    display: flex;
-    padding: 1rem 5%;
-    gap: 2rem;
-    margin-top: 0;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+    padding: 2rem 5% 4rem;
+    gap: 1.25rem;
+    align-items: stretch;
 }
 .activityLeft{
-    width: 70%;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.75rem;
+    min-height: 14rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .activityLeft h2 {
     margin-bottom: 1rem;
 }
 .activityRight{
-    width: 30%;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.5rem;
+    min-height: 14rem;
+    text-align: center;
+}
+.activityRight p {
+    color: var(--text-muted);
+}
+.activityRight .btn {
+    align-self: center;
+}
+.activityLeft > p {
+    margin-bottom: 1rem;
 }
 .recentMeta {
     font-size: 0.9rem;
