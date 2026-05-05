@@ -118,7 +118,7 @@
         <div id="map"></div>
         <script>
             //this gets the route data from the server
-            var routeData = {{ activity.route_data | safe }};
+            var routeData = JSON.parse('{{ activity.route_data | safe }}');
             
             if (routeData && routeData.length > 0) {
                 //this starts the map centered on the first route point
