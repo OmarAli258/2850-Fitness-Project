@@ -61,6 +61,26 @@ nav ul a {
 nav ul a:hover {
     color: var(--yellow);
 }
+.nav-logout {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 1.05rem;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.nav-logout:hover {
+    color: var(--yellow);
+}
+
+nav form {
+    margin: 0;
+    padding: 0;
+}
 .hero {
     display: flex;
     align-items: center;
@@ -509,6 +529,15 @@ td{
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+.dayssince {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 .nextrace-panel {

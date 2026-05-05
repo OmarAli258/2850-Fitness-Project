@@ -52,7 +52,6 @@
                         </tbody>
                     </table>
                 </section>
-
                 <section class="pastraces">
                     <h2>Past Races</h2>
                     <table>
@@ -93,7 +92,6 @@
                     </table>
                 </section>
             </div>
-
             <div class="nextrace-panel">
                 {% set next_race = races | selectattr('status', 'equalto', 'upcoming') | first %}
                 {% if next_race %}
@@ -107,6 +105,12 @@
                     <p class="nextrace-label">NEXT RACE</p>
                     <p class="nextrace-empty">No upcoming races</p>
                     <a href="/addrace" class="btn btna" style="margin-top: 1rem;">+ Add Race</a>
+                {% endif %}
+
+                {% if days_since_last is not none %}
+                    <div class="dayssince">
+                        {{ days_since_last }} Days Since Last Race
+                    </div>
                 {% endif %}
             </div>
         </div>
