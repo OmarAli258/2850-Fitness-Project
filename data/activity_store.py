@@ -1,7 +1,7 @@
 import uuid
 from data.database import get_connection
 
-ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Gym"]
+ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifitng","Crossfit","Football","Yoga","Hiking","Rowing"]
 
 
 def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None):
@@ -172,4 +172,45 @@ def get_activity_summary(user_id):
         "total_minutes": total_minutes,
         "total_distance": round(total_distance, 2),
         "favorite_activity": favorite_activity
+    }
+#function for gettings statistics data
+def get_chart_data(user_id):
+    from datetime import date, timedelta
+
+    activities = get_activities_for_user(user_id)
+
+    today = date.today()
+    days = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
+    day_labels = [d.strftime("%a") for d in days]
+    day_strings = [d.strftime("%Y-%m-%d") for d in days]
+
+    workouts_per_day = [0] * 7
+    minutes_per_day = [0] * 7
+    distance_per_day = [0.0] * 7
+    type_counts = {}
+
+    for activity in activities:
+        if activity["date"] in day_strings:
+            index = day_strings.index(activity["date"])
+            workouts_per_day[index] += 1
+            minutes_per_day[index] += int(activity["duration"])
+            if activity["distance"]:
+                try:
+                    distance_per_day[index] += float(activity["distance"])
+                except ValueError:
+                    pass
+
+        activity_type = activity["type"]
+        if activity_type in type_counts:
+            type_counts[activity_type] += 1
+        else:
+            type_counts[activity_type] = 1
+
+    return {
+        "labels": day_labels,
+        "workouts": workouts_per_day,
+        "minutes": minutes_per_day,
+        "distance": [round(d, 2) for d in distance_per_day],
+        "type_labels": list(type_counts.keys()),
+        "type_counts": list(type_counts.values())
     }
