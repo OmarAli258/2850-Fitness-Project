@@ -1,5 +1,6 @@
 import uuid
 from data.database import get_connection
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def register(name, email, password):
     email = email.lower()
@@ -19,12 +20,15 @@ def register(name, email, password):
     
     user_id = str(uuid.uuid4())
 
+    # hash the password before storing it
+    password_hash = generate_password_hash(password)
+
     cursor.execute(
         """
         INSERT INTO users (id, name, email, password)
         VALUES (?, ?, ?, ?)
         """,
-        (user_id, name, email, password)
+        (user_id, name, email, password_hash)
     )
 
     connection.commit()
@@ -34,7 +38,7 @@ def register(name, email, password):
         "id": user_id,
         "name": name,
         "email": email,
-        "password": password
+        "password": password_hash
     }
 
 def login(email, password):
@@ -48,12 +52,14 @@ def login(email, password):
         (email,)
     ).fetchone()
 
+    connection.close()
+
     if user is None:
         return None
 
-    # wrong password
-    if user["password"] != password:
-         return None
+    # check typed password against the hashed password in the database
+    if not check_password_hash(user["password"], password):
+        return None
 
     return {
         "id": user["id"],
