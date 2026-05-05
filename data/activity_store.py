@@ -135,25 +135,27 @@ def delete_activity(activity_id, user_id):
     connection.commit()
     connection.close()
 
-
 def get_activity_summary(user_id):
-    activities = get_activities_for_user(user_id)
+    from datetime import date
 
-    total_workouts = len(activities)
+    activities = get_activities_for_user(user_id)
+    today_str = date.today().isoformat()
+
+    total_workouts = 0
     total_minutes = 0
     total_distance = 0.0
     activity_counts = {}
 
     for activity in activities:
+        if activity["date"] > today_str:
+            continue
+        total_workouts += 1
         total_minutes += int(activity["duration"])
-
         activity_type = activity["type"]
-
         if activity_type in activity_counts:
             activity_counts[activity_type] += 1
         else:
             activity_counts[activity_type] = 1
-
         distance = activity["distance"]
 
         if distance:
@@ -214,3 +216,9 @@ def get_chart_data(user_id):
         "type_labels": list(type_counts.keys()),
         "type_counts": list(type_counts.values())
     }
+def search_activities(user_id, query, limit=10):
+    if not query or not query.strip():
+        return []
+
+    activities = get_activities_for_user(user_id, search=query.strip())
+    return activities[:limit]

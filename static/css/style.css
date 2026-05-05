@@ -283,6 +283,62 @@ nav form {
     font-weight: 700;
     border: none;
 }
+.search-wrapper {
+    position: relative;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 0.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.search-dropdown.active {
+    display: block;
+}
+
+.search-result {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+.search-result:last-child {
+    border-bottom: none;
+}
+
+.search-result:hover {
+    background: rgba(245, 197, 24, 0.1);
+}
+
+.search-result-type {
+    color: var(--yellow);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.search-result-meta {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.search-empty {
+    padding: 1rem;
+    color: var(--text-muted);
+    text-align: center;
+}
 /* recent activity area*/
 .recentActivity {
     display: flex;
