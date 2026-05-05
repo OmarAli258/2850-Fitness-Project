@@ -1,3 +1,8 @@
+#this file defines routes and logic for creating, viewing, editing and deleting activities
+#also shows main activities page with search, filtering and grouping by upcming and past
+
+#import libraries for gpx parsing, json handling, flask routing/session features, activity/plan data access and date comparisons
+
 import gpxpy
 import json
 from flask import Blueprint, request, session, redirect, render_template
@@ -6,6 +11,8 @@ from datetime import date
 
 activities = Blueprint("activities", __name__)
 
+
+#this function prepares activity form data for creating, editing, or redisplaying the form after an error
 
 def _build_form_data(request_form=None, activity=None):
     if activity is not None:
@@ -31,6 +38,7 @@ def _build_form_data(request_form=None, activity=None):
     }
 
 
+#this function validates the required activity form fields before saving or updating an activity
 def _validate_activity(form_data):
     if form_data["activity_type"] == "":
         return "Please choose an activity type."
@@ -47,6 +55,7 @@ def _validate_activity(form_data):
     return ""
 
 
+#this function shows the blank activity form for logging a new workout
 @activities.route("/activities/new", methods=["GET"])
 def show_activity_form():
     if "user_id" not in session:
@@ -66,6 +75,7 @@ def show_activity_form():
     )
 
 
+#this function saves a new activity, including optional GPX route parsing and plan linking
 @activities.route("/activities/new", methods=["POST"])
 def save_activity():
     if "user_id" not in session:
@@ -88,19 +98,19 @@ def save_activity():
             if route_points:
                 route_data_json = json.dumps(route_points)
                 
-                # Auto-fill duration and distance if they are empty
-                # Using basic gpxpy properties
+                #this autofills duration and distance if they are empty
+                #using basic gpxpy properties
                 moving_data = gpx.get_moving_data()
                 if moving_data and form_data["distance"] == "":
                     distance_km = moving_data.moving_distance / 1000.0
                     form_data["distance"] = str(round(distance_km, 2))
                 
                 if form_data["duration"] == "":
-                    # approximate duration in minutes
+                    #approximate duration in minutes
                     duration_min = gpx.get_duration() / 60.0 if gpx.get_duration() else 0
                     form_data["duration"] = str(int(duration_min))
                 
-                # Re-validate after auto-fill
+                #revalidate after autofill
                 error = _validate_activity(form_data)
         except Exception as e:
             error = f"Error parsing GPX file: {str(e)}"
@@ -135,6 +145,7 @@ def save_activity():
     return redirect("/activities")
 
 
+#this function shows the detail page for one activity if it belongs to the logged in user
 @activities.route("/activities/<activity_id>", methods=["GET"])
 def view_activity(activity_id):
     if "user_id" not in session:
@@ -149,6 +160,7 @@ def view_activity(activity_id):
         activity=activity
     )
 
+#this function shows the edit form for an existing activity
 @activities.route("/activities/<activity_id>/edit", methods=["GET"])
 def edit_activity(activity_id):
     if "user_id" not in session:
@@ -172,6 +184,7 @@ def edit_activity(activity_id):
     )
 
 
+#this function validates and saves changes to an existing activity
 @activities.route("/activities/<activity_id>/edit", methods=["POST"])
 def save_edited_activity(activity_id):
     if "user_id" not in session:
@@ -210,6 +223,7 @@ def save_edited_activity(activity_id):
     return redirect("/activities")
 
 
+#this function deletes an activity owned by the logged in user
 @activities.route("/activities/<activity_id>/delete", methods=["POST"])
 def delete_activity(activity_id):
     if "user_id" not in session:
@@ -219,6 +233,7 @@ def delete_activity(activity_id):
     return redirect("/activities")
 
 
+#this function shows the activities page with search, type filtering, and upcomign and past grouping
 @activities.route("/activities", methods=["GET"])
 def show_activities():
     if "user_id" not in session:
@@ -256,3 +271,12 @@ def show_activities():
         filter_type=filter_type,
         search=search,
     )
+
+#done comments for activities.py 
+#summary of comments:
+# - shows blank activity form for logging new workout
+# - shows activity form
+# - validates input
+# - saves new and edited activities
+# - shows activity details
+# - deletes activities and shows main activities page with search, filtering and grouping by upcoming and past
