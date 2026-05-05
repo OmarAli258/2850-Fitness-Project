@@ -1,13 +1,15 @@
-import sqlite3
+import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv
 
-DATABASE_NAME = "fittrack.db"
-
+load_dotenv()
 
 def get_connection():
-    connection = sqlite3.connect(DATABASE_NAME)
-    connection.row_factory = sqlite3.Row
-    return connection
-
+    return psycopg2.connect(
+        os.environ.get("DATABASE_URL"),
+        cursor_factory=RealDictCursor
+    )
 
 def setup_database():
     connection = get_connection()
@@ -39,18 +41,10 @@ def setup_database():
         )
     """)
 
-    # If the activities table already existed before route_data was added,
-    # this updates the old table safely.
-    try:
-        cursor.execute("ALTER TABLE activities ADD COLUMN route_data TEXT")
-    except sqlite3.OperationalError:
-        # Column already exists, so no action is needed.
-        pass
-
     # Stores race tracker information
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS races (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             race_type TEXT NOT NULL,
             location TEXT NOT NULL,
@@ -65,11 +59,18 @@ def setup_database():
 
     connection.commit()
     
+    # If the activities table already existed before route_data was added,
+    # this updates the old table safely.
+    try:
+        cursor.execute("ALTER TABLE activities ADD COLUMN route_data TEXT")
+    except psycopg2.errors.DuplicateColumn:
+        pass
+
     # Add is_public column if it doesn't exist (for existing databases)
-    cursor.execute("PRAGMA table_info(activities)")
-    columns = [row[1] for row in cursor.fetchall()]
-    if "is_public" not in columns:
+    try:
         cursor.execute("ALTER TABLE activities ADD COLUMN is_public INTEGER DEFAULT 0")
-    
+    except psycopg2.errors.DuplicateColumn:
+        pass
+        
     connection.commit()
     connection.close()
