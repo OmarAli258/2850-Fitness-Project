@@ -90,3 +90,23 @@ def get_race_summary(user_id):
         "past_races": past_races,
         "personal_bests": personal_bests
     }
+
+#function that auto sends races from upcoming to past when date passes
+def update_race_statuses(user_id):
+    from datetime import date
+    today = str(date.today())
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE races
+        SET status = 'past'
+        WHERE user_id = ? AND status = 'upcoming' AND date < ?
+        """,
+        (user_id, today)
+    )
+
+    connection.commit()
+    connection.close()
