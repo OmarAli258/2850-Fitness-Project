@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link href="/static/css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <title>Dashboard</title>
@@ -84,7 +85,8 @@
                                     No distance
                                 {% endif %}
                             </p>
-                            <a href="/activities/{{ activity.id }}/edit">Edit</a>
+                            <a href="/activities/{{ activity.id }}" class="btn btna" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">View</a>
+                            <a href="/activities/{{ activity.id }}/edit" style="margin-left: 0.5rem;">Edit</a>
                         </div>
                     </div>
                     {% endfor %}

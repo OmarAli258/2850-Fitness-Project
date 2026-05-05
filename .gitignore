@@ -34,9 +34,4 @@ out/
 
 ### VS Code ###
 .vscode/__pycache__/
-*.pyc
-
-### Database ###
-*.db
-*.sqlite
-*.sqlite3
+*.pyc*.db
