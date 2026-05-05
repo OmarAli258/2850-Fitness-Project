@@ -69,6 +69,107 @@
             </div>
         </section>
 
+        <section style="padding: 0 5%; margin-bottom: 1.5rem;">
+            <h2 style="margin-bottom: 0.75rem;">Adherence Summary</h2>
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.5rem; display: flex; flex-wrap: wrap; gap: 2rem;">
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Avg Rating</span>
+                    <p style="font-weight: 700; font-size: 1.1rem;">
+                        {% if adherence_summary.avg_rating > 0 %}
+                            {{ adherence_summary.avg_rating }}/5
+                        {% else %}
+                            Not rated yet
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Total Rated</span>
+                    <p style="font-weight: 700; font-size: 1.1rem;">{{ adherence_summary.total_sessions }}</p>
+                </div>
+                <div>
+                    <span style="color: #4caf50; font-size: 0.9rem;">Excellent (4-5)</span>
+                    <p style="font-weight: 700; font-size: 1.1rem;">{{ adherence_summary.excellent_sessions }}</p>
+                </div>
+                <div>
+                    <span style="color: var(--yellow); font-size: 0.9rem;">On Track (3)</span>
+                    <p style="font-weight: 700; font-size: 1.1rem;">{{ adherence_summary.on_track_sessions }}</p>
+                </div>
+                <div>
+                    <span style="color: #ff4d4d; font-size: 0.9rem;">Missed/Poor (1-2)</span>
+                    <p style="font-weight: 700; font-size: 1.1rem;">{{ adherence_summary.missed_sessions }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding: 0 5%; margin-bottom: 1.5rem;">
+            <h2 style="margin-bottom: 0.75rem;">Rate Session Adherence</h2>
+            <form action="/plans/{{ completion.plan.id }}/adherence" method="post" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.85rem; font-weight:700; color: var(--text-muted);">Session Date</label>
+                    <input type="date" name="session_date" required style="padding:0.6rem 0.8rem; border-radius:8px; border:1px solid var(--border); background: var(--bg-raised); color: var(--text); font-size:0.95rem;">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <label style="font-size:0.85rem; font-weight:700; color: var(--text-muted);">How well did you follow the plan?</label>
+                    <select name="rating" required style="padding:0.6rem 0.8rem; border-radius:8px; border:1px solid var(--border); background: var(--bg-raised); color: var(--text); font-size:0.95rem;">
+                        <option value="5">5 - Excellent (fully followed)</option>
+                        <option value="4">4 - Good (mostly followed)</option>
+                        <option value="3">3 - On Track (partially followed)</option>
+                        <option value="2">2 - Below (barely followed)</option>
+                        <option value="1">1 - Missed (did not follow)</option>
+                    </select>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem; flex:1; min-width:200px;">
+                    <label style="font-size:0.85rem; font-weight:700; color: var(--text-muted);">Notes (optional)</label>
+                    <input type="text" name="adherence_notes" placeholder="e.g. Cut session short, ran extra, etc." style="padding:0.6rem 0.8rem; border-radius:8px; border:1px solid var(--border); background: var(--bg-raised); color: var(--text); font-size:0.95rem;">
+                </div>
+                <button type="submit" class="btn btna" style="padding:0.6rem 1.2rem;">Record</button>
+            </form>
+        </section>
+
+        <section style="padding: 0 5%; margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1rem;">Adherence Log</h2>
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow-x:auto;">
+                <table style="min-width: 600px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left; padding-left: 1.2rem;">Date</th>
+                            <th>Rating</th>
+                            <th>Notes</th>
+                            <th>Del</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if adherence|length == 0 %}
+                        <tr>
+                            <td colspan="4" style="padding: 2rem; text-align:center; color: var(--text-muted);">No adherence records yet. Use the form above to rate each session.</td>
+                        </tr>
+                        {% else %}
+                        {% for record in adherence %}
+                        <tr>
+                            <td style="text-align:left; padding-left: 1.2rem;">{{ record.session_date }}</td>
+                            <td>
+                                {% if record.rating >= 4 %}
+                                <span class="status-badge status-completed">{{ record.rating }}/5</span>
+                                {% elif record.rating == 3 %}
+                                <span class="status-badge status-active">{{ record.rating }}/5</span>
+                                {% else %}
+                                <span class="status-badge status-paused">{{ record.rating }}/5</span>
+                                {% endif %}
+                            </td>
+                            <td style="color: var(--text-muted);">{{ record.notes if record.notes else '—' }}</td>
+                            <td>
+                                <form action="/plans/{{ completion.plan.id }}/adherence/{{ record.id }}/delete" method="post" style="margin:0; display:inline;">
+                                    <button type="submit" class="deletebtn" style="border:none; background:none; padding:0.5rem 0.9rem;">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section style="padding: 0 5%; margin-bottom: 3rem;">
             <h2 style="margin-bottom: 1rem;">Completed Activities</h2>
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow-x:auto;">

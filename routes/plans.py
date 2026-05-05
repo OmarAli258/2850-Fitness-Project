@@ -50,7 +50,7 @@ def show_plans():
 
     plans_with_completion = []
     for plan in plans_list:
-        completion = plan_store.get_plan_completion(plan["id"], session["user_id"])
+        completion = plan_store.get_plan_completion(session["user_id"], plan["id"])
         plans_with_completion.append({
             **plan,
             "completed_count": completion["completed_count"] if completion else 0,
@@ -122,9 +122,14 @@ def view_plan(plan_id):
     if completion is None:
         return redirect("/plans")
 
+    adherence = plan_store.get_adherence_for_plan(session["user_id"], plan_id)
+    adherence_summary = plan_store.get_adherence_summary(session["user_id"], plan_id)
+
     return render_template(
         "plan_detail.html",
         completion=completion,
+        adherence=adherence,
+        adherence_summary=adherence_summary,
     )
 
 
@@ -189,3 +194,42 @@ def delete_plan(plan_id):
 
     plan_store.delete_plan(plan_id, session["user_id"])
     return redirect("/plans")
+
+
+@plans.route("/plans/<plan_id>/adherence", methods=["POST"])
+def record_plan_adherence(plan_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    session_date = request.form.get("session_date", "").strip()
+    rating = request.form.get("rating", "").strip()
+    notes = request.form.get("adherence_notes", "").strip()
+
+    if not session_date or not rating:
+        return redirect(f"/plans/{plan_id}")
+
+    try:
+        rating = int(rating)
+        if rating < 1 or rating > 5:
+            return redirect(f"/plans/{plan_id}")
+    except ValueError:
+        return redirect(f"/plans/{plan_id}")
+
+    plan_store.record_adherence(
+        user_id=session["user_id"],
+        plan_id=plan_id,
+        session_date=session_date,
+        rating=rating,
+        notes=notes,
+    )
+
+    return redirect(f"/plans/{plan_id}")
+
+
+@plans.route("/plans/<plan_id>/adherence/<adherence_id>/delete", methods=["POST"])
+def delete_plan_adherence(plan_id, adherence_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    plan_store.delete_adherence(adherence_id, session["user_id"])
+    return redirect(f"/plans/{plan_id}")

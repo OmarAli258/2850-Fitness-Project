@@ -78,4 +78,23 @@ def setup_database():
     except Exception:
         pass
 
+    # Stores plan adherence records (how well planned sessions were followed)
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS plan_adherence (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                plan_id TEXT NOT NULL,
+                session_date TEXT NOT NULL,
+                rating INTEGER NOT NULL,
+                notes TEXT,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (plan_id) REFERENCES plans(id)
+            )
+        """)
+        connection.commit()
+    except Exception:
+        pass
+
     connection.close()

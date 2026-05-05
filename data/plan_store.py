@@ -146,7 +146,7 @@ def delete_plan(plan_id, user_id):
     connection.close()
 
 
-def get_plan_completion(plan_id, user_id):
+def get_plan_completion(user_id, plan_id):
     plan = get_plan(user_id, plan_id)
     if plan is None:
         return None
@@ -256,7 +256,7 @@ def get_plan_summary(user_id):
     completion_count = 0
 
     for plan in plans:
-        completion = get_plan_completion(plan["id"], user_id)
+        completion = get_plan_completion(user_id, plan["id"])
         if completion:
             overall_completion += completion["completion_rate"]
             completion_count += 1
@@ -270,3 +270,94 @@ def get_plan_summary(user_id):
         "completed_plans": completed_plans,
         "avg_completion": avg_completion
     }
+
+
+def record_adherence(user_id, plan_id, session_date, rating, notes):
+    adherence_id = str(uuid.uuid4())
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO plan_adherence (id, user_id, plan_id, session_date, rating, notes, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (adherence_id, user_id, plan_id, session_date, int(rating), notes, created_at)
+    )
+
+    connection.commit()
+    connection.close()
+
+    return {
+        "id": adherence_id,
+        "plan_id": plan_id,
+        "session_date": session_date,
+        "rating": int(rating),
+        "notes": notes,
+        "created_at": created_at,
+    }
+
+
+def get_adherence_for_plan(user_id, plan_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    rows = cursor.execute(
+        """
+        SELECT * FROM plan_adherence
+        WHERE user_id = ? AND plan_id = ?
+        ORDER BY session_date DESC
+        """,
+        (user_id, plan_id)
+    ).fetchall()
+
+    connection.close()
+
+    records = []
+    for row in rows:
+        records.append({
+            "id": row["id"],
+            "plan_id": row["plan_id"],
+            "session_date": row["session_date"],
+            "rating": row["rating"],
+            "notes": row["notes"],
+            "created_at": row["created_at"],
+        })
+
+    return records
+
+
+def get_adherence_summary(user_id, plan_id):
+    records = get_adherence_for_plan(user_id, plan_id)
+
+    if not records:
+        return {"avg_rating": 0, "total_sessions": 0, "missed_sessions": 0, "on_track_sessions": 0, "excellent_sessions": 0}
+
+    total = len(records)
+    avg_rating = round(sum(r["rating"] for r in records) / total, 1)
+    missed = sum(1 for r in records if r["rating"] <= 2)
+    on_track = sum(1 for r in records if r["rating"] == 3)
+    excellent = sum(1 for r in records if r["rating"] >= 4)
+
+    return {
+        "avg_rating": avg_rating,
+        "total_sessions": total,
+        "missed_sessions": missed,
+        "on_track_sessions": on_track,
+        "excellent_sessions": excellent,
+    }
+
+
+def delete_adherence(adherence_id, user_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "DELETE FROM plan_adherence WHERE id = ? AND user_id = ?",
+        (adherence_id, user_id)
+    )
+
+    connection.commit()
+    connection.close()
