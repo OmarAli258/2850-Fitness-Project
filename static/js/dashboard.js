@@ -87,18 +87,18 @@ function showchart(type) {
     let chartData = {}
 
     if (type == "workouts") {
-        chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [1, 0, 2, 0, 1, 2, 0],
-            label: "Workouts This Week",
-            type: "bar"
-        }
+    chartData = {
+        labels: CHART_DATA.labels,
+        data: CHART_DATA.workouts,
+        label: "Workouts This Week",
+        type: "bar"
     }
+}
 
     if (type == "time") {
         chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [45, 0, 60, 0, 30, 50, 0],
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.minutes,
             label: "Minutes Spent This Week",
             type: "bar"
         }
@@ -106,30 +106,33 @@ function showchart(type) {
 
     if (type == "distance") {
         chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [5, 0, 8, 0, 3, 6, 0],
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.distance,
             label: "Distance This Week (km)",
             type: "line"
         }
     }
 
-    if (type == "streak") {
-        chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [1, 1, 1, 0, 1, 1, 1],
-            label: "Active Days This Week",
-            type: "bar"
-        }
-    }
-
     if (type == "favorite") {
         chartData = {
-            labels: ["Running", "Swimming", "Cycling", "Weightlifting", "Crossfit"],
-            data: [12, 8, 5, 3, 2],
+            labels: CHART_DATA.type_labels,
+            data: CHART_DATA.type_counts,
             label: "Exercise Breakdown",
             type: "doughnut"
         }
     }
+    if (type == "races") {
+    chartData = {
+        labels: ["Upcoming", "Past", "PBs"],
+        data: [
+            CHART_DATA.upcoming_races,
+            CHART_DATA.past_races,
+            CHART_DATA.personal_bests
+        ],
+        label: "Race Summary",
+        type: "bar"
+    }
+}
 
     let chartColours = "#f5c518"
     let borderColours = "#f5c518"
@@ -145,17 +148,17 @@ function showchart(type) {
     }
 
     if (type == "races") {
-        chartColours = "#ff9f40"
-        borderColours = "#ff9f40"
+        chartColours = ["#ff9f40", "#f5c518", "#2ecc71"]
+        borderColours = ["#0a0a0a", "#0a0a0a", "#0a0a0a"]
     }
 
     if (type == "favorite") {
         chartColours = [
             "#f5c518",
-            "#3498db",
-            "#2ecc71",
-            "#e74c3c",
-            "#9b59b6"
+            "#2c80b8",
+            "#2ecc55",
+            "#3ce7b7",
+            "#c31b1b"
         ]
         borderColours = [
             "#0a0a0a",
@@ -193,7 +196,10 @@ function showchart(type) {
                     grid: { color: "#222222" }
                 },
                 y: {
-                    ticks: { color: "#ffffff" },
+                    ticks: { 
+                        color: "#ffffff",
+                        stepSize: 1
+                    },
                     grid: { color: "#222222" }
                 }
             }
