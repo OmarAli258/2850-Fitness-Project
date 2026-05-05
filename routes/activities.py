@@ -272,7 +272,7 @@ def show_activities():
         search=search,
     )
 
-#done comments for activities.py 
+#done comments for routes/activities.py 
 #summary of comments:
 # - shows blank activity form for logging new workout
 # - shows activity form
