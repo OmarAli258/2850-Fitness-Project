@@ -67,6 +67,7 @@
                             <th>Type</th>
                             <th>Duration</th>
                             <th>Distance</th>
+                            <th>Visibility</th>
                             <th>View</th>
                             <th>Edit</th>
                             <th>Del</th>
@@ -75,7 +76,7 @@
                     <tbody>
                         {% if upcoming_activities|length == 0 %}
                         <tr>
-                            <td colspan="7" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities.</td>
+                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities.</td>
                         </tr>
                         {% else %}
                         {% for activity in upcoming_activities %}
@@ -84,6 +85,7 @@
                             <td>{{ activity.type }}</td>
                             <td>{{ activity.duration }} min</td>
                             <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
+                            <td>{% if activity.is_public %}<span style="color: #2ecc71;">Public</span>{% else %}<span style="color: var(--text-muted);">Private</span>{% endif %}</td>
                             <td><a class="btn btna" href="/activities/{{ activity.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
                             <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
                             <td>
@@ -109,6 +111,7 @@
                             <th>Type</th>
                             <th>Duration</th>
                             <th>Distance</th>
+                            <th>Visibility</th>
                             <th>View</th>
                             <th>Edit</th>
                             <th>Del</th>
@@ -117,7 +120,7 @@
                     <tbody>
                         {% if past_activities|length == 0 %}
                         <tr>
-                            <td colspan="7" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities.</td>
+                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities.</td>
                         </tr>
                         {% else %}
                         {% for activity in past_activities %}
@@ -126,6 +129,7 @@
                             <td>{{ activity.type }}</td>
                             <td>{{ activity.duration }} min</td>
                             <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
+                            <td>{% if activity.is_public %}<span style="color: #2ecc71;">Public</span>{% else %}<span style="color: var(--text-muted);">Private</span>{% endif %}</td>
                             <td><a class="btn btna" href="/activities/{{ activity.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
                             <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
                             <td>

@@ -32,6 +32,7 @@ def setup_database():
             distance TEXT,
             notes TEXT,
             route_data TEXT,
+            is_public INTEGER DEFAULT 0,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
@@ -52,5 +53,13 @@ def setup_database():
         )
     """)
 
+    connection.commit()
+    
+    # Add is_public column if it doesn't exist (for existing databases)
+    cursor.execute("PRAGMA table_info(activities)")
+    columns = [row[1] for row in cursor.fetchall()]
+    if "is_public" not in columns:
+        cursor.execute("ALTER TABLE activities ADD COLUMN is_public INTEGER DEFAULT 0")
+    
     connection.commit()
     connection.close()

@@ -15,6 +15,7 @@ def _build_form_data(request_form=None, activity=None):
             "duration": activity.get("duration", ""),
             "distance": activity.get("distance", ""),
             "notes": activity.get("notes", ""),
+            "is_public": activity.get("is_public", 0),
         }
 
     request_form = request_form or {}
@@ -24,6 +25,7 @@ def _build_form_data(request_form=None, activity=None):
         "duration": request_form.get("duration", "").strip(),
         "distance": request_form.get("distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
+        "is_public": 1 if request_form.get("is_public") == "on" else 0,
     }
 
 
@@ -116,7 +118,8 @@ def save_activity():
         duration=form_data["duration"],
         distance=form_data["distance"],
         notes=form_data["notes"],
-        route_data=route_data_json
+        route_data=route_data_json,
+        is_public=form_data.get("is_public", 0)
     )
 
     return redirect("/activities")
@@ -183,6 +186,7 @@ def save_edited_activity(activity_id):
         duration=form_data["duration"],
         distance=form_data["distance"],
         notes=form_data["notes"],
+        is_public=form_data.get("is_public", 0)
     )
 
     return redirect("/activities")

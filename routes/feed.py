@@ -12,6 +12,7 @@ def index():
         SELECT activities.*, users.name as user_name
         FROM activities
         JOIN users ON activities.user_id = users.id
+        WHERE activities.is_public = 1
         ORDER BY activities.date DESC
     """)
 
