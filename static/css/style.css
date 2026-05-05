@@ -467,6 +467,26 @@ td{
     transform: scale(1.15);
     box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
 }
+
+.deletebtn-plan {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: default;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.deletebtn-plan:hover {
+    background: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+}
 /*addraces css*/
 /* Add Race page */
 .addracehead {

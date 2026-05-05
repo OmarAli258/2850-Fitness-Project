@@ -55,6 +55,7 @@ def show_plans():
             **plan,
             "completed_count": completion["completed_count"] if completion else 0,
             "expected_sessions": completion["expected_sessions"] if completion else 0,
+            "frequency_target": completion["frequency_target"] if completion else 1,
             "completion_rate": completion["completion_rate"] if completion else 0,
         })
 
@@ -193,6 +194,34 @@ def delete_plan(plan_id):
         return redirect("/login")
 
     plan_store.delete_plan(plan_id, session["user_id"])
+    return redirect("/plans")
+
+
+@plans.route("/plans/<plan_id>/status", methods=["POST"])
+def update_plan_status(plan_id):
+    if "user_id" not in session:
+        return redirect("/login")
+
+    new_status = request.form.get("status", "active").strip()
+    if new_status not in ["active", "paused", "completed"]:
+        return redirect(f"/plans/{plan_id}")
+
+    plan = plan_store.get_plan(session["user_id"], plan_id)
+    if plan is None:
+        return redirect("/plans")
+
+    plan_store.update_plan(
+        plan_id=plan_id,
+        user_id=session["user_id"],
+        name=plan["name"],
+        exercise_type=plan["exercise_type"],
+        frequency=plan["frequency"],
+        target_duration=plan["target_duration"],
+        target_distance=plan["target_distance"],
+        notes=plan["notes"],
+        status=new_status,
+    )
+
     return redirect("/plans")
 
 

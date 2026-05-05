@@ -11,87 +11,79 @@
 <body>
     {% include "navbar.html" %}
     <main>
-        <section class="hero" style="padding: 3rem 5% 2rem; min-height: auto;">
-            <div class="hero-text" style="max-width: 680px; padding-left: 0; padding-right: 0;">
-                <h1>Exercise Plans</h1>
-                <p>Create and track structured exercise programmes with completion goals.</p>
+        <section class="hero" style="padding: 4rem 5% 3rem; min-height: auto;">
+            <div class="hero-text" style="max-width: 800px; padding-left: 0; padding-right: 0;">
+                <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Exercise Plans</h1>
+                <p style="font-size: 1.25rem; color: var(--text-muted);">Create and track structured exercise programmes with goals. Link activities to see your progress.</p>
             </div>
-            <a href="/plans/new" class="btn btna" style="margin-left: auto; margin-right: 2rem;">Create Plan</a>
+            <a href="/plans/new" class="btn btna" style="margin-left: auto; margin-right: 2rem; padding: 1rem 2rem; font-size: 1.1rem;">+ Create Plan</a>
         </section>
 
-        <section class="statsRow" style="padding: 0 5% 2rem; grid-template-columns: repeat(5, 1fr);">
-            <div class="statscard">
-                <span class="stat-number">{{ summary.total_plans }}</span>
-                <span class="stat-label">Total Plans</span>
+        <section class="statsRow" style="padding: 3rem 5% 3rem; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+            <div class="statscard" style="padding: 3rem; text-align: center;">
+                <span class="stat-number" style="font-size: 4rem;">{{ summary.total_plans }}</span>
+                <span class="stat-label" style="font-size: 1.2rem; margin-top: 1rem;">Total Plans</span>
             </div>
-            <div class="statscard">
-                <span class="stat-number">{{ summary.active_plans }}</span>
-                <span class="stat-label">Active</span>
-            </div>
-            <div class="statscard">
-                <span class="stat-number">{{ summary.paused_plans }}</span>
-                <span class="stat-label">Paused</span>
-            </div>
-            <div class="statscard">
-                <span class="stat-number">{{ summary.completed_plans }}</span>
-                <span class="stat-label">Completed</span>
-            </div>
-            <div class="statscard">
-                <span class="stat-number">{{ summary.avg_completion }}%</span>
-                <span class="stat-label">Avg Completion</span>
+            <div class="statscard" style="padding: 3rem; text-align: center;">
+                <span class="stat-number" style="font-size: 4rem;">{{ summary.active_plans }}</span>
+                <span class="stat-label" style="font-size: 1.2rem; margin-top: 1rem;">Active Plans</span>
             </div>
         </section>
 
-        <section style="padding: 0 5%; margin-bottom: 3rem;">
-            <h2 style="margin-bottom: 1rem;">Your Plans</h2>
-            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow-x:auto;">
-                <table style="min-width: 820px;">
+        <section style="padding: 2rem 5%; margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Your Plans</h2>
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1rem;">
+                <table style="min-width: 1000px; border-collapse: separate; border-spacing: 0 0.5rem;">
                     <thead>
-                        <tr>
-                            <th style="text-align:left; padding-left: 1.2rem;">Name</th>
-                            <th>Type</th>
-                            <th>Frequency</th>
-                            <th>Target Duration</th>
-                            <th>Target Distance</th>
-                            <th>Status</th>
-                            <th>Completion</th>
-                            <th>View</th>
-                            <th>Edit</th>
-                            <th>Del</th>
+                        <tr style="background: var(--bg-raised);">
+                            <th style="text-align:left; padding: 1.5rem 2rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Plan Name</th>
+                            <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Exercise</th>
+                            <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Frequency</th>
+                            <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Target Duration</th>
+                            <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Status</th>
+                            <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Sessions</th>
+                            <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--text-muted); font-weight: 700;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% if plans|length == 0 %}
                         <tr>
-                            <td colspan="10" style="padding: 2rem; text-align:center; color: var(--text-muted);">No plans created yet.</td>
+                            <td colspan="7" style="padding: 4rem; text-align:center; color: var(--text-muted); font-size: 1.25rem;">No plans created yet. Click "Create Plan" to get started.</td>
                         </tr>
                         {% else %}
                         {% for plan in plans %}
-                        <tr>
-                            <td style="text-align:left; padding-left: 1.2rem; font-weight: 600;">{{ plan.name }}</td>
-                            <td>{{ plan.exercise_type }}</td>
-                            <td>{{ plan.frequency }}</td>
-                            <td>{{ plan.target_duration ~ ' min' if plan.target_duration else 'N/A' }}</td>
-                            <td>{{ plan.target_distance if plan.target_distance else 'N/A' }}</td>
-                            <td>
-                                <span class="status-badge status-{{ plan.status }}">
-                                    {{ plan.status | capitalize }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="completion-bar">
-                                    <div class="completion-bar-fill" style="width: {{ plan.completion_rate }}%;"></div>
-                                </div>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">
-                                    {{ plan.completed_count }}/{{ plan.expected_sessions }} ({{ plan.completion_rate }}%)
-                                </span>
-                            </td>
-                            <td><a class="btn btna" href="/plans/{{ plan.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
-                            <td><a class="btn btnb" href="/plans/{{ plan.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
-                            <td>
-                                <form action="/plans/{{ plan.id }}/delete" method="post" style="margin:0; display:inline;">
-                                    <button type="submit" class="deletebtn" style="border:none; background:none; padding:0.5rem 0.9rem;">🗑️</button>
+                        <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border);">
+                            <td style="text-align:left; padding: 1.5rem 2rem; font-weight: 700; font-size: 1.25rem;">{{ plan.name }}</td>
+                            <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.exercise_type }}</td>
+                            <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.frequency }}</td>
+                            <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.target_duration ~ ' min' if plan.target_duration else 'N/A' }}</td>
+                            <td style="padding: 1.5rem 1.5rem;">
+                                <form action="/plans/{{ plan.id }}/status" method="post" style="display:inline;">
+                                    <select name="status" onchange="this.form.submit()" style="padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1rem; cursor: pointer; min-width: 130px;">
+                                        <option value="active" {% if plan.status == 'active' %}selected{% endif %}>🟢 Active</option>
+                                        <option value="paused" {% if plan.status == 'paused' %}selected{% endif %}>🟡 Paused</option>
+                                        <option value="completed" {% if plan.status == 'completed' %}selected{% endif %}>🟣 Completed</option>
+                                    </select>
                                 </form>
+                            </td>
+                            <td style="padding: 1.5rem 1.5rem;">
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 1rem;">
+                                        <div style="flex: 1; min-width: 120px; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden;">
+                                            <div style="height: 100%; width: {{ plan.completion_rate }}%; background: {% if plan.completion_rate >= 80 %}#4caf50{% elif plan.completion_rate >= 50 %}var(--yellow){% else %}#ff4d4d{% endif %}; border-radius: 7px; transition: width 0.3s ease;"></div>
+                                        </div>
+                                        <span style="font-size: 1rem; color: var(--text-muted); min-width: 60px; text-align: right;">{{ plan.completed_count }}/{{ plan.frequency_target }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 1.5rem 1.5rem;">
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <a href="/plans/{{ plan.id }}" class="btn btna" style="padding: 0.75rem 1.25rem; font-size: 1rem;">View</a>
+                                    <a href="/plans/{{ plan.id }}/edit" class="btn btnb" style="padding: 0.75rem 1.25rem; font-size: 1rem;">Edit</a>
+                                    <form action="/plans/{{ plan.id }}/delete" method="post" style="margin:0;">
+                                        <button type="submit" class="deletebtn-plan" title="Delete plan" style="padding: 0.75rem 1rem;">🗑️</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

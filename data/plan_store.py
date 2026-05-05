@@ -185,15 +185,17 @@ def get_plan_completion(user_id, plan_id):
 
     frequency = plan["frequency"].lower().strip()
     expected_sessions = _calculate_expected_sessions(frequency, days_since_created)
+    frequency_target = _get_frequency_target(frequency)
 
     completion_rate = 0
-    if expected_sessions > 0:
-        completion_rate = round((len(activities) / expected_sessions) * 100, 1)
+    if expected_sessions > 0 and len(activities) > 0:
+        completion_rate = min(100, round((len(activities) / expected_sessions) * 100, 1))
 
     return {
         "plan": plan,
         "completed_count": len(activities),
         "expected_sessions": expected_sessions,
+        "frequency_target": frequency_target,
         "completion_rate": completion_rate,
         "total_duration": total_duration,
         "activities": activities
@@ -244,6 +246,17 @@ def _calculate_expected_sessions(frequency, days):
     return int(weeks)
 
 
+def _get_frequency_target(frequency):
+    if "x" in frequency:
+        try:
+            return int(frequency.split("x")[0].strip())
+        except (ValueError, IndexError):
+            pass
+    elif frequency in ("daily", "weekly"):
+        return 1
+    return 1
+
+
 def get_plan_summary(user_id):
     plans = get_plans_for_user(user_id)
 
@@ -251,24 +264,20 @@ def get_plan_summary(user_id):
     active_plans = sum(1 for p in plans if p["status"] == "active")
     paused_plans = sum(1 for p in plans if p["status"] == "paused")
     completed_plans = sum(1 for p in plans if p["status"] == "completed")
-
-    overall_completion = 0
-    completion_count = 0
+    
+    total_activities_logged = 0
 
     for plan in plans:
         completion = get_plan_completion(user_id, plan["id"])
         if completion:
-            overall_completion += completion["completion_rate"]
-            completion_count += 1
-
-    avg_completion = round(overall_completion / completion_count, 1) if completion_count > 0 else 0
+            total_activities_logged += completion["completed_count"]
 
     return {
         "total_plans": total_plans,
         "active_plans": active_plans,
         "paused_plans": paused_plans,
         "completed_plans": completed_plans,
-        "avg_completion": avg_completion
+        "total_activities_logged": total_activities_logged
     }
 
 
