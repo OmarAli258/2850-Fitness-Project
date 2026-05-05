@@ -9,8 +9,10 @@
     <link rel="icon" href="/static/images/favicon.ico">
 </head>
 <body>
+    <!-- include the shared navigation bar used across the site -->
     {% include "navbar.html" %}
     <main>
+        <!-- hero section introduces the plans page and gives users a quick way to create a new plan -->
         <section class="hero" style="padding: 4rem 5% 3rem; min-height: auto;">
             <div class="hero-text" style="max-width: 800px; padding-left: 0; padding-right: 0;">
                 <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Exercise Plans</h1>
@@ -19,6 +21,7 @@
             <a href="/plans/new" class="btn btna" style="margin-left: auto; margin-right: 2rem; padding: 1rem 2rem; font-size: 1.1rem;">+ Create Plan</a>
         </section>
 
+        <!-- summary cards show the users total plans and how many are currently active -->
         <section class="statsRow" style="padding: 3rem 5% 3rem; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
             <div class="statscard" style="padding: 3rem; text-align: center;">
                 <span class="stat-number" style="font-size: 4rem;">{{ summary.total_plans }}</span>
@@ -30,6 +33,7 @@
             </div>
         </section>
 
+        <!-- table section lists every plan owned by the logged in user -->
         <section style="padding: 2rem 5%; margin-bottom: 3rem;">
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Your Plans</h2>
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1rem;">
@@ -46,11 +50,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- show a friendly message if the user has not created any plans yet -->
                         {% if plans|length == 0 %}
                         <tr>
                             <td colspan="7" style="padding: 4rem; text-align:center; color: var(--text-muted); font-size: 1.25rem;">No plans created yet. Click "Create Plan" to get started.</td>
                         </tr>
                         {% else %}
+                        <!-- render each plan with its details, status, session progress and actions -->
                         {% for plan in plans %}
                         <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border);">
                             <td style="text-align:left; padding: 1.5rem 2rem; font-weight: 700; font-size: 1.25rem;">{{ plan.name }}</td>
@@ -58,6 +64,7 @@
                             <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.frequency }}</td>
                             <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.target_duration ~ ' min' if plan.target_duration else 'N/A' }}</td>
                             <td style="padding: 1.5rem 1.5rem;">
+                                <!-- changing the dropdown automatically submits the plans new status -->
                                 <form action="/plans/{{ plan.id }}/status" method="post" style="display:inline;">
                                     <select name="status" onchange="this.form.submit()" style="padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1rem; cursor: pointer; min-width: 130px;">
                                         <option value="active" {% if plan.status == 'active' %}selected{% endif %}>🟢 Active</option>
@@ -67,6 +74,7 @@
                                 </form>
                             </td>
                             <td style="padding: 1.5rem 1.5rem;">
+                                <!-- progress bar compares completed sessions with the target number of sessions -->
                                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                                     <div style="display: flex; align-items: center; gap: 1rem;">
                                         <div style="flex: 1; min-width: 120px; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden;">
@@ -77,6 +85,7 @@
                                 </div>
                             </td>
                             <td style="padding: 1.5rem 1.5rem;">
+                                <!-- action buttons let the user view details, edit the plan or delete it -->
                                 <div style="display: flex; gap: 0.75rem;">
                                     <a href="/plans/{{ plan.id }}" class="btn btna" style="padding: 0.75rem 1.25rem; font-size: 1rem;">View</a>
                                     <a href="/plans/{{ plan.id }}/edit" class="btn btnb" style="padding: 0.75rem 1.25rem; font-size: 1rem;">Edit</a>
@@ -94,5 +103,7 @@
         </section>
     </main>
     <script src="/static/js/main.js"></script>
+    <!-- done comments for templates/plans.html -->
+    <!-- summary of comments: page intro, plan summary cards, empty state, plan rows, status updates, progress bar and action buttons -->
 </body>
 </html>
