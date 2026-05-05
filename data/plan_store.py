@@ -48,7 +48,8 @@ def get_plans_for_user(user_id, status=None):
 
     query += " ORDER BY created_at DESC"
 
-    rows = cursor.execute(query, values).fetchall()
+    cursor.execute(query, values)
+    rows = cursor.fetchall()
     connection.close()
 
     plans = []
@@ -77,10 +78,11 @@ def get_plan(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    row = cursor.execute(
+    cursor.execute(
         "SELECT * FROM plans WHERE user_id = %s AND id = %s",
         (user_id, plan_id)
-    ).fetchone()
+    )
+    row = cursor.fetchone()
 
     connection.close()
 

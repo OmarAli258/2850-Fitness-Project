@@ -56,7 +56,8 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
 
     query += " ORDER BY date DESC"
 
-    rows = cursor.execute(query, values).fetchall()
+    cursor.execute(query, values)
+    rows = cursor.fetchall()
     connection.close()
 
     activities = []
@@ -87,13 +88,14 @@ def get_activity(user_id, activity_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    row = cursor.execute(
+    cursor.execute(
         """
         SELECT * FROM activities
         WHERE user_id = %s AND id = %s
         """,
         (user_id, activity_id)
-    ).fetchone()
+    )
+    row = cursor.fetchone()
 
     connection.close()
 
