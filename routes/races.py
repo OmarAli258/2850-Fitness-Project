@@ -23,7 +23,7 @@ def racetracker():
     races_with_countdown = []
 
     for race in user_races:
-        race_dict = dict(race)  # convert to regular dictionary
+        race_dict = dict(race)
         if race_dict['status'] == 'upcoming':
             race_date = datetime.strptime(race_dict['date'], '%Y-%m-%d').date()
             diff = (race_date - today).days
@@ -37,7 +37,20 @@ def racetracker():
             race_dict['countdown'] = ''
         races_with_countdown.append(race_dict)
 
-    return render_template("racetracker.html", races=races_with_countdown, summary=summary)
+    days_since_last = None
+    past_races = [r for r in races_with_countdown if r['status'] == 'past']
+    if past_races:
+        most_recent_past = max(past_races, key=lambda r: r['date'])
+        last_date = datetime.strptime(most_recent_past['date'], '%Y-%m-%d').date()
+        days_since_last = (today - last_date).days
+
+    return render_template(
+        "racetracker.html",
+        races=races_with_countdown,
+        summary=summary,
+        days_since_last=days_since_last
+    )
+
 
 @races.route("/addrace", methods=["GET"])
 def addrace_page():
@@ -56,7 +69,7 @@ def add_race():
     date        = request.form.get("date", "").strip()
     finish_time = request.form.get("finish_time", "").strip()
     is_pb       = 1 if request.form.get("is_pb") == "on" else 0
-    race_type = check_valid(request.form.get("race_type", "").strip())
+    race_type   = check_valid(request.form.get("race_type", "").strip())
 
     if not name or not race_type or not date:
         return render_template("addrace.html", error="Please fill in all required fields.")

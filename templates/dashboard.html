@@ -17,13 +17,16 @@
             <h1>Welcome back, {{ user_name }} 👋</h1>
             <p>Here's your fitness summary</p>
         </div>
-                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-            <form class="nav-search" method="GET" action="/dashboard">
-                <input type="text" name="q" placeholder="   Search activities...">
-                <button type="submit">Search</button>
-            </form>
-            <a href="/activities/new" class="btn btna">+ Log Activity</a>
-        </div>
+            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                <div class="search-wrapper">
+                    <form class="nav-search" id="searchForm" onsubmit="return false;">
+                        <input type="text" id="searchInput" name="q" placeholder="   Search activities..." autocomplete="off">
+                        <button type="submit">Search</button>
+                    </form>
+                    <div id="searchResults" class="search-dropdown"></div>
+                </div>
+                <a href="/activities/new" class="btn btna">+ Log Activity</a>
+            </div>
     </section>
 
     <section class="statsRow">

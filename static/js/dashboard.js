@@ -209,3 +209,74 @@ function showchart(type) {
     document.querySelector("#chartArea").classList.add("active")
     currenttype = type
 }
+
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+let searchTimer = null;
+
+if (searchInput) {
+    searchInput.addEventListener("input", function () {
+        const query = searchInput.value.trim();
+
+        clearTimeout(searchTimer);
+
+        if (query === "") {
+            hideDropdown();
+            return;
+        }
+
+        searchTimer = setTimeout(function () {
+            fetchSearchResults(query);
+        }, 250);
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".search-wrapper")) {
+            hideDropdown();
+        }
+    });
+}
+
+function fetchSearchResults(query) {
+    fetch("/api/search?q=" + encodeURIComponent(query))
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (results) {
+            renderResults(results);
+        })
+        .catch(function (error) {
+            console.error("Search failed:", error);
+            hideDropdown();
+        });
+}
+
+function renderResults(results) {
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-empty">No activities found</div>';
+        showDropdown();
+        return;
+    }
+
+    let html = "";
+    for (const activity of results) {
+        const distance = activity.distance ? activity.distance + " km" : "No distance";
+        html += `
+            <a href="/activities/${activity.id}" class="search-result">
+                <div class="search-result-type">${activity.type}</div>
+                <div class="search-result-meta">${activity.date} | ${activity.duration} min | ${distance}</div>
+            </a>
+        `;
+    }
+
+    searchResults.innerHTML = html;
+    showDropdown();
+}
+
+function showDropdown() {
+    searchResults.classList.add("active");
+}
+
+function hideDropdown() {
+    searchResults.classList.remove("active");
+}

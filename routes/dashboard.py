@@ -1,4 +1,4 @@
-from flask import Blueprint, session, redirect, render_template
+from flask import Blueprint, session, redirect, render_template, request, jsonify
 from data import activity_store, race_store
 
 dashboard = Blueprint("dashboard", __name__)
@@ -26,3 +26,24 @@ def show_dashboard():
         race_summary=race_summary,
         chart_data=chart_data
     )
+
+
+@dashboard.route("/api/search")
+def api_search():
+    if "user_id" not in session:
+        return jsonify([]), 401
+
+    query = request.args.get("q", "").strip()
+    results = activity_store.search_activities(session["user_id"], query)
+
+    return jsonify([
+        {
+            "id": activity["id"],
+            "type": activity["type"],
+            "date": activity["date"],
+            "duration": activity["duration"],
+            "distance": activity["distance"],
+            "notes": activity["notes"] or "",
+        }
+        for activity in results
+    ])
