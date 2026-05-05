@@ -4,6 +4,7 @@ from routes.activities import activities
 from routes.dashboard import dashboard
 from routes.races import races
 from routes.plans import plans
+from routes.feed import feed
 from data.database import setup_database
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ app.register_blueprint(activities)
 app.register_blueprint(dashboard)
 app.register_blueprint(races)
 app.register_blueprint(plans) 
+app.register_blueprint(feed) 
 
 @app.route("/")
 def home():
