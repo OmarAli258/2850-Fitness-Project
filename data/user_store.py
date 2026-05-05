@@ -10,7 +10,7 @@ def register(name, email, password):
 
     # Check if this email is already registered
     existing_user = cursor.execute(
-        "SELECT * FROM users WHERE email = ?",
+        "SELECT * FROM users WHERE email = %s",
         (email,)
     ).fetchone()
 
@@ -26,7 +26,7 @@ def register(name, email, password):
     cursor.execute(
         """
         INSERT INTO users (id, name, email, password)
-        VALUES (?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s)
         """,
         (user_id, name, email, password_hash)
     )
@@ -48,7 +48,7 @@ def login(email, password):
     cursor = connection.cursor()
 
     user = cursor.execute(
-        "SELECT * FROM users WHERE email = ?",
+        "SELECT * FROM users WHERE email = %s",
         (email,)
     ).fetchone()
 
@@ -73,7 +73,7 @@ def find_by_id(user_id):
     cursor = connection.cursor()
 
     user = cursor.execute(
-        "SELECT * FROM users WHERE id = ?",
+        "SELECT * FROM users WHERE id = %s",
         (user_id,)
     ).fetchone()
 

@@ -13,7 +13,7 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
     cursor.execute(
         """
         INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, is_public, plan_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """,
         (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data, is_public, plan_id)
     )
@@ -40,17 +40,17 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
 
     query = """
         SELECT * FROM activities
-        WHERE user_id = ?
+        WHERE user_id = %s
     """
 
     values = [user_id]
 
     if activity_type:
-        query += " AND type = ?"
+        query += " AND type = %s"
         values.append(activity_type)
 
     if search:
-        query += " AND (type LIKE ? OR date LIKE ? OR notes LIKE ?)"
+        query += " AND (type LIKE %s OR date LIKE %s OR notes LIKE %s)"
         search_text = f"%{search}%"
         values.extend([search_text, search_text, search_text])
 
@@ -90,7 +90,7 @@ def get_activity(user_id, activity_id):
     row = cursor.execute(
         """
         SELECT * FROM activities
-        WHERE user_id = ? AND id = ?
+        WHERE user_id = %s AND id = %s
         """,
         (user_id, activity_id)
     ).fetchone()
@@ -124,8 +124,8 @@ def update_activity(activity_id, user_id, activity_type, date, duration, distanc
     cursor.execute(
         """
         UPDATE activities
-        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?, is_public = ?, plan_id = ?
-        WHERE id = ? AND user_id = ?
+        SET type = %s, date = %s, duration = %s, distance = %s, notes = %s, is_public = %s, plan_id = %s
+        WHERE id = %s AND user_id = %s
         """,
         (activity_type, date, int(duration), distance, notes, is_public, plan_id, activity_id, user_id)
     )
@@ -141,7 +141,7 @@ def delete_activity(activity_id, user_id):
     cursor.execute(
         """
         DELETE FROM activities
-        WHERE id = ? AND user_id = ?
+        WHERE id = %s AND user_id = %s
         """,
         (activity_id, user_id)
     )
@@ -255,7 +255,7 @@ def get_weekly_activity_data(user_id):
             """
             SELECT COUNT(*) as count, COALESCE(SUM(duration), 0) as total_min
             FROM activities
-            WHERE user_id = ? AND date = ?
+            WHERE user_id = %s AND date = %s
             """,
             (user_id, date_str)
         ).fetchone()
@@ -263,7 +263,7 @@ def get_weekly_activity_data(user_id):
         dist_row = cursor.execute(
             """
             SELECT distance FROM activities
-            WHERE user_id = ? AND date = ? AND distance IS NOT NULL AND distance != ''
+            WHERE user_id = %s AND date = %s AND distance IS NOT NULL AND distance != ''
             """,
             (user_id, date_str)
         ).fetchall()

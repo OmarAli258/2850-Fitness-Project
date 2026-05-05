@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, session, redirect, render_template
 from routes.auth import auth
 from routes.activities import activities
