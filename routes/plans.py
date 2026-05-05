@@ -1,9 +1,17 @@
+#this file defines routes and logic for creating, viewing, editing and deleting plans
+#also handles plan status, sessions progress and consistency (adherence) ratings
+#note: we changed the user-facing word adherence because it was too complex for users
+#we chose the simpler word consistency, but some code was already named adherence
+#so consistency is the main word in comments, with adherence shown because the code still uses that label
+
+#import flask routing and session features and data access for plans and activity types
 from flask import Blueprint, request, session, redirect, render_template
 from data import plan_store, activity_store
 
 plans = Blueprint("plans", __name__)
 
 
+#this function prepares plan form data for creating, editing, or redisplaying the form after an error
 def _build_form_data(request_form=None, plan=None):
     if plan is not None:
         return {
@@ -28,6 +36,7 @@ def _build_form_data(request_form=None, plan=None):
     }
 
 
+#this function validates the required plan form fields before saving or updating a plan
 def _validate_plan(form_data):
     if form_data["name"] == "":
         return "Please enter a plan name."
@@ -40,6 +49,7 @@ def _validate_plan(form_data):
     return ""
 
 
+#this function shows all plans for the logged in user with session progress data
 @plans.route("/plans", methods=["GET"])
 def show_plans():
     if "user_id" not in session:
@@ -66,6 +76,7 @@ def show_plans():
     )
 
 
+#this function shows the blank form for creating a new plan
 @plans.route("/plans/new", methods=["GET"])
 def show_plan_form():
     if "user_id" not in session:
@@ -82,6 +93,7 @@ def show_plan_form():
     )
 
 
+#this function validates and saves a new plan
 @plans.route("/plans/new", methods=["POST"])
 def save_plan():
     if "user_id" not in session:
@@ -114,6 +126,7 @@ def save_plan():
     return redirect("/plans")
 
 
+#this function shows one plan detail page with sessions progress and consistency (adherence) records
 @plans.route("/plans/<plan_id>", methods=["GET"])
 def view_plan(plan_id):
     if "user_id" not in session:
@@ -134,6 +147,7 @@ def view_plan(plan_id):
     )
 
 
+#this function shows the edit form for an existing plan
 @plans.route("/plans/<plan_id>/edit", methods=["GET"])
 def edit_plan(plan_id):
     if "user_id" not in session:
@@ -154,6 +168,7 @@ def edit_plan(plan_id):
     )
 
 
+#this function validates and saves changes to an existing plan
 @plans.route("/plans/<plan_id>/edit", methods=["POST"])
 def save_edited_plan(plan_id):
     if "user_id" not in session:
@@ -188,6 +203,7 @@ def save_edited_plan(plan_id):
     return redirect("/plans")
 
 
+#this function deletes a plan owned by the logged in user
 @plans.route("/plans/<plan_id>/delete", methods=["POST"])
 def delete_plan(plan_id):
     if "user_id" not in session:
@@ -197,6 +213,7 @@ def delete_plan(plan_id):
     return redirect("/plans")
 
 
+#this function updates the status of a plan, like active, paused or completed
 @plans.route("/plans/<plan_id>/status", methods=["POST"])
 def update_plan_status(plan_id):
     if "user_id" not in session:
@@ -225,6 +242,7 @@ def update_plan_status(plan_id):
     return redirect("/plans")
 
 
+#this function records a consistency (adherence) rating for a plan session
 @plans.route("/plans/<plan_id>/adherence", methods=["POST"])
 def record_plan_adherence(plan_id):
     if "user_id" not in session:
@@ -255,6 +273,7 @@ def record_plan_adherence(plan_id):
     return redirect(f"/plans/{plan_id}")
 
 
+#this function deletes one consistency (adherence) record from a plan
 @plans.route("/plans/<plan_id>/adherence/<adherence_id>/delete", methods=["POST"])
 def delete_plan_adherence(plan_id, adherence_id):
     if "user_id" not in session:
@@ -262,3 +281,16 @@ def delete_plan_adherence(plan_id, adherence_id):
 
     plan_store.delete_adherence(adherence_id, session["user_id"])
     return redirect(f"/plans/{plan_id}")
+
+#done comments for routes/plans.py
+#summary of comments:
+# - shows all plans and one plan detail page
+# - shows blank and edit forms for plans
+# - validates plan form input
+# - saves new and edited plans
+# - deletes plans and updates plan status
+# - records and deletes plan consistency (adherence) ratings
+# - connects plans to activity types and session progress
+#note: consistency is the main word we use for users because it is easier to understand than adherence
+#the code still says adherence in some function and variable names because that was the original label
+#that is why comments show consistency (adherence), so the simple user word and the code word both make sense
