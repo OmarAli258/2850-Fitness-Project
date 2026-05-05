@@ -78,7 +78,12 @@
 
     <main class="detail-container">
         <div class="detail-header">
-            <h1>{{ activity.type }}</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <h1>{{ activity.type }}</h1>
+                {% if not activity.is_public %}
+                <span style="background: var(--yellow); color: #000; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Private</span>
+                {% endif %}
+            </div>
             <a href="/activities" class="btn btnb">← Back</a>
         </div>
 
@@ -121,7 +126,7 @@
                 }).addTo(map);
                 
                 // Draw the polyline
-                var polyline = L.polyline(routeData, {color: '#f5c518', weight: 4}).addTo(map);
+                var polyline = L.polyline(routeData, {color: '#3498db', weight: 6}).addTo(map);
                 
                 // Zoom the map to the polyline
                 map.fitBounds(polyline.getBounds());

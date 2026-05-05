@@ -4,7 +4,7 @@ from data.database import get_connection
 ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifitng","Crossfit","Football","Yoga","Hiking","Rowing"]
 
 
-def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None):
+def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None, is_public=0):
     activity_id = str(uuid.uuid4())
 
     connection = get_connection()
@@ -12,10 +12,10 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
 
     cursor.execute(
         """
-        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, is_public)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data)
+        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data, is_public)
     )
 
     connection.commit()
@@ -28,7 +28,8 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
         "date": date,
         "duration": int(duration),
         "distance": distance,
-        "notes": notes
+        "notes": notes,
+        "is_public": is_public
     }
 
 
@@ -68,7 +69,8 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
             "duration": row["duration"],
             "distance": row["distance"],
             "notes": row["notes"],
-            "route_data": row["route_data"]
+            "route_data": row["route_data"],
+            "is_public": row["is_public"]
         })
 
     return activities
@@ -99,21 +101,22 @@ def get_activity(user_id, activity_id):
         "duration": row["duration"],
         "distance": row["distance"],
         "notes": row["notes"],
-        "route_data": row["route_data"]
+        "route_data": row["route_data"],
+        "is_public": row["is_public"]
     }
 
 
-def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes):
+def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes, is_public=0):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
         """
         UPDATE activities
-        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?
+        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?, is_public = ?
         WHERE id = ? AND user_id = ?
         """,
-        (activity_type, date, int(duration), distance, notes, activity_id, user_id)
+        (activity_type, date, int(duration), distance, notes, is_public, activity_id, user_id)
     )
 
     connection.commit()
