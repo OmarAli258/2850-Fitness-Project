@@ -33,8 +33,17 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/__pycache__/
-*.pyc*.db
-*.db
+.vscode/
 __pycache__/
 *.pyc
+
+### Database ###
+fittrack.db
+
+### Python ###
+.venv/
+*.pyo
+*.pyd
+.Python
+*.so
+.DS_Store

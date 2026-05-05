@@ -36,8 +36,9 @@ def racetracker():
         else:
             race_dict['countdown'] = ''
         races_with_countdown.append(race_dict)
+    personal_bests = race_store.get_personal_bests(session["user_id"])
 
-    return render_template("racetracker.html", races=races_with_countdown, summary=summary)
+    return render_template("racetracker.html", races=races_with_countdown, summary=summary, personal_bests=personal_bests)
 
 @races.route("/addrace", methods=["GET"])
 def addrace_page():

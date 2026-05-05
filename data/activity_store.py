@@ -1,10 +1,10 @@
 import uuid
 from data.database import get_connection
 
-ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifitng","Crossfit","Football","Yoga","Hiking","Rowing"]
+ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Gym", "Weights"]
 
 
-def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None):
+def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None, plan_id=None):
     activity_id = str(uuid.uuid4())
 
     connection = get_connection()
@@ -12,10 +12,10 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
 
     cursor.execute(
         """
-        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, plan_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data)
+        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data, plan_id)
     )
 
     connection.commit()
@@ -28,7 +28,8 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
         "date": date,
         "duration": int(duration),
         "distance": distance,
-        "notes": notes
+        "notes": notes,
+        "plan_id": plan_id,
     }
 
 
@@ -68,7 +69,8 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
             "duration": row["duration"],
             "distance": row["distance"],
             "notes": row["notes"],
-            "route_data": row["route_data"]
+            "route_data": row["route_data"],
+            "plan_id": row["plan_id"],
         })
 
     return activities
@@ -99,21 +101,22 @@ def get_activity(user_id, activity_id):
         "duration": row["duration"],
         "distance": row["distance"],
         "notes": row["notes"],
-        "route_data": row["route_data"]
+        "route_data": row["route_data"],
+        "plan_id": row["plan_id"],
     }
 
 
-def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes):
+def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes, plan_id=None):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
         """
         UPDATE activities
-        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?
+        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?, plan_id = ?
         WHERE id = ? AND user_id = ?
         """,
-        (activity_type, date, int(duration), distance, notes, activity_id, user_id)
+        (activity_type, date, int(duration), distance, notes, plan_id, activity_id, user_id)
     )
 
     connection.commit()
@@ -173,44 +176,135 @@ def get_activity_summary(user_id):
         "total_distance": round(total_distance, 2),
         "favorite_activity": favorite_activity
     }
-#function for gettings statistics data
-def get_chart_data(user_id):
-    from datetime import date, timedelta
 
-    activities = get_activities_for_user(user_id)
 
-    today = date.today()
-    days = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
-    day_labels = [d.strftime("%a") for d in days]
-    day_strings = [d.strftime("%Y-%m-%d") for d in days]
+def get_weekly_activity_data(user_id):
+    from datetime import datetime, timedelta
 
-    workouts_per_day = [0] * 7
-    minutes_per_day = [0] * 7
-    distance_per_day = [0.0] * 7
-    type_counts = {}
+    today = datetime.now()
+    start_of_week = today - timedelta(days=today.weekday())
 
-    for activity in activities:
-        if activity["date"] in day_strings:
-            index = day_strings.index(activity["date"])
-            workouts_per_day[index] += 1
-            minutes_per_day[index] += int(activity["duration"])
-            if activity["distance"]:
-                try:
-                    distance_per_day[index] += float(activity["distance"])
-                except ValueError:
-                    pass
+    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    workouts = [0] * 7
+    minutes = [0] * 7
+    distances = [0.0] * 7
 
-        activity_type = activity["type"]
-        if activity_type in type_counts:
-            type_counts[activity_type] += 1
-        else:
-            type_counts[activity_type] = 1
+    for i in range(7):
+        day = start_of_week + timedelta(days=i)
+        date_str = day.strftime("%Y-%m-%d")
+
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        row = cursor.execute(
+            """
+            SELECT COUNT(*) as count, COALESCE(SUM(duration), 0) as total_min
+            FROM activities
+            WHERE user_id = ? AND date = ?
+            """,
+            (user_id, date_str)
+        ).fetchone()
+
+        dist_row = cursor.execute(
+            """
+            SELECT distance FROM activities
+            WHERE user_id = ? AND date = ? AND distance IS NOT NULL AND distance != ''
+            """,
+            (user_id, date_str)
+        ).fetchall()
+
+        connection.close()
+
+        workouts[i] = row["count"]
+        minutes[i] = row["total_min"]
+
+        for d in dist_row:
+            try:
+                distances[i] += float(d["distance"])
+            except (ValueError, TypeError):
+                pass
 
     return {
-        "labels": day_labels,
-        "workouts": workouts_per_day,
-        "minutes": minutes_per_day,
-        "distance": [round(d, 2) for d in distance_per_day],
+        "labels": days,
+        "workouts": workouts,
+        "minutes": minutes,
+        "distances": [round(d, 2) for d in distances]
+    }
+
+
+def get_activity_type_counts(user_id):
+    activities = get_activities_for_user(user_id)
+
+    counts = {}
+    for activity in activities:
+        t = activity["type"]
+        if t in counts:
+            counts[t] += 1
+        else:
+            counts[t] = 1
+
+    labels = list(counts.keys())
+    data = list(counts.values())
+
+    return {"labels": labels, "data": data}
+
+
+def get_chart_data(user_id):
+    from datetime import datetime, timedelta
+
+    today = datetime.now()
+    start_of_week = today - timedelta(days=today.weekday())
+    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    workouts = [0] * 7
+    minutes = [0] * 7
+    distance = [0.0] * 7
+
+    for i in range(7):
+        day = start_of_week + timedelta(days=i)
+        date_str = day.strftime("%Y-%m-%d")
+
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        row = cursor.execute(
+            """
+            SELECT COUNT(*) as count, COALESCE(SUM(duration), 0) as total_min
+            FROM activities
+            WHERE user_id = ? AND date = ?
+            """,
+            (user_id, date_str)
+        ).fetchone()
+
+        dist_row = cursor.execute(
+            """
+            SELECT distance FROM activities
+            WHERE user_id = ? AND date = ? AND distance IS NOT NULL AND distance != ''
+            """,
+            (user_id, date_str)
+        ).fetchall()
+
+        connection.close()
+
+        workouts[i] = row["count"]
+        minutes[i] = row["total_min"]
+
+        for d in dist_row:
+            try:
+                distance[i] += float(d["distance"])
+            except (ValueError, TypeError):
+                pass
+
+    activities = get_activities_for_user(user_id)
+    type_counts = {}
+    for a in activities:
+        t = a["type"]
+        type_counts[t] = type_counts.get(t, 0) + 1
+
+    return {
+        "labels": days,
+        "workouts": workouts,
+        "minutes": minutes,
+        "distance": [round(d, 2) for d in distance],
         "type_labels": list(type_counts.keys()),
-        "type_counts": list(type_counts.values())
+        "type_counts": list(type_counts.values()),
     }

@@ -1,7 +1,7 @@
 import gpxpy
 import json
 from flask import Blueprint, request, session, redirect, render_template
-from data import activity_store
+from data import activity_store, plan_store
 from datetime import date
 
 activities = Blueprint("activities", __name__)
@@ -15,6 +15,7 @@ def _build_form_data(request_form=None, activity=None):
             "duration": activity.get("duration", ""),
             "distance": activity.get("distance", ""),
             "notes": activity.get("notes", ""),
+            "plan_id": activity.get("plan_id", ""),
         }
 
     request_form = request_form or {}
@@ -24,6 +25,7 @@ def _build_form_data(request_form=None, activity=None):
         "duration": request_form.get("duration", "").strip(),
         "distance": request_form.get("distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
+        "plan_id": request_form.get("plan_id", "").strip(),
     }
 
 
@@ -54,6 +56,7 @@ def show_activity_form():
         action="/activities/new",
         submit_label="Save Activity",
         activity_types=activity_store.ACTIVITY_TYPES,
+        active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
         form_data=_build_form_data(),
         error="",
     )
@@ -105,9 +108,12 @@ def save_activity():
             action="/activities/new",
             submit_label="Save Activity",
             activity_types=activity_store.ACTIVITY_TYPES,
+            active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
             form_data=form_data,
             error=error,
         )
+
+    plan_id = form_data["plan_id"] if form_data["plan_id"] else None
 
     activity_store.create_activity(
         user_id=session["user_id"],
@@ -116,7 +122,8 @@ def save_activity():
         duration=form_data["duration"],
         distance=form_data["distance"],
         notes=form_data["notes"],
-        route_data=route_data_json
+        route_data=route_data_json,
+        plan_id=plan_id,
     )
 
     return redirect("/activities")
@@ -151,6 +158,7 @@ def edit_activity(activity_id):
         action=f"/activities/{activity_id}/edit",
         submit_label="Save Changes",
         activity_types=activity_store.ACTIVITY_TYPES,
+        active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
         form_data=_build_form_data(activity=activity),
         error="",
     )
@@ -171,9 +179,12 @@ def save_edited_activity(activity_id):
             action=f"/activities/{activity_id}/edit",
             submit_label="Save Changes",
             activity_types=activity_store.ACTIVITY_TYPES,
+            active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
             form_data=form_data,
             error=error,
         )
+
+    plan_id = form_data["plan_id"] if form_data["plan_id"] else None
 
     activity_store.update_activity(
         activity_id=activity_id,
@@ -183,6 +194,7 @@ def save_edited_activity(activity_id):
         duration=form_data["duration"],
         distance=form_data["distance"],
         notes=form_data["notes"],
+        plan_id=plan_id,
     )
 
     return redirect("/activities")
