@@ -26,7 +26,7 @@ nav {
     border-bottom: 1px solid var(--border);
     background-color: var(--bg);
     position: sticky;
-    top: 0;python
+    top: 0;
     z-index: 1000;
 }
 
@@ -458,7 +458,6 @@ td{
     color: var(--text-muted);
     padding: 0.4rem 0.7rem;
     border-radius: 4px;
-<<<<<<< HEAD
     font-size: 1rem;
     cursor: default;
 }
@@ -485,14 +484,6 @@ td{
     transition: all 0.2s;
 }
 
-=======
-    font-size: 1rem;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
->>>>>>> 413f338c269c6052e63f943ee5e95fb171f61e72
 .delete-btn:hover {
     background: rgba(245, 197, 24, 0.15);
     color: var(--yellow);
