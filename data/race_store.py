@@ -8,7 +8,7 @@ def create_race(user_id, name, race_type, location, date, finish_time, is_pb, st
     cursor.execute(
         """
         INSERT INTO races (name, race_type, location, date, finish_time, is_pb, status, user_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
         (name, race_type, location, date, finish_time, is_pb, status, user_id)
     )
@@ -24,7 +24,7 @@ def get_races_for_user(user_id):
     rows = cursor.execute(
         """
         SELECT * FROM races
-        WHERE user_id = ?
+        WHERE user_id = %s
         ORDER BY date ASC
         """,
         (user_id,)
@@ -57,7 +57,7 @@ def delete_race(race_id, user_id):
     cursor.execute(
         """
         DELETE FROM races
-        WHERE id = ? AND user_id = ?
+        WHERE id = %s AND user_id = %s
         """,
         (race_id, user_id)
     )
@@ -103,7 +103,7 @@ def update_race_statuses(user_id):
         """
         UPDATE races
         SET status = 'past'
-        WHERE user_id = ? AND status = 'upcoming' AND date < ?
+        WHERE user_id = %s AND status = 'upcoming' AND date < %s
         """,
         (user_id, today)
     )

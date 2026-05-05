@@ -13,7 +13,7 @@ def create_plan(user_id, name, exercise_type, frequency, target_duration, target
     cursor.execute(
         """
         INSERT INTO plans (id, user_id, name, exercise_type, frequency, target_duration, target_distance, notes, created_at, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 'active')
         """,
         (plan_id, user_id, name, exercise_type, frequency, int(target_duration) if target_duration else None, target_distance, notes, created_at)
     )
@@ -39,11 +39,11 @@ def get_plans_for_user(user_id, status=None):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = "SELECT * FROM plans WHERE user_id = ?"
+    query = "SELECT * FROM plans WHERE user_id = %s"
     values = [user_id]
 
     if status:
-        query += " AND status = ?"
+        query += " AND status = %s"
         values.append(status)
 
     query += " ORDER BY created_at DESC"
@@ -78,7 +78,7 @@ def get_plan(user_id, plan_id):
     cursor = connection.cursor()
 
     row = cursor.execute(
-        "SELECT * FROM plans WHERE user_id = ? AND id = ?",
+        "SELECT * FROM plans WHERE user_id = %s AND id = %s",
         (user_id, plan_id)
     ).fetchone()
 
@@ -109,8 +109,8 @@ def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duratio
         cursor.execute(
             """
             UPDATE plans
-            SET name = ?, exercise_type = ?, frequency = ?, target_duration = ?, target_distance = ?, notes = ?, status = ?
-            WHERE id = ? AND user_id = ?
+            SET name = %s, exercise_type = %s, frequency = %s, target_duration = %s, target_distance = %s, notes = %s, status = %s
+            WHERE id = %s AND user_id = %s
             """,
             (name, exercise_type, frequency, int(target_duration) if target_duration else None, target_distance, notes, status, plan_id, user_id)
         )
@@ -118,8 +118,8 @@ def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duratio
         cursor.execute(
             """
             UPDATE plans
-            SET name = ?, exercise_type = ?, frequency = ?, target_duration = ?, target_distance = ?, notes = ?
-            WHERE id = ? AND user_id = ?
+            SET name = %s, exercise_type = %s, frequency = %s, target_duration = %s, target_distance = %s, notes = %s
+            WHERE id = %s AND user_id = %s
             """,
             (name, exercise_type, frequency, int(target_duration) if target_duration else None, target_distance, notes, plan_id, user_id)
         )
@@ -133,12 +133,12 @@ def delete_plan(plan_id, user_id):
     cursor = connection.cursor()
 
     cursor.execute(
-        "UPDATE activities SET plan_id = NULL WHERE plan_id = ? AND user_id = ?",
+        "UPDATE activities SET plan_id = NULL WHERE plan_id = %s AND user_id = %s",
         (plan_id, user_id)
     )
 
     cursor.execute(
-        "DELETE FROM plans WHERE id = ? AND user_id = ?",
+        "DELETE FROM plans WHERE id = %s AND user_id = %s",
         (plan_id, user_id)
     )
 
@@ -157,7 +157,7 @@ def get_plan_completion(user_id, plan_id):
     completed_activities = cursor.execute(
         """
         SELECT * FROM activities
-        WHERE user_id = ? AND plan_id = ? AND type = ?
+        WHERE user_id = %s AND plan_id = %s AND type = %s
         ORDER BY date DESC
         """,
         (user_id, plan_id, plan["exercise_type"])
@@ -291,7 +291,7 @@ def record_adherence(user_id, plan_id, session_date, rating, notes):
     cursor.execute(
         """
         INSERT INTO plan_adherence (id, user_id, plan_id, session_date, rating, notes, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """,
         (adherence_id, user_id, plan_id, session_date, int(rating), notes, created_at)
     )
@@ -316,7 +316,7 @@ def get_adherence_for_plan(user_id, plan_id):
     rows = cursor.execute(
         """
         SELECT * FROM plan_adherence
-        WHERE user_id = ? AND plan_id = ?
+        WHERE user_id = %s AND plan_id = %s
         ORDER BY session_date DESC
         """,
         (user_id, plan_id)
@@ -364,7 +364,7 @@ def delete_adherence(adherence_id, user_id):
     cursor = connection.cursor()
 
     cursor.execute(
-        "DELETE FROM plan_adherence WHERE id = ? AND user_id = ?",
+        "DELETE FROM plan_adherence WHERE id = %s AND user_id = %s",
         (adherence_id, user_id)
     )
 
