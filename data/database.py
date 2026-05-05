@@ -2,10 +2,12 @@ import sqlite3
 
 DATABASE_NAME = "fittrack.db"
 
+
 def get_connection():
     connection = sqlite3.connect(DATABASE_NAME)
     connection.row_factory = sqlite3.Row
     return connection
+
 
 def setup_database():
     connection = get_connection()
@@ -35,6 +37,14 @@ def setup_database():
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
+
+    # If the activities table already existed before route_data was added,
+    # this updates the old table safely.
+    try:
+        cursor.execute("ALTER TABLE activities ADD COLUMN route_data TEXT")
+    except sqlite3.OperationalError:
+        # Column already exists, so no action is needed.
+        pass
 
     # Stores race tracker information
     cursor.execute("""
