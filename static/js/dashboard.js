@@ -7,25 +7,25 @@ let currentindex = 0
 if (forwardbtn && backbtn && cards.length > 0) {
     forwardbtn.addEventListener("click", function () {
         if (currentindex < cards.length - 1) {
-            currentindex++
+            currentindex = currentindex + 1
             carousel(currentindex)
         }
     })
 
     backbtn.addEventListener("click", function () {
         if (currentindex > 0) {
-            currentindex--
+            currentindex = currentindex - 1
             carousel(currentindex)
         }
     })
 }
 
 function carousel(index) {
-    cards.forEach(card => card.style.display = "none")
+    cards.forEach(function (card) {
+        card.style.display = "none"
+    })
     cards[index].style.display = "block"
 }
-
-// ---------------- CHART ----------------
 
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
@@ -33,116 +33,141 @@ const distancebtn = document.getElementById("distance")
 const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
-const chartArea = document.getElementById("chartArea")
-
-let liveData = {}
-
-if (chartArea && chartArea.dataset.chart) {
-    try {
-        liveData = JSON.parse(chartArea.dataset.chart)
-    } catch (e) {
-        console.error("Failed to parse chart data:", e)
-    }
-}
 
 let currenttype = null
 let currentchart = null
 
-// button listeners
-workoutbtn?.addEventListener("click", () => showchart("workouts"))
-timebtn?.addEventListener("click", () => showchart("time"))
-distancebtn?.addEventListener("click", () => showchart("distance"))
-racesbtn?.addEventListener("click", () => showchart("races"))
-favoritebtn?.addEventListener("click", () => showchart("favorite"))
+if (workoutbtn) {
+    workoutbtn.addEventListener("click", function () {
+        showchart("workouts")
+    })
+}
+
+if (timebtn) {
+    timebtn.addEventListener("click", function () {
+        showchart("time")
+    })
+}
+
+if (distancebtn) {
+    distancebtn.addEventListener("click", function () {
+        showchart("distance")
+    })
+}
+
+if (racesbtn) {
+    racesbtn.addEventListener("click", function () {
+        showchart("races")
+    })
+}
+
+if (favoritebtn) {
+    favoritebtn.addEventListener("click", function () {
+        showchart("favorite")
+    })
+}
 
 function showchart(type) {
-    if (!mycanvas) return
-
-    // toggle off if same chart
-    if (currenttype === type && currentchart) {
-        currentchart.destroy()
-        currentchart = null
-        currenttype = null
-        chartArea.classList.remove("active")
+    if (!mycanvas) {
         return
     }
 
-    if (currentchart) currentchart.destroy()
+    if (currenttype == type && currentchart != null) {
+        currentchart.destroy()
+        currentchart = null
+        currenttype = null
+        document.querySelector("#chartArea").classList.remove("active")
+        return
+    }
+
+    if (currentchart != null) {
+        currentchart.destroy()
+    }
 
     let chartData = {}
+
+    if (type == "workouts") {
+    chartData = {
+        labels: CHART_DATA.labels,
+        data: CHART_DATA.workouts,
+        label: "Workouts This Week",
+        type: "bar"
+    }
+}
+
+    if (type == "time") {
+        chartData = {
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.minutes,
+            label: "Minutes Spent This Week",
+            type: "bar"
+        }
+    }
+
+    if (type == "distance") {
+        chartData = {
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.distance,
+            label: "Distance This Week (km)",
+            type: "line"
+        }
+    }
+
+    if (type == "favorite") {
+        chartData = {
+            labels: CHART_DATA.type_labels,
+            data: CHART_DATA.type_counts,
+            label: "Exercise Breakdown",
+            type: "doughnut"
+        }
+    }
+    if (type == "races") {
+    chartData = {
+        labels: ["Upcoming", "Past", "PBs"],
+        data: [
+            CHART_DATA.upcoming_races,
+            CHART_DATA.past_races,
+            CHART_DATA.personal_bests
+        ],
+        label: "Race Summary",
+        type: "bar"
+    }
+}
+
     let chartColours = "#f5c518"
     let borderColours = "#f5c518"
 
-    // ---------------- DATA SELECTION ----------------
-
-    if (type === "workouts") {
-        chartData = liveData.workouts ? {
-            labels: liveData.workouts.labels,
-            data: liveData.workouts.data,
-            label: "Workouts This Week",
-            type: "bar"
-        } : {}
-    }
-
-    else if (type === "time") {
-        chartData = liveData.time ? {
-            labels: liveData.time.labels,
-            data: liveData.time.data,
-            label: "Minutes Spent This Week",
-            type: "bar"
-        } : {}
-
+    if (type == "time") {
         chartColours = "#36a2eb"
         borderColours = "#36a2eb"
     }
 
-    else if (type === "distance") {
-        chartData = liveData.distance ? {
-            labels: liveData.distance.labels,
-            data: liveData.distance.data,
-            label: "Distance This Week (km)",
-            type: "line"
-        } : {}
-
+    if (type == "distance") {
         chartColours = "#2ecc71"
         borderColours = "#2ecc71"
     }
 
-    else if (type === "races") {
-        chartData = liveData.races ? {
-            labels: liveData.races.labels,
-            data: liveData.races.data,
-            label: "Races Completed",
-            type: "bar"
-        } : {}
-
-        chartColours = "#ff9f40"
-        borderColours = "#ff9f40"
+    if (type == "races") {
+        chartColours = ["#ff9f40", "#f5c518", "#2ecc71"]
+        borderColours = ["#0a0a0a", "#0a0a0a", "#0a0a0a"]
     }
 
-    else if (type === "favorite") {
-        chartData = liveData.favorite ? {
-            labels: liveData.favorite.labels,
-            data: liveData.favorite.data,
-            label: "Exercise Breakdown",
-            type: "doughnut"
-        } : {}
-
-        const colours = [
-            "#f5c518", "#3498db", "#2ecc71", "#e74c3c",
-            "#9b59b6", "#ff9f40", "#1abc9c", "#34495e"
+    if (type == "favorite") {
+        chartColours = [
+            "#f5c518",
+            "#2c80b8",
+            "#2ecc55",
+            "#3ce7b7",
+            "#c31b1b"
         ]
-
-        chartColours = colours.slice(0, liveData.favorite ? liveData.favorite.labels.length : 0)
-        borderColours = Array(chartColours.length).fill("#0a0a0a")
+        borderColours = [
+            "#0a0a0a",
+            "#0a0a0a",
+            "#0a0a0a",
+            "#0a0a0a",
+            "#0a0a0a"
+        ]
     }
-
-    if (!chartData.type) {
-        console.warn("No data available for chart type:", type)
-        return
-    }
-
-    // ---------------- CREATE CHART ----------------
 
     currentchart = new Chart(mycanvas, {
         type: chartData.type,
@@ -160,7 +185,9 @@ function showchart(type) {
             responsive: true,
             plugins: {
                 legend: {
-                    labels: { color: "#ffffff" }
+                    labels: {
+                        color: "#ffffff"
+                    }
                 }
             },
             scales: chartData.type === "doughnut" ? {} : {
@@ -169,13 +196,16 @@ function showchart(type) {
                     grid: { color: "#222222" }
                 },
                 y: {
-                    ticks: { color: "#ffffff", stepSize: 1 },
+                    ticks: { 
+                        color: "#ffffff",
+                        stepSize: 1
+                    },
                     grid: { color: "#222222" }
                 }
             }
         }
     })
 
-    chartArea.classList.add("active")
+    document.querySelector("#chartArea").classList.add("active")
     currenttype = type
 }

@@ -689,60 +689,92 @@ tr:hover td  {
     letter-spacing: 0.05em;
 }
 
-.status-badge {
-    padding: 0.3rem 0.7rem;
-    border-radius: 0.375rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: capitalize;
+/* Feed Styles */
+.feed-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
-.status-active {
-    background: rgba(245, 197, 24, 0.15);
+.feed-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 0.625rem;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+}
+
+.feed-card:hover {
+    border-color: var(--yellow);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.feed-user-action {
+    font-size: 1.1rem;
+}
+
+.feed-user-action strong {
+    color: var(--text);
+}
+
+.feed-sport {
     color: var(--yellow);
+    font-weight: 700;
 }
 
-.status-paused {
-    background: rgba(170, 170, 170, 0.15);
-    color: #aaaaaa;
+.feed-meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
-.status-completed {
-    background: rgba(76, 175, 80, 0.15);
-    color: #4caf50;
+.feed-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
 }
 
-.completion-bar {
+.feed-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.feed-notes {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.feed-map {
     width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    height: 250px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-weight: 500;
     overflow: hidden;
-    margin-bottom: 0.3rem;
 }
 
-.completion-bar-fill {
-    height: 100%;
-    background: var(--yellow);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-}
-
-.deletebtn-upcoming {
-    background: rgba(162, 10, 10, 0.15);
-    color: #ff6b6b;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    font-size: 1rem;
-    cursor: default;
-    transition: all 0.2s ease;
-}
-
-.deletebtn-upcoming:hover {
-    background: #ff6b6b;
-    color: white;
-    cursor: pointer;
-    transform: scale(1.15);
-    box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+.feed-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    padding: 3rem;
 }

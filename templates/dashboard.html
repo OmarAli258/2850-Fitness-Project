@@ -18,11 +18,11 @@
             <p>Here's your fitness summary</p>
         </div>
                 <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-            <form class="nav-search" method="GET" action="/dashboard" style="height: fit-content;">
-                <input type="text" name="q" placeholder="   Search activities..." style="height: 2.85rem;">
-                <button type="submit" style="height: 2.85rem;">Search</button>
+            <form class="nav-search" method="GET" action="/dashboard">
+                <input type="text" name="q" placeholder="   Search activities...">
+                <button type="submit">Search</button>
             </form>
-            <a href="/activities/new" class="btn btna" style="height: 2.85rem;">+ Log Activity</a>
+            <a href="/activities/new" class="btn btna">+ Log Activity</a>
         </div>
     </section>
 
@@ -54,7 +54,7 @@
         </div>
     </section>
 
-    <section class="statsRight" id="chartArea" data-chart='{{ chart_data }}'>
+    <section class="statsRight" id="chartArea">
         <canvas id="chart"></canvas>
     </section>
 
