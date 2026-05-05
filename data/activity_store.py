@@ -1,10 +1,10 @@
 import uuid
 from data.database import get_connection
 
-ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Gym", "Weights"]
+ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifting", "Crossfit", "Football", "Yoga", "Hiking", "Rowing", "Gym", "Weights"]
 
 
-def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None, plan_id=None):
+def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None, is_public=0, plan_id=None):
     activity_id = str(uuid.uuid4())
 
     connection = get_connection()
@@ -12,10 +12,10 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
 
     cursor.execute(
         """
-        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, plan_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, is_public, plan_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data, plan_id)
+        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data, is_public, plan_id)
     )
 
     connection.commit()
@@ -29,7 +29,8 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
         "duration": int(duration),
         "distance": distance,
         "notes": notes,
-        "plan_id": plan_id,
+        "is_public": is_public,
+        "plan_id": plan_id
     }
 
 
@@ -61,6 +62,11 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
     activities = []
 
     for row in rows:
+        # Check if plan_id exists in the row (for backward compatibility if schema hasn't updated yet)
+        plan_id = row["plan_id"] if "plan_id" in row.keys() else None
+        # Same for is_public
+        is_public = row["is_public"] if "is_public" in row.keys() else 0
+        
         activities.append({
             "id": row["id"],
             "user_id": row["user_id"],
@@ -70,7 +76,8 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
             "distance": row["distance"],
             "notes": row["notes"],
             "route_data": row["route_data"],
-            "plan_id": row["plan_id"],
+            "is_public": is_public,
+            "plan_id": plan_id
         })
 
     return activities
@@ -93,6 +100,9 @@ def get_activity(user_id, activity_id):
     if row is None:
         return None
 
+    plan_id = row["plan_id"] if "plan_id" in row.keys() else None
+    is_public = row["is_public"] if "is_public" in row.keys() else 0
+
     return {
         "id": row["id"],
         "user_id": row["user_id"],
@@ -102,21 +112,22 @@ def get_activity(user_id, activity_id):
         "distance": row["distance"],
         "notes": row["notes"],
         "route_data": row["route_data"],
-        "plan_id": row["plan_id"],
+        "is_public": is_public,
+        "plan_id": plan_id
     }
 
 
-def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes, plan_id=None):
+def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes, is_public=0, plan_id=None):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
         """
         UPDATE activities
-        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?, plan_id = ?
+        SET type = ?, date = ?, duration = ?, distance = ?, notes = ?, is_public = ?, plan_id = ?
         WHERE id = ? AND user_id = ?
         """,
-        (activity_type, date, int(duration), distance, notes, plan_id, activity_id, user_id)
+        (activity_type, date, int(duration), distance, notes, is_public, plan_id, activity_id, user_id)
     )
 
     connection.commit()
@@ -175,6 +186,48 @@ def get_activity_summary(user_id):
         "total_minutes": total_minutes,
         "total_distance": round(total_distance, 2),
         "favorite_activity": favorite_activity
+    }
+
+
+def get_chart_data(user_id):
+    from datetime import date, timedelta
+
+    activities = get_activities_for_user(user_id)
+
+    today = date.today()
+    days = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
+    day_labels = [d.strftime("%a") for d in days]
+    day_strings = [d.strftime("%Y-%m-%d") for d in days]
+
+    workouts_per_day = [0] * 7
+    minutes_per_day = [0] * 7
+    distance_per_day = [0.0] * 7
+    type_counts = {}
+
+    for activity in activities:
+        if activity["date"] in day_strings:
+            index = day_strings.index(activity["date"])
+            workouts_per_day[index] += 1
+            minutes_per_day[index] += int(activity["duration"])
+            if activity["distance"]:
+                try:
+                    distance_per_day[index] += float(activity["distance"])
+                except ValueError:
+                    pass
+
+        activity_type = activity["type"]
+        if activity_type in type_counts:
+            type_counts[activity_type] += 1
+        else:
+            type_counts[activity_type] = 1
+
+    return {
+        "labels": day_labels,
+        "workouts": workouts_per_day,
+        "minutes": minutes_per_day,
+        "distance": [round(d, 2) for d in distance_per_day],
+        "type_labels": list(type_counts.keys()),
+        "type_counts": list(type_counts.values())
     }
 
 

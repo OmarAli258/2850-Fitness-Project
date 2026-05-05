@@ -244,7 +244,8 @@ nav ul a:hover {
 }
 /* The search bar stuff*/
 .nav-search {
-    display: flex; 
+    display: flex;
+    margin-left: 1rem;
 }
 .nav-search input {
     background: var(--card);
@@ -284,22 +285,22 @@ nav ul a:hover {
     justify-content: center;
     gap: 2rem;
 }
-.recentCard img{
-    width: 25rem;
-    height: 18.75rem;
-    border-radius: 1rem;
-    border: 1px solid var(--border);
+.recentMeta {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.recentbtn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+}
+.recentfooter {
+    display: flex;
+    gap: 0.8rem;
 }
 .recentfooter p{
     font-size: 1.3rem;
 
-}
-.recentfooter{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    
 }
 .recentfooter a{
     color: var(--yellow);
@@ -308,37 +309,56 @@ nav ul a:hover {
 }
 .recentCard {
     display: none;
+    width: 25rem
 }
 
 .recentCard.active {
     display: block;
 }
+.recentCard img{
+    width: 100%;
+    height: 300px;
+    border-radius: 10px ;
+    border: 1px solid var(--border);
+    object-fit: cover;
+}
+.recentCardBody {
+    padding: 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recentCardBody h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
 .carousel{
     display: flex;
     width: 25rem;
 }
-.carouselbtn{
+.carouselbtn {
     background: var(--yellow);
     border: none;
-    color:#000000;
+    color: #000000;
     border-radius: 50%;
-    width: 3.125rem;
-    height: 3.125rem;
+    width: 50px;
+    height: 50px;
     font-size: 1.5rem;
     cursor: pointer;
     font-weight: bold;
     line-height: 1;
+    margin-top: 125px;
 }
 .carouselbtn:hover {
     background: var(--bg);
     color: var(--yellow);
     border: 2px solid var(--yellow);
 }
-.carouselall{
+.carouselall {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
-    align-self: center;
 }
 /* The stats section*/
 
@@ -407,13 +427,13 @@ nav ul a:hover {
     display: flex;
     gap: 5rem;
 }
-.upcomingraces, .pastraces{
+.upcomingraces, .pastraces {
     padding: 2rem 5%;
     border: 3px solid var(--border);
     border-radius: 0.5rem;
     background: var(--card);
-    width: 70%;
-    margin: 1rem 2%
+    width: 100%;
+    margin: 0;
 }
 table {
     width: 100%;
@@ -433,20 +453,13 @@ td{
 .pbrow{
     background: rgb(198, 198, 20);
 }
-.deletebtn {
-    background: rgba(162, 10, 10, 0.15);
-    color: #ff4d4d;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
+.delete-btn {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.4rem 0.7rem;
+    border-radius: 4px;
     font-size: 1rem;
     cursor: default;
-}
-
-.deletebtn:hover {
-    background: #ff4d4d;
-    color: white;
-    cursor: pointer;
 }
 
 .deletebtn-upcoming {
@@ -466,6 +479,88 @@ td{
     cursor: pointer;
     transform: scale(1.15);
     box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.delete-btn:hover {
+    background: rgba(245, 197, 24, 0.15);
+    color: var(--yellow);
+    border-color: var(--yellow);
+    box-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
+}
+.countdown {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--yellow);
+    font-weight: 700;
+    margin-top: 2px;
+}
+.racetracker-layout {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2%;
+    align-items: flex-start;
+}
+
+.racetracker-tables {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nextrace-panel {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: sticky;
+    top: 2rem;
+}
+.nextrace-panel:hover {
+    border-color: var(--yellow);
+}
+tr {
+    transition: all 0.2s;
+}
+tr:hover td  {
+    border-bottom: 1px solid var(--yellow);
+    color: var(--yellow);
+}
+.nextrace-label {
+    color: var(--yellow);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.nextrace-sport {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+}
+.nextrace-detail {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.nextrace-countdown {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--yellow);
+    margin-top: 0.5rem;
+}
+
+.nextrace-empty {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
 .deletebtn-plan {
@@ -614,60 +709,92 @@ td{
     letter-spacing: 0.05em;
 }
 
-.status-badge {
-    padding: 0.3rem 0.7rem;
-    border-radius: 0.375rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: capitalize;
+/* Feed Styles */
+.feed-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
-.status-active {
-    background: rgba(245, 197, 24, 0.15);
+.feed-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 0.625rem;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+}
+
+.feed-card:hover {
+    border-color: var(--yellow);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.feed-user-action {
+    font-size: 1.1rem;
+}
+
+.feed-user-action strong {
+    color: var(--text);
+}
+
+.feed-sport {
     color: var(--yellow);
+    font-weight: 700;
 }
 
-.status-paused {
-    background: rgba(170, 170, 170, 0.15);
-    color: #aaaaaa;
+.feed-meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
-.status-completed {
-    background: rgba(76, 175, 80, 0.15);
-    color: #4caf50;
+.feed-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
 }
 
-.completion-bar {
+.feed-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.feed-notes {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.feed-map {
     width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    height: 250px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-weight: 500;
     overflow: hidden;
-    margin-bottom: 0.3rem;
 }
 
-.completion-bar-fill {
-    height: 100%;
-    background: var(--yellow);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-}
-
-.deletebtn-upcoming {
-    background: rgba(162, 10, 10, 0.15);
-    color: #ff6b6b;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    font-size: 1rem;
-    cursor: default;
-    transition: all 0.2s ease;
-}
-
-.deletebtn-upcoming:hover {
-    background: #ff6b6b;
-    color: white;
-    cursor: pointer;
-    transform: scale(1.15);
-    box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+.feed-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    padding: 3rem;
 }

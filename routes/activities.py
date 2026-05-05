@@ -15,6 +15,7 @@ def _build_form_data(request_form=None, activity=None):
             "duration": activity.get("duration", ""),
             "distance": activity.get("distance", ""),
             "notes": activity.get("notes", ""),
+            "is_public": activity.get("is_public", 0),
             "plan_id": activity.get("plan_id", ""),
         }
 
@@ -25,6 +26,7 @@ def _build_form_data(request_form=None, activity=None):
         "duration": request_form.get("duration", "").strip(),
         "distance": request_form.get("distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
+        "is_public": 1 if request_form.get("is_public") == "on" else 0,
         "plan_id": request_form.get("plan_id", "").strip(),
     }
 
@@ -50,13 +52,15 @@ def show_activity_form():
     if "user_id" not in session:
         return redirect("/login")
 
+    active_plans = plan_store.get_plans_for_user(session["user_id"])
+
     return render_template(
         "activity_form.html",
         heading="Log a Workout",
         action="/activities/new",
         submit_label="Save Activity",
         activity_types=activity_store.ACTIVITY_TYPES,
-        active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
+        active_plans=active_plans,
         form_data=_build_form_data(),
         error="",
     )
@@ -102,13 +106,14 @@ def save_activity():
             error = f"Error parsing GPX file: {str(e)}"
 
     if error:
+        active_plans = plan_store.get_plans_for_user(session["user_id"])
         return render_template(
             "activity_form.html",
             heading="Log a Workout",
             action="/activities/new",
             submit_label="Save Activity",
             activity_types=activity_store.ACTIVITY_TYPES,
-            active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
+            active_plans=active_plans,
             form_data=form_data,
             error=error,
         )
@@ -123,7 +128,8 @@ def save_activity():
         distance=form_data["distance"],
         notes=form_data["notes"],
         route_data=route_data_json,
-        plan_id=plan_id,
+        is_public=form_data.get("is_public", 0),
+        plan_id=plan_id
     )
 
     return redirect("/activities")
@@ -152,13 +158,15 @@ def edit_activity(activity_id):
     if activity is None:
         return redirect("/activities")
 
+    active_plans = plan_store.get_plans_for_user(session["user_id"])
+
     return render_template(
         "activity_form.html",
         heading="Edit Activity",
         action=f"/activities/{activity_id}/edit",
         submit_label="Save Changes",
         activity_types=activity_store.ACTIVITY_TYPES,
-        active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
+        active_plans=active_plans,
         form_data=_build_form_data(activity=activity),
         error="",
     )
@@ -173,13 +181,14 @@ def save_edited_activity(activity_id):
     error = _validate_activity(form_data)
 
     if error:
+        active_plans = plan_store.get_plans_for_user(session["user_id"])
         return render_template(
             "activity_form.html",
             heading="Edit Activity",
             action=f"/activities/{activity_id}/edit",
             submit_label="Save Changes",
             activity_types=activity_store.ACTIVITY_TYPES,
-            active_plans=plan_store.get_active_plans_for_user(session["user_id"]),
+            active_plans=active_plans,
             form_data=form_data,
             error=error,
         )
@@ -194,7 +203,8 @@ def save_edited_activity(activity_id):
         duration=form_data["duration"],
         distance=form_data["distance"],
         notes=form_data["notes"],
-        plan_id=plan_id,
+        is_public=form_data.get("is_public", 0),
+        plan_id=plan_id
     )
 
     return redirect("/activities")

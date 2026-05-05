@@ -15,108 +15,101 @@
             <a href="/addrace" class="btn btna">+ Add Race</a>
         </div>
 
-        {% if personal_bests %}
-        <section class="upcomingraces">
-            <h2>Personal Bests</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Race</th>
-                        <th>Sport</th>
-                        <th>Location</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for pb in personal_bests %}
-                    <tr class="pbrow">
-                        <td>{{ pb['name'] }}</td>
-                        <td>{{ pb['race_type'] }}</td>
-                        <td>{{ pb['location'] }}</td>
-                        <td>{{ pb['date'] }}</td>
-                        <td>{{ pb['finish_time'] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-        {% endif %}
+        <div class="racetracker-layout">
+            <div class="racetracker-tables">
+                <section class="upcomingraces">
+                    <h2>Upcoming Races</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sport</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                                <th>Length</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for race in races if race['status'] == 'upcoming' %}
+                            <tr>
+                                <td>{{ race['name'] }}</td>
+                                <td>{{ race['location'] }}</td>
+                                <td>{{ race['date'] }}
+                                    <span class="countdown">{{ race['countdown'] }}</span>
+                                </td>
+                                <td>{{ race['race_type'] }}</td>
+                                <td>
+                                    <form method="POST" action="/races/{{ race['id'] }}/delete">
+                                        <button type="submit" class="delete-btn">🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5">No upcoming races</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
 
-        <section class="upcomingraces">
-            <h2>Upcoming Races</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sport</th>
-                        <th>Location</th>
-                        <th>Date</th>
-                        <th>Length</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for race in races if race['status'] == 'upcoming' %}
-                    <tr>
-                        <td>{{ race['name'] }}</td>
-                        <td>{{ race['location'] }}</td>
-                        <td>{{ race['date'] }}</td>
-                        <td>{{ race['race_type'] }}</td>
-                        <td>
-                            <form method="POST" action="/races/{{ race['id'] }}/delete"
-                                onsubmit="return confirm('Delete this race?')">
-                                <button type="submit" class="delete-btn">🗑️</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="5">No upcoming races</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>  
-        <section class="pastraces">
-            <h2>Past Races</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sport</th>
-                        <th>Location</th>
-                        <th>Date</th>
-                        <th>Length</th>
-                        <th>Time</th>
-                        <th>Record</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for race in races if race['status'] == 'past' %}
-                    <tr class="{{ 'pbrow' if race['is_pb'] == 1 else '' }}">
-                        <td>{{ race['name'] }}</td>
-                        <td>{{ race['location'] }}</td>
-                        <td>{{ race['date'] }}</td>
-                        <td>{{ race['race_type'] }}</td>
-                        <td>{{ race['finish_time'] }}</td>
-                        <td class="{{ 'pbcol' if race['is_pb'] == 1 else '' }}">
-                            {{ '🥇 PB' if race['is_pb'] == 1 else '' }}
-                        </td>
-                        <td>
-                            <form method="POST" action="/races/{{ race['id'] }}/delete"
-                                onsubmit="return confirm('Delete this race?')">
-                                <button type="submit" class="delete-btn">🗑️</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="7">No past races</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+                <section class="pastraces">
+                    <h2>Past Races</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sport</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                                <th>Length</th>
+                                <th>Time</th>
+                                <th>Record</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for race in races if race['status'] == 'past' %}
+                            <tr class="{{ 'pbrow' if race['is_pb'] == 1 else '' }}">
+                                <td>{{ race['name'] }}</td>
+                                <td>{{ race['location'] }}</td>
+                                <td>{{ race['date'] }}</td>
+                                <td>{{ race['race_type'] }}</td>
+                                <td>{{ race['finish_time'] }}</td>
+                                <td class="{{ 'pbcol' if race['is_pb'] == 1 else '' }}">
+                                    {{ '🥇 PB' if race['is_pb'] == 1 else '' }}
+                                </td>
+                                <td>
+                                    <form method="POST" action="/races/{{ race['id'] }}/delete">
+                                        <button type="submit" class="delete-btn">🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7">No past races</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <div class="nextrace-panel">
+                {% set next_race = races | selectattr('status', 'equalto', 'upcoming') | first %}
+                {% if next_race %}
+                    <p class="nextrace-label">NEXT RACE</p>
+                    <div class="nextrace-sport">{{ next_race['name'] }}</div>
+                    <div class="nextrace-detail">📍 {{ next_race['location'] }}</div>
+                    <div class="nextrace-detail">📅 {{ next_race['date'] }}</div>
+                    <div class="nextrace-detail">📏 {{ next_race['race_type'] }}km</div>
+                    <div class="nextrace-countdown">{{ next_race['countdown'] }}</div>
+                {% else %}
+                    <p class="nextrace-label">NEXT RACE</p>
+                    <p class="nextrace-empty">No upcoming races</p>
+                    <a href="/addrace" class="btn btna" style="margin-top: 1rem;">+ Add Race</a>
+                {% endif %}
+            </div>
+        </div>
     </main>
 </body>
 </html>
