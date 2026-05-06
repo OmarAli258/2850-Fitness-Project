@@ -8,10 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="/static/images/favicon.ico">
     
-    <!-- this loads leaflet css so the activity route map can be styled -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <!-- this loads leaflet javascript so the gpx route can be shown on a map -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         .detail-container {
@@ -117,23 +117,18 @@
         {% if activity.route_data %}
         <div id="map"></div>
         <script>
-            //this gets the route data from the server
-            var routeData = JSON.parse('{{ activity.route_data | safe }}');
+            // load the map with the route from gpx
+            var routeData = {{ activity.route_data | safe }};
             
             if (routeData && routeData.length > 0) {
-                //this starts the map centered on the first route point
                 var map = L.map('map').setView([routeData[0][0], routeData[0][1]], 13);
                 
-                //this adds the openstreetmap background tiles
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '© OpenStreetMap'
                 }).addTo(map);
                 
-                //this draws the route line on top of the map
                 var polyline = L.polyline(routeData, {color: '#3498db', weight: 6}).addTo(map);
-                
-                //this zooms the map so the full route is visible
                 map.fitBounds(polyline.getBounds());
             }
         </script>
