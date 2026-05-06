@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="/static/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="/static/images/favicon.ico">
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     {% include "navbar.html" %}
@@ -45,17 +55,23 @@
                     <input type="date" name="date" value="{{ form_data.date }}">
                 </div>
 
-                <!-- this lets the user enter how long the activity lasted in minutes -->
+                <!-- this lets the user enter how long the activity lasted and choose minutes or hours -->
                 <div class="form-group">
-                    <label>Duration (minutes)</label>
-                    <input type="text" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45">
+                    <label>Duration</label>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <input type="number" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45" min="0" step="0.01" style="flex:2; min-width:160px;">
+                        <select name="duration_unit" style="flex:1; min-width:120px;">
+                            <option value="minutes" {% if form_data.duration_unit != "hours" %}selected{% endif %}>minutes</option>
+                            <option value="hours" {% if form_data.duration_unit == "hours" %}selected{% endif %}>hours</option>
+                        </select>
+                    </div>
                 </div>
 
 
                 <!-- this lets the user enter distance if the activity has one -->
                 <div class="form-group">
                     <label>Distance in km (optional)</label>
-                    <input type="text" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5">
+                    <input type="number" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5.5" min="0" step="0.01">
                 </div>
 
                 <!-- this lets the user connect the activity to one of their plans -->
@@ -83,10 +99,11 @@
 
                 <!-- this lets the user choose if the activity should appear in the community feed -->
                 <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" name="is_public" {% if form_data.is_public %}checked{% endif %}>
-                        Make this activity public (visible in community feed)
-                    </label>
+                    <label>Activity Visibility</label>
+                    <select name="visibility">
+                        <option value="private" {% if not form_data.is_public %}selected{% endif %}>private</option>
+                        <option value="public" {% if form_data.is_public %}selected{% endif %}>public</option>
+                    </select>
                 </div>
 
                 <!-- this gives the user buttons to save the form or cancel back to activities -->

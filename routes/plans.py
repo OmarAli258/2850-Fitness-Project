@@ -14,22 +14,53 @@ plans = Blueprint("plans", __name__)
 #this function prepares plan form data for creating, editing, or redisplaying the form after an error
 def _build_form_data(request_form=None, plan=None):
     if plan is not None:
+        freq_num = ""
+        freq_unit = "weekly"
+        if plan.get("frequency"):
+            freq_parts = plan["frequency"].split(" ", 1)
+            if len(freq_parts) == 2:
+                freq_num = freq_parts[0]
+                freq_unit = freq_parts[1]
+            elif freq_parts[0].isdigit():
+                freq_num = freq_parts[0]
+            else:
+                freq_num = "1"
+                freq_unit = freq_parts[0]
+
+        dur_unit = "minutes"
+        if plan.get("target_duration"):
+            try:
+                dur = int(plan["target_duration"])
+                if dur >= 60:
+                    dur_unit = "hours"
+            except:
+                pass
+
         return {
             "name": plan.get("name", ""),
             "exercise_type": plan.get("exercise_type", ""),
-            "frequency": plan.get("frequency", ""),
+            "frequency_number": freq_num,
+            "frequency_unit": freq_unit,
             "target_duration": plan.get("target_duration", ""),
+            "target_duration_unit": dur_unit,
             "target_distance": plan.get("target_distance", ""),
             "notes": plan.get("notes", ""),
             "status": plan.get("status", "active"),
         }
 
     request_form = request_form or {}
+    freq_num = request_form.get("frequency_number", "").strip()
+    freq_unit = request_form.get("frequency_unit", "weekly").strip()
+    target_duration = request_form.get("target_duration", "").strip()
+    target_duration_unit = request_form.get("target_duration_unit", "minutes").strip()
+
     return {
         "name": request_form.get("name", "").strip(),
         "exercise_type": request_form.get("exercise_type", "").strip(),
-        "frequency": request_form.get("frequency", "").strip(),
-        "target_duration": request_form.get("target_duration", "").strip(),
+        "frequency_number": freq_num,
+        "frequency_unit": freq_unit,
+        "target_duration": target_duration,
+        "target_duration_unit": target_duration_unit,
         "target_distance": request_form.get("target_distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
         "status": request_form.get("status", "active").strip(),
@@ -42,11 +73,50 @@ def _validate_plan(form_data):
         return "Please enter a plan name."
     if form_data["exercise_type"] == "":
         return "Please choose an exercise type."
-    if form_data["frequency"] == "":
-        return "Please enter a frequency."
-    if form_data["target_duration"] and not form_data["target_duration"].isdigit():
-        return "Target duration must be a number."
+    if form_data["frequency_number"] == "":
+        return "Please enter a frequency number."
+    try:
+        freq_num = int(form_data["frequency_number"])
+    except ValueError:
+        return "Frequency number must be a number."
+    if freq_num < 1:
+        return "Frequency number must be at least 1."
+    if form_data["frequency_unit"] not in ["daily", "weekly", "monthly", "yearly"]:
+        return "Please choose a valid frequency unit."
+
+    if form_data["target_duration"] != "":
+        try:
+            dur = int(form_data["target_duration"])
+        except ValueError:
+            return "Target duration must be a number."
+        if dur < 0:
+            return "Target duration cannot be negative."
+
     return ""
+
+
+#this function formats frequency as number + unit string for database storage
+def _format_frequency(form_data):
+    freq_num = form_data["frequency_number"]
+    freq_unit = form_data["frequency_unit"]
+    if freq_unit == "daily":
+        return f"{freq_num}x daily"
+    elif freq_unit == "monthly":
+        return f"{freq_num}x monthly"
+    elif freq_unit == "yearly":
+        return f"{freq_num}x yearly"
+    else:
+        return f"{freq_num}x weekly"
+
+
+#this function converts target duration to minutes before saving
+def _duration_to_minutes(form_data):
+    if not form_data["target_duration"]:
+        return None
+    duration = int(form_data["target_duration"])
+    if form_data["target_duration_unit"] == "hours":
+        duration = duration * 60
+    return duration
 
 
 #this function shows all plans for the logged in user with session progress data
@@ -117,8 +187,8 @@ def save_plan():
         user_id=session["user_id"],
         name=form_data["name"],
         exercise_type=form_data["exercise_type"],
-        frequency=form_data["frequency"],
-        target_duration=form_data["target_duration"],
+        frequency=_format_frequency(form_data),
+        target_duration=_duration_to_minutes(form_data),
         target_distance=form_data["target_distance"],
         notes=form_data["notes"],
     )
@@ -193,8 +263,8 @@ def save_edited_plan(plan_id):
         user_id=session["user_id"],
         name=form_data["name"],
         exercise_type=form_data["exercise_type"],
-        frequency=form_data["frequency"],
-        target_duration=form_data["target_duration"],
+        frequency=_format_frequency(form_data),
+        target_duration=_duration_to_minutes(form_data),
         target_distance=form_data["target_distance"],
         notes=form_data["notes"],
         status=form_data["status"],

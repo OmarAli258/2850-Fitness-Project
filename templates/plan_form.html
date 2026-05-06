@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="/static/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="/static/images/favicon.ico">
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     {% include "navbar.html" %}
@@ -48,19 +58,33 @@
                 <!-- this lets the user enter how often they want to follow the plan -->
                 <div class="form-group">
                     <label>Frequency</label>
-                    <input type="text" name="frequency" value="{{ form_data.frequency }}" placeholder="e.g. daily, 3x per week, weekly">
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <input type="number" name="frequency_number" value="{{ form_data.frequency_number }}" placeholder="e.g. 3" min="1" step="1" style="flex:1; min-width:100px;">
+                        <select name="frequency_unit" style="flex:2; min-width:180px;">
+                            <option value="daily" {% if form_data.frequency_unit == "daily" %}selected{% endif %}>daily</option>
+                            <option value="weekly" {% if form_data.frequency_unit == "weekly" %}selected{% endif %}>weekly</option>
+                            <option value="monthly" {% if form_data.frequency_unit == "monthly" %}selected{% endif %}>monthly</option>
+                            <option value="yearly" {% if form_data.frequency_unit == "yearly" %}selected{% endif %}>yearly</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- this lets the user add an optional duration target for each session -->
                 <div class="form-group">
-                    <label>Target Duration per Session (minutes, optional)</label>
-                    <input type="text" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45">
+                    <label>Target Duration per Session</label>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <input type="number" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45" min="0" step="1" style="flex:2; min-width:160px;">
+                        <select name="target_duration_unit" style="flex:1; min-width:120px;">
+                            <option value="minutes" {% if form_data.target_duration_unit != "hours" %}selected{% endif %}>minutes</option>
+                            <option value="hours" {% if form_data.target_duration_unit == "hours" %}selected{% endif %}>hours</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- this lets the user add an optional distance target for the plan -->
                 <div class="form-group">
                     <label>Target Distance (optional)</label>
-                    <input type="text" name="target_distance" value="{{ form_data.target_distance }}" placeholder="e.g. 5 km">
+                    <input type="number" name="target_distance" value="{{ form_data.target_distance }}" placeholder="e.g. 5" min="0" step="0.01">
                 </div>
 
                 <!-- this lets the user add extra notes or goals for the plan -->

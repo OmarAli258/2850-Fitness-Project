@@ -20,6 +20,7 @@ def _build_form_data(request_form=None, activity=None):
             "activity_type": activity.get("type", ""),
             "date": activity.get("date", ""),
             "duration": activity.get("duration", ""),
+            "duration_unit": "minutes",
             "distance": activity.get("distance", ""),
             "notes": activity.get("notes", ""),
             "is_public": activity.get("is_public", 0),
@@ -31,9 +32,10 @@ def _build_form_data(request_form=None, activity=None):
         "activity_type": request_form.get("activity_type", "").strip(),
         "date": request_form.get("date", "").strip(),
         "duration": request_form.get("duration", "").strip(),
+        "duration_unit": request_form.get("duration_unit", "minutes").strip(),
         "distance": request_form.get("distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
-        "is_public": 1 if request_form.get("is_public") == "on" else 0,
+        "is_public": 1 if request_form.get("visibility") == "public" else 0,
         "plan_id": request_form.get("plan_id", "").strip(),
     }
 
@@ -49,10 +51,36 @@ def _validate_activity(form_data):
     if form_data["duration"] == "":
         return "Please enter the duration."
 
-    if not form_data["duration"].isdigit():
+    try:
+        duration = float(form_data["duration"])
+    except ValueError:
         return "Duration must be a number."
 
+    if duration <= 0:
+        return "Duration must be more than 0."
+
+    if form_data["duration_unit"] not in ["minutes", "hours"]:
+        return "Please choose minutes or hours for the duration."
+
+    if form_data["distance"] != "":
+        try:
+            distance = float(form_data["distance"])
+        except ValueError:
+            return "Distance must be a number."
+
+        if distance < 0:
+            return "Distance cannot be negative."
+
     return ""
+
+
+#this function converts the activity duration into minutes before it is saved
+def _duration_to_minutes(form_data):
+    duration = float(form_data["duration"])
+    if form_data["duration_unit"] == "hours":
+        duration = duration * 60
+
+    return max(1, int(round(duration)))
 
 
 #this function shows the blank activity form for logging a new workout
@@ -134,7 +162,7 @@ def save_activity():
         user_id=session["user_id"],
         activity_type=form_data["activity_type"],
         date=form_data["date"],
-        duration=form_data["duration"],
+        duration=_duration_to_minutes(form_data),
         distance=form_data["distance"],
         notes=form_data["notes"],
         route_data=route_data_json,
@@ -213,7 +241,7 @@ def save_edited_activity(activity_id):
         user_id=session["user_id"],
         activity_type=form_data["activity_type"],
         date=form_data["date"],
-        duration=form_data["duration"],
+        duration=_duration_to_minutes(form_data),
         distance=form_data["distance"],
         notes=form_data["notes"],
         is_public=form_data.get("is_public", 0),

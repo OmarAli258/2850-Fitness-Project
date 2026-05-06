@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="/static/images/favicon.ico">
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     {% include "navbar.html" %}
@@ -76,7 +86,7 @@
                             <th>Visibility</th>
                             <th>View</th>
                             <th>Edit</th>
-                            <th>Del</th>
+                            <th>Delete Activity</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,17 +96,17 @@
                         </tr>
                         {% else %}
                         {% for activity in upcoming_activities %}
-                        <tr>
+                        <tr onclick="window.location.href='/activities/{{ activity.id }}'" style="cursor:pointer;">
                             <td style="text-align:left; padding-left: 1.2rem;">{{ activity.date }}</td>
                             <td>{{ activity.type }}</td>
                             <td>{{ activity.duration }} min</td>
                             <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
                             <td>{% if activity.is_public %}<span style="color: #2ecc71;">Public</span>{% else %}<span style="color: var(--text-muted);">Private</span>{% endif %}</td>
-                            <td><a class="btn btna" href="/activities/{{ activity.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
-                            <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
+                            <td><a class="btn btna" href="/activities/{{ activity.id }}" onclick="event.stopPropagation()" style="padding:0.45rem 0.9rem;">View</a></td>
+                            <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" onclick="event.stopPropagation()" style="padding:0.45rem 0.9rem;">Edit</a></td>
                             <td>
-                                <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0; display:inline;">
-                                    <button type="submit" class="deletebtn deletebtn-upcoming" style="border:none; background:none; padding:0.5rem 0.9rem;">🗑️</button>
+                                <form action="/activities/{{ activity.id }}/delete" method="post" onclick="event.stopPropagation()" style="margin:0; display:inline;">
+                                    <button type="submit" class="deletebtn deletebtn-upcoming" style="border:none; background:none; padding:0.5rem 0.9rem;">Delete Activity</button>
                                 </form>
                             </td>
                         </tr>
@@ -121,7 +131,7 @@
                             <th>Visibility</th>
                             <th>View</th>
                             <th>Edit</th>
-                            <th>Del</th>
+                            <th>Delete Activity</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,17 +141,17 @@
                         </tr>
                         {% else %}
                         {% for activity in past_activities %}
-                        <tr>
+                        <tr onclick="window.location.href='/activities/{{ activity.id }}'" style="cursor:pointer;">
                             <td style="text-align:left; padding-left: 1.2rem;">{{ activity.date }}</td>
                             <td>{{ activity.type }}</td>
                             <td>{{ activity.duration }} min</td>
                             <td>{{ activity.distance if activity.distance else 'N/A' }}</td>
                             <td>{% if activity.is_public %}<span style="color: #2ecc71;">Public</span>{% else %}<span style="color: var(--text-muted);">Private</span>{% endif %}</td>
-                            <td><a class="btn btna" href="/activities/{{ activity.id }}" style="padding:0.45rem 0.9rem;">View</a></td>
-                            <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" style="padding:0.45rem 0.9rem;">Edit</a></td>
+                            <td><a class="btn btna" href="/activities/{{ activity.id }}" onclick="event.stopPropagation()" style="padding:0.45rem 0.9rem;">View</a></td>
+                            <td><a class="btn btnb" href="/activities/{{ activity.id }}/edit" onclick="event.stopPropagation()" style="padding:0.45rem 0.9rem;">Edit</a></td>
                             <td>
-                                <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0; display:inline;">
-                                    <button type="submit" class="deletebtn" style="border:none; background:none; padding:0.5rem 0.9rem;">🗑️</button>
+                                <form action="/activities/{{ activity.id }}/delete" method="post" onclick="event.stopPropagation()" style="margin:0; display:inline;">
+                                    <button type="submit" class="deletebtn" style="border:none; background:none; padding:0.5rem 0.9rem;">Delete Activity</button>
                                 </form>
                             </td>
                         </tr>
