@@ -8,9 +8,9 @@
     <link rel="icon" href="/static/images/favicon.ico">
     
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         .detail-container {
@@ -112,23 +112,18 @@
         {% if activity.route_data %}
         <div id="map"></div>
         <script>
-            // Get the route data from the server
+            // load the map with the route from gpx
             var routeData = {{ activity.route_data | safe }};
             
             if (routeData && routeData.length > 0) {
-                // Initialize map centered at the first point
                 var map = L.map('map').setView([routeData[0][0], routeData[0][1]], 13);
                 
-                // Add OpenStreetMap tiles
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '© OpenStreetMap'
                 }).addTo(map);
                 
-                // Draw the polyline
                 var polyline = L.polyline(routeData, {color: '#3498db', weight: 6}).addTo(map);
-                
-                // Zoom the map to the polyline
                 map.fitBounds(polyline.getBounds());
             }
         </script>
