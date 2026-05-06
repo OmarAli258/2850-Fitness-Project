@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- this page shows the form used to create or edit a training plan -->
     <meta charset="UTF-8">
     <title>FitTrack | {{ heading }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -12,6 +13,7 @@
     {% include "navbar.html" %}
 
     <main class="auth-page">
+        <!-- this card holds the plan form and keeps the page layout consistent with the other forms -->
         <section class="auth-card">
             <div class="auth-header">
                 <span class="auth-logo">FitTrack</span>
@@ -19,16 +21,20 @@
                 <p class="auth-sub">Set up your exercise programme with goals and targets.</p>
             </div>
 
+            <!-- this shows validation errors if the plan form is submitted with missing or invalid details -->
             {% if error %}
             <div class="auth-error">{{ error }}</div>
             {% endif %}
 
+            <!-- this form sends plan details to either the create route or edit route -->
             <form action="{{ action }}" method="post" class="auth-form">
+                <!-- this lets the user name their training plan -->
                 <div class="form-group">
                     <label>Plan Name</label>
                     <input type="text" name="name" value="{{ form_data.name }}" placeholder="e.g. Marathon Training">
                 </div>
 
+                <!-- this lets the user choose what type of exercise the plan is for -->
                 <div class="form-group">
                     <label>Exercise Type</label>
                     <select name="exercise_type">
@@ -39,26 +45,31 @@
                     </select>
                 </div>
 
+                <!-- this lets the user enter how often they want to follow the plan -->
                 <div class="form-group">
                     <label>Frequency</label>
                     <input type="text" name="frequency" value="{{ form_data.frequency }}" placeholder="e.g. daily, 3x per week, weekly">
                 </div>
 
+                <!-- this lets the user add an optional duration target for each session -->
                 <div class="form-group">
                     <label>Target Duration per Session (minutes, optional)</label>
                     <input type="text" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45">
                 </div>
 
+                <!-- this lets the user add an optional distance target for the plan -->
                 <div class="form-group">
                     <label>Target Distance (optional)</label>
                     <input type="text" name="target_distance" value="{{ form_data.target_distance }}" placeholder="e.g. 5 km">
                 </div>
 
+                <!-- this lets the user add extra notes or goals for the plan -->
                 <div class="form-group">
                     <label>Notes / Goals (optional)</label>
                     <textarea name="notes" rows="4" placeholder="e.g. Build up to half marathon distance">{{ form_data.notes }}</textarea>
                 </div>
 
+                <!-- this lets the user update the plan status when editing an existing plan -->
                 {% if form_data.status %}
                 <div class="form-group">
                     <label>Status</label>
@@ -70,6 +81,7 @@
                 </div>
                 {% endif %}
 
+                <!-- this gives the user buttons to save the form or cancel back to plans -->
                 <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                     <button class="btn btn-primary btn-full" type="submit">{{ submit_label }}</button>
                     <a class="btn btn-ghost" href="/plans">Cancel</a>
@@ -80,3 +92,11 @@
     <script src="/static/js/main.js"></script>
 </body>
 </html>
+
+<!-- done comments for templates/plan_form.html -->
+<!-- summary of comments: -->
+<!-- - shows the form for creating or editing a training plan -->
+<!-- - displays validation errors when form input is wrong -->
+<!-- - collects plan name, exercise type, frequency, targets and notes -->
+<!-- - lets users update the plan status when editing -->
+<!-- - gives save and cancel actions -->
