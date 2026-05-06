@@ -1,8 +1,16 @@
+#this file handles saving, loading, updating, deleting and summarising plan data from the database
+#it also handles sessions progress and consistency (adherence) records for plans
+#note: we changed the user-facing word adherence because it was too complex for users
+#we chose the simpler word consistency, but some code was already named adherence
+#so consistency is the main word in comments, with adherence shown because the code still uses that label
+
+#import uuid for unique ids, datetime for dates and get_connection for database access
 import uuid
 from datetime import datetime
 from data.database import get_connection
 
 
+#this function creates a new plan in the database and starts it as active
 def create_plan(user_id, name, exercise_type, frequency, target_duration, target_distance, notes):
     plan_id = str(uuid.uuid4())
     created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -35,6 +43,7 @@ def create_plan(user_id, name, exercise_type, frequency, target_duration, target
     }
 
 
+#this function gets all plans for a user, with optional filtering by status
 def get_plans_for_user(user_id, status=None):
     connection = get_connection()
     cursor = connection.cursor()
@@ -48,7 +57,8 @@ def get_plans_for_user(user_id, status=None):
 
     query += " ORDER BY created_at DESC"
 
-    rows = cursor.execute(query, values).fetchall()
+    cursor.execute(query, values)
+    rows = cursor.fetchall()
     connection.close()
 
     plans = []
@@ -69,18 +79,21 @@ def get_plans_for_user(user_id, status=None):
     return plans
 
 
+#this function gets only active plans for a user
 def get_active_plans_for_user(user_id):
     return get_plans_for_user(user_id, status="active")
 
 
+#this function gets one plan by id, but only if it belongs to the user
 def get_plan(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    row = cursor.execute(
+    cursor.execute(
         "SELECT * FROM plans WHERE user_id = %s AND id = %s",
         (user_id, plan_id)
-    ).fetchone()
+    )
+    row = cursor.fetchone()
 
     connection.close()
 
@@ -101,6 +114,7 @@ def get_plan(user_id, plan_id):
     }
 
 
+#this function updates an existing plan and can also update its status
 def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duration, target_distance, notes, status=None):
     connection = get_connection()
     cursor = connection.cursor()
@@ -128,6 +142,7 @@ def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duratio
     connection.close()
 
 
+#this function deletes a plan and unlinks any activities that were connected to it
 def delete_plan(plan_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
@@ -146,6 +161,7 @@ def delete_plan(plan_id, user_id):
     connection.close()
 
 
+#this function calculates a plan's linked sessions, progress numbers and completed activities
 def get_plan_completion(user_id, plan_id):
     plan = get_plan(user_id, plan_id)
     if plan is None:
@@ -202,6 +218,7 @@ def get_plan_completion(user_id, plan_id):
     }
 
 
+#this function estimates expected sessions based on frequency and how long the plan has existed
 def _calculate_expected_sessions(frequency, days):
     weeks = days / 7.0
 
@@ -246,6 +263,7 @@ def _calculate_expected_sessions(frequency, days):
     return int(weeks)
 
 
+#this function gets the target session number directly from the plan frequency
 def _get_frequency_target(frequency):
     if "x" in frequency:
         try:
@@ -257,6 +275,7 @@ def _get_frequency_target(frequency):
     return 1
 
 
+#this function calculates summary numbers for all of a user's plans
 def get_plan_summary(user_id):
     plans = get_plans_for_user(user_id)
 
@@ -281,6 +300,7 @@ def get_plan_summary(user_id):
     }
 
 
+#this function records a consistency (adherence) rating for a plan session
 def record_adherence(user_id, plan_id, session_date, rating, notes):
     adherence_id = str(uuid.uuid4())
     created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -309,6 +329,7 @@ def record_adherence(user_id, plan_id, session_date, rating, notes):
     }
 
 
+#this function gets all consistency (adherence) records for one plan
 def get_adherence_for_plan(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
@@ -338,6 +359,7 @@ def get_adherence_for_plan(user_id, plan_id):
     return records
 
 
+#this function calculates a consistency (adherence) summary for one plan
 def get_adherence_summary(user_id, plan_id):
     records = get_adherence_for_plan(user_id, plan_id)
 
@@ -359,6 +381,7 @@ def get_adherence_summary(user_id, plan_id):
     }
 
 
+#this function deletes one consistency (adherence) record from the database
 def delete_adherence(adherence_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
@@ -370,3 +393,15 @@ def delete_adherence(adherence_id, user_id):
 
     connection.commit()
     connection.close()
+
+#done comments for data/plan_store.py
+#summary of comments:
+# - creates, gets, updates and deletes plans from the database
+# - filters plans by status and gets active plans
+# - calculates plan session progress and frequency targets
+# - calculates plan summary numbers for the plans page
+# - records, gets, summarises and deletes consistency (adherence) records
+# - keeps consistency as the main user word while adherence remains in some code names
+#note: consistency is the main word we use for users because it is easier to understand than adherence
+#the code still says adherence in some function, table and variable names because that was the original label
+#that is why comments show consistency (adherence), so the simple user word and the code word both make sense

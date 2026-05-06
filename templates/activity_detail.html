@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- this page shows the full details for one activity -->
     <meta charset="UTF-8">
     <title>FitTrack | View Activity</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -77,6 +78,7 @@
     {% include "navbar.html" %}
 
     <main class="detail-container">
+        <!-- this header shows the activity type, private badge if needed and back button -->
         <div class="detail-header">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <h1>{{ activity.type }}</h1>
@@ -87,6 +89,7 @@
             <a href="/activities" class="btn btnb">← Back</a>
         </div>
 
+        <!-- this section shows the main stats for the activity -->
         <div class="detail-stats">
             <div class="stat-item">
                 <span>Date</span>
@@ -102,6 +105,7 @@
             </div>
         </div>
 
+        <!-- this section shows notes only when the activity has notes saved -->
         {% if activity.notes %}
         <div class="detail-notes">
             <h3 style="color: var(--yellow); margin-bottom: 0.5rem;">Notes</h3>
@@ -109,6 +113,7 @@
         </div>
         {% endif %}
 
+        <!-- this section shows a map only when route data exists from a gpx upload -->
         {% if activity.route_data %}
         <div id="map"></div>
         <script>
@@ -129,6 +134,7 @@
         </script>
         {% endif %}
 
+        <!-- this section gives the user buttons to edit or delete the activity -->
         <div style="display: flex; gap: 1rem; justify-content: flex-end;">
             <a href="/activities/{{ activity.id }}/edit" class="btn btnb">Edit</a>
             <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0;">
@@ -140,3 +146,12 @@
     <script src="/static/js/main.js"></script>
 </body>
 </html>
+
+<!-- done comments for templates/activity_detail.html -->
+<!-- summary of comments: -->
+<!-- - shows one activity detail page -->
+<!-- - displays activity type, privacy status and back button -->
+<!-- - shows date, duration and distance stats -->
+<!-- - shows notes when they exist -->
+<!-- - shows a route map when gpx route data exists -->
+<!-- - gives edit and delete actions for the activity -->

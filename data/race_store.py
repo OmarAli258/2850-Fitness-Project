@@ -21,14 +21,15 @@ def get_races_for_user(user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    rows = cursor.execute(
+    cursor.execute(
         """
         SELECT * FROM races
         WHERE user_id = %s
         ORDER BY date ASC
         """,
         (user_id,)
-    ).fetchall()
+    )
+    rows = cursor.fetchall()
 
     connection.close()
 
