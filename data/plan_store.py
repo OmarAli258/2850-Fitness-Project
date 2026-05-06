@@ -170,14 +170,15 @@ def get_plan_completion(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    completed_activities = cursor.execute(
+    cursor.execute(
         """
         SELECT * FROM activities
         WHERE user_id = %s AND plan_id = %s AND type = %s
         ORDER BY date DESC
         """,
         (user_id, plan_id, plan["exercise_type"])
-    ).fetchall()
+    )
+    completed_activities = cursor.fetchall()
 
     connection.close()
 
@@ -334,14 +335,15 @@ def get_adherence_for_plan(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    rows = cursor.execute(
+    cursor.execute(
         """
         SELECT * FROM plan_adherence
         WHERE user_id = %s AND plan_id = %s
         ORDER BY session_date DESC
         """,
         (user_id, plan_id)
-    ).fetchall()
+    )
+    rows = cursor.fetchall()
 
     connection.close()
 
