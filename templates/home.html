@@ -85,6 +85,23 @@
                 </div>
             </section>
         </main>
-        <script src="/static/js/main.js"></script>
+        <script>
+    const quotes = [
+        "One Day Or Day One",
+        "The Only Bad Workout Is The One That Didn't Happen",
+        "Sweat Is Just Fat Crying",
+        "No Pain No Gain",
+        "Train Insane Or Remain The Same",
+        "Push Yourself Because No One Else Will Do It For You",
+        "Your Body Can Stand Almost Anything It's Your Mind You Have To Convince",
+        "Dream Big Work Hard Stay Focused",
+        "Make Yourself Proud",
+        "Results Happen Over Time Not Overnight"
+    ];
+    
+    const quotesHtml = quotes.map(q => `<span>${q}</span>`).join('<span class="quote-sep">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+    document.getElementById('quotes').innerHTML = quotesHtml;
+</script>
+<script src="/static/js/main.js"></script>
     </body>
     </html>
