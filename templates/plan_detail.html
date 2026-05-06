@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- this page shows the full details for one training plan -->
     <meta charset="UTF-8">
     <title>FitTrack | {{ completion.plan.name }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -11,6 +12,7 @@
 <body>
     {% include "navbar.html" %}
     <main>
+        <!-- this section shows the plan name, basic details and navigation buttons -->
         <section class="hero" style="padding: 4rem 5% 3rem; min-height: auto;">
             <div class="hero-text" style="max-width: 800px; padding-left: 0; padding-right: 0;">
                 <h1 style="font-size: 3rem;">{{ completion.plan.name }}</h1>
@@ -22,20 +24,23 @@
             </div>
         </section>
 
+        <!-- this section shows how many planned sessions the user has completed -->
         <section style="padding: 3rem 5%; margin-bottom: 3rem;">
             {% set target = completion.frequency_target %}
             {% set pct = (completion.completed_count / target * 100)|round|int if target > 0 else 0 %}
+            {% set progress_width = pct ~ '%' %}
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
                     <span style="font-size: 1.1rem; font-weight: 600;">Sessions</span>
                     <span style="font-size: 1.1rem; font-weight: 600;">{{ completion.completed_count }} / {{ target }}</span>
                 </div>
                 <div style="background: var(--bg-raised); border-radius: 12px; height: 2.5rem; overflow: hidden;">
-                    <div style="background: var(--primary); height: 100%; width: {{ pct }}%; min-width: 4px; border-radius: 12px; transition: width 0.3s ease;"></div>
+                    <div style="background: var(--primary); height: 100%; width: {{ progress_width }}; min-width: 4px; border-radius: 12px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
         </section>
 
+        <!-- this section shows the targets and notes saved for the plan -->
         <section style="padding: 3rem 5%; margin-bottom: 3rem;">
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Plan Targets</h2>
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem;">
@@ -64,6 +69,7 @@
             </div>
         </section>
 
+        <!-- this section shows a quick summary of how consistent the user has been -->
         <section style="padding: 3rem 5%; margin-bottom: 3rem;">
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Consistency Summary</h2>
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 3rem;">
@@ -96,6 +102,7 @@
             </div>
         </section>
 
+        <!-- this form lets the user rate how well they followed the plan for a session -->
         <section style="padding: 3rem 5%; margin-bottom: 3rem;">
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Rate Session Consistency</h2>
             <form action="/plans/{{ completion.plan.id }}/adherence" method="post" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;">
@@ -121,6 +128,7 @@
             </form>
         </section>
 
+        <!-- this section lists all saved consistency ratings for the plan -->
         <section style="padding: 3rem 5% 4rem;">
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Consistency Log</h2>
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1.5rem;">
@@ -166,5 +174,14 @@
         </section>
     </main>
     <script src="/static/js/main.js"></script>
+    <!-- done comments for templates/plan_detail.html -->
+    <!-- summary of comments: -->
+    <!-- - shows one training plan detail page -->
+    <!-- - displays the plan name, basic details and navigation buttons -->
+    <!-- - shows session completion progress -->
+    <!-- - displays saved targets and notes for the plan -->
+    <!-- - shows consistency rating totals -->
+    <!-- - lets users record a consistency rating for a session -->
+    <!-- - lists saved consistency records for the plan -->
 </body>
 </html>
