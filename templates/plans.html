@@ -15,6 +15,8 @@
             border-radius: 7px;
             overflow: hidden;
             background: var(--border);
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         .plan-progress::-webkit-progress-bar {
@@ -24,34 +26,36 @@
 
         .plan-progress::-webkit-progress-value {
             border-radius: 7px;
+            transition: width 0.3s ease;
         }
 
         .plan-progress::-moz-progress-bar {
+            background: var(--border);
             border-radius: 7px;
         }
 
         .progress-high::-webkit-progress-value {
-            background: #4caf50;
+            background: #4caf50 !important;
         }
 
         .progress-medium::-webkit-progress-value {
-            background: var(--yellow);
+            background: #f1c40f !important;
         }
 
         .progress-low::-webkit-progress-value {
-            background: #ff4d4d;
+            background: #ff4d4d !important;
         }
 
         .progress-high::-moz-progress-bar {
-            background: #4caf50;
+            background: #4caf50 !important;
         }
 
         .progress-medium::-moz-progress-bar {
-            background: var(--yellow);
+            background: #f1c40f !important;
         }
 
         .progress-low::-moz-progress-bar {
-            background: #ff4d4d;
+            background: #ff4d4d !important;
         }
     </style>
 </head>
@@ -105,15 +109,15 @@
                         {% else %}
                         <!-- render each plan with its details, status, session progress and actions -->
                         {% for plan in plans %}
-                        <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border);">
+                        <tr onclick="window.location.href='/plans/{{ plan.id }}'" style="background: var(--bg-card); border-bottom: 1px solid var(--border); cursor:pointer;">
                             <td style="text-align:left; padding: 1.5rem 2rem; font-weight: 700; font-size: 1.25rem;">{{ plan.name }}</td>
                             <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.exercise_type }}</td>
                             <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.frequency }}</td>
                             <td style="padding: 1.5rem 1.5rem; font-size: 1.1rem;">{{ plan.target_duration ~ ' min' if plan.target_duration else 'N/A' }}</td>
                             <td style="padding: 1.5rem 1.5rem;">
                                 <!-- changing the dropdown automatically submits the plans new status -->
-                                <form action="/plans/{{ plan.id }}/status" method="post" style="display:inline;">
-                                    <select name="status" onchange="this.form.submit()" style="padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1rem; cursor: pointer; min-width: 130px;">
+                                <form action="/plans/{{ plan.id }}/status" method="post" onsubmit="event.stopPropagation()" style="display:inline;">
+                                    <select name="status" onchange="this.form.submit()" onclick="event.stopPropagation()" style="padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1rem; cursor: pointer; min-width: 130px;">
                                         <option value="active" {% if plan.status == 'active' %}selected{% endif %}>🟢 Active</option>
                                         <option value="paused" {% if plan.status == 'paused' %}selected{% endif %}>🟡 Paused</option>
                                         <option value="completed" {% if plan.status == 'completed' %}selected{% endif %}>🟣 Completed</option>
@@ -123,7 +127,7 @@
                             <td style="padding: 1.5rem 1.5rem;">
                                 <!-- progress bar compares completed sessions with the target number of sessions -->
                                 {% set progress_class = 'progress-high' if plan.completion_rate >= 80 else 'progress-medium' if plan.completion_rate >= 50 else 'progress-low' %}
-                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;" onclick="event.stopPropagation()">
                                     <div style="display: flex; align-items: center; gap: 1rem;">
                                         <div style="flex: 1; min-width: 120px;">
                                             <progress class="plan-progress {{ progress_class }}" value="{{ plan.completion_rate }}" max="100"></progress>
@@ -132,13 +136,13 @@
                                     </div>
                                 </div>
                             </td>
-                            <td style="padding: 1.5rem 1.5rem;">
+                            <td style="padding: 1.5rem 1.5rem;" onclick="event.stopPropagation()">
                                 <!-- action buttons let the user view details, edit the plan or delete it -->
                                 <div style="display: flex; gap: 0.75rem;">
                                     <a href="/plans/{{ plan.id }}" class="btn btna" style="padding: 0.75rem 1.25rem; font-size: 1rem;">View</a>
                                     <a href="/plans/{{ plan.id }}/edit" class="btn btnb" style="padding: 0.75rem 1.25rem; font-size: 1rem;">Edit</a>
                                     <form action="/plans/{{ plan.id }}/delete" method="post" style="margin:0;">
-                                        <button type="submit" class="deletebtn-plan" title="Delete plan" style="padding: 0.75rem 1rem;">🗑️</button>
+                                        <button type="submit" class="deletebtn-plan" title="Delete plan" style="padding: 0.75rem 1rem;">Delete Plan</button>
                                     </form>
                                 </div>
                             </td>
