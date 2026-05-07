@@ -118,7 +118,7 @@
                     <div class="feed-actions">
                         <!-- this section shows the like button and social counts for the activity -->
                         {% if session.get('user_id') %}
-                        <form method="POST" action="/feed/{{ activity.id }}/like">
+                        <form method="POST" action="/feed/{{ activity.id }}/like?view={{ view }}">
                             <button type="submit" class="feed-like-button {% if activity.liked_by_user %}feed-like-button-liked{% endif %}" aria-label="{% if activity.liked_by_user %}Unlike{% else %}Like{% endif %} {{ activity.type }} activity by {{ activity.user_name }}">
                                 {% if activity.liked_by_user %}Liked{% else %}Like{% endif %}
                             </button>
@@ -141,7 +141,7 @@
                                         <span>{{ comment.display_created_at }}</span>
                                         {% if session.get('user_id') == comment.user_id %}
                                         <!-- this button lets users delete their own feed comments -->
-                                        <form method="POST" action="/feed/comments/{{ comment.id }}/delete">
+                                        <form method="POST" action="/feed/comments/{{ comment.id }}/delete?view={{ view }}">
                                             <button type="submit" class="feed-comment-delete">Delete</button>
                                         </form>
                                         {% endif %}
@@ -156,7 +156,7 @@
 
                         {% if session.get('user_id') %}
                         <!-- this form posts a new comment for the selected feed activity -->
-                        <form class="feed-comment-form" method="POST" action="/feed/{{ activity.id }}/comments">
+                        <form class="feed-comment-form" method="POST" action="/feed/{{ activity.id }}/comments?view={{ view }}">
                             <label for="comment-{{ activity.id }}">Add a comment</label>
                             <textarea id="comment-{{ activity.id }}" name="comment" rows="2" maxlength="500" placeholder="Encourage {{ activity.user_name }}..."></textarea>
                             <button type="submit" class="btn btna">Post Comment</button>
