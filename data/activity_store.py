@@ -5,7 +5,7 @@
 import uuid
 from data.database import get_connection
 
-ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifting", "Crossfit", "Football", "Yoga", "Hiking", "Rowing", "Gym", "Weights"]
+ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifting", "Crossfit", "Football", "Yoga", "Hiking", "Rowing"]
 
 
 #this function creates new activity in  atabase and returns saved activity data
@@ -148,6 +148,35 @@ def update_activity(activity_id, user_id, activity_type, date, duration, distanc
 def delete_activity(activity_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
+
+    #this checks ownership first, then clears feed likes and comments before deleting the activity
+    cursor.execute(
+        """
+        SELECT id FROM activities
+        WHERE id = %s AND user_id = %s
+        """,
+        (activity_id, user_id)
+    )
+
+    if cursor.fetchone() is None:
+        connection.close()
+        return
+
+    cursor.execute(
+        """
+        DELETE FROM activity_likes
+        WHERE activity_id = %s
+        """,
+        (activity_id,)
+    )
+
+    cursor.execute(
+        """
+        DELETE FROM activity_comments
+        WHERE activity_id = %s
+        """,
+        (activity_id,)
+    )
 
     cursor.execute(
         """

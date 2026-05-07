@@ -33,7 +33,7 @@ def _build_form_data(request_form=None, plan=None):
                 dur = int(plan["target_duration"])
                 if dur >= 60:
                     dur_unit = "hours"
-            except:
+            except (ValueError, TypeError):
                 pass
 
         return {
@@ -91,6 +91,8 @@ def _validate_plan(form_data):
             return "Target duration must be a number."
         if dur < 0:
             return "Target duration cannot be negative."
+        if dur > 480:
+            return "Target duration cannot exceed 8 hours (480 minutes)."
 
     return ""
 

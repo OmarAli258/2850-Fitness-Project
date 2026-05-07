@@ -3,6 +3,8 @@
 <head>
     <!-- this page displays all user activities with search, filtering options and upcoming/past groupings -->
     <!-- allows users to view, edit and delete their logged workouts -->
+    <!-- accessibility - skip link lets keyboard users go straight to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <meta charset="UTF-8">
     <title>FitTrack | Activities</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -21,7 +23,8 @@
 </head>
 <body>
     {% include "navbar.html" %}
-    <main>
+    <!-- accessibility - main-content id is the target for the skip link -->
+    <main id="main-content">
         <!-- page header section displays the activities page title and provides a button to log a new workout -->
         <!-- also shows quick summary cards with total number of activities, upcoming scheduled workouts and past completed ones -->
         <section class="hero" style="padding: 3rem 5% 2rem; min-height: auto;">
@@ -95,7 +98,7 @@
                     <tbody>
                         {% if upcoming_activities|length == 0 %}
                         <tr>
-                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities.</td>
+                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities yet. Log a future workout to plan ahead.</td>
                         </tr>
                         {% else %}
                         {% for activity in upcoming_activities %}
@@ -140,7 +143,7 @@
                     <tbody>
                         {% if past_activities|length == 0 %}
                         <tr>
-                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities.</td>
+                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities yet. Complete a workout to see it here.</td>
                         </tr>
                         {% else %}
                         {% for activity in past_activities %}

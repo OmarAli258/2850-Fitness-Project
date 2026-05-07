@@ -2,39 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitTrack | Login</title>
+
+    <!-- Main stylesheet for the login/auth page -->
     <link rel="stylesheet" href="/static/css/main.css">
+
+    <!-- Inter font used for a consistent modern layout -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Full-page container that centres the login card -->
     <div class="auth-page">
         <div class="auth-card">
 
+            <!-- Login page heading -->
             <div class="auth-header">
                 <h1>Welcome back</h1>
                 <p class="auth-sub">Log in to track your training.</p>
             </div>
 
+            <!-- Error message shown if the login details are incorrect -->
             {% if error %}
                 <div class="auth-error">⚠ {{ error }}</div>
             {% endif %}
 
+            <!-- accessibility - for and id attributes connect each label to its input
+screen readers announce the label when user focuses on each input field -->
             <form action="/login" method="post" class="auth-form">
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" placeholder="alex@example.com" required>
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" placeholder="alex@example.com" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" placeholder="••••••••" required>
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="••••••••" required>
                 </div>
 
+                <!-- Submits login details -->
                 <button type="submit" class="btn btn-primary btn-full">
                     Log in
                 </button>
             </form>
 
+            <!-- Link for users who do not have an account yet -->
             <p class="auth-switch">
                 Don't have an account?
                 <a href="/signup">Sign up free</a>

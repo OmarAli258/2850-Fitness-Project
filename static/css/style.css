@@ -13,6 +13,51 @@
     box-sizing: border-box;
 }
 
+/* accessibility - focus styles for keyboard navigation
+shows a yellow outline around any element that is currently selected
+helps keyboard-only users see where they are on the page */
+*:focus {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - only show focus outline for keyboard users, not mouse clicks */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* accessibility - strong yellow outline for keyboardTab navigation */
+*:focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - ensure focus is visible even after clicking with mouse */
+*:focus:active {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - skip navigation link
+hidden link that appears at top of page when user presses Tab
+lets keyboard users skip past the navigation menu and go straight to main content */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--yellow);
+    color: #000;
+    padding: 1rem 2rem;
+    z-index: 10000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* accessibility - show skip link when it receives keyboard focus */
+.skip-link:focus {
+    top: 0;
+}
+
 body {
     background: var(--bg);
     color: var(--text);
@@ -965,6 +1010,12 @@ tr:hover td {
     outline: none;
     border-color: var(--yellow);
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
 .checkbox-field {
     display: flex;
     align-items: center;
@@ -1052,7 +1103,25 @@ tr:hover td {
 }
 
 .feed-user-action {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
     font-size: 1.1rem;
+}
+
+.feed-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
 }
 
 .feed-user-action strong {
@@ -1101,6 +1170,148 @@ tr:hover td {
     color: var(--text-muted);
     font-weight: 500;
     overflow: hidden;
+}
+
+/* Feed action buttons and counts */
+.feed-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.feed-actions form {
+    margin: 0;
+}
+
+.feed-like-button,
+.feed-login-link {
+    border: 2px solid var(--yellow);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--yellow);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+}
+
+.feed-like-button:hover,
+.feed-login-link:hover,
+.feed-like-button-liked {
+    background: var(--yellow);
+    color: #0a0a0a;
+}
+
+.feed-action-count {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* Feed comments and comment form */
+.feed-comments {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.feed-comment {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.feed-comment-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.feed-comment-header strong {
+    color: var(--yellow);
+}
+
+.feed-comment-header span,
+.feed-no-comments,
+.feed-login-prompt {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.feed-comment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.feed-comment-meta form {
+    margin: 0;
+}
+
+.feed-comment-delete {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0;
+}
+
+.feed-comment-delete:hover {
+    color: #ff8585;
+}
+
+.feed-comment p {
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.feed-comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.feed-comment-form label {
+    color: var(--yellow);
+    font-weight: 700;
+}
+
+.feed-comment-form textarea {
+    width: 100%;
+    min-height: 5rem;
+    resize: vertical;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    padding: 0.85rem 1rem;
+}
+
+.feed-comment-form button {
+    align-self: flex-start;
+}
+
+.feed-login-prompt a {
+    color: var(--yellow);
+    font-weight: 700;
 }
 
 .feed-empty {

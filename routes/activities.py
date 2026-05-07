@@ -35,7 +35,7 @@ def _build_form_data(request_form=None, activity=None):
         "duration_unit": request_form.get("duration_unit", "minutes").strip(),
         "distance": request_form.get("distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
-        "is_public": 1 if request_form.get("visibility") == "public" else 0,
+        "is_public": 1 if request_form.get("visibility", "").lower() == "public" else 0,
         "plan_id": request_form.get("plan_id", "").strip(),
     }
 
@@ -59,6 +59,10 @@ def _validate_activity(form_data):
     if duration <= 0:
         return "Duration must be more than 0."
 
+    #max limits to prevent unrealistic inputs
+    if duration > 480:
+        return "Duration cannot exceed 8 hours (480 minutes)."
+
     if form_data["duration_unit"] not in ["minutes", "hours"]:
         return "Please choose minutes or hours for the duration."
 
@@ -70,6 +74,9 @@ def _validate_activity(form_data):
 
         if distance < 0:
             return "Distance cannot be negative."
+
+        if distance > 100:
+            return "Distance cannot exceed 100 km."
 
     return ""
 
@@ -140,8 +147,8 @@ def save_activity():
                 
                 #revalidate after autofill
                 error = _validate_activity(form_data)
-        except Exception as e:
-            error = f"Error parsing GPX file: {str(e)}"
+        except Exception:
+            error = "Could not parse GPX file. Please ensure it's a valid GPX file."
 
     if error:
         active_plans = plan_store.get_plans_for_user(session["user_id"])

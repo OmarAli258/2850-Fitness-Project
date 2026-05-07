@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> <!--connecting the css, fonts favicon etc-->
+<head>
+    <!-- accessibility - skip link lets keyboard users bypass the navigation and go straight to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <!-- linking the css, fonts, favicon and chart.js library -->
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -10,8 +13,8 @@
 </head> 
 <body>
     {% include "navbar.html" %}
-    <!--including the nav bar-->
-<main> 
+    <!-- accessibility - main-content id is the target for the skip link above -->
+<main id="main-content"> 
     <section class="dash-header"> <!--the first main section below the nav bar including the name used for login search bar and log activites button-->
         <div>
             <h1>Welcome back, {{ user_name }} 👋</h1>
@@ -77,8 +80,6 @@
                         <img src="/static/images/Pic2.jpg" alt="Swimming">
                     {% elif activity.type == "Cycling" %}
                         <img src="/static/images/Pic4.jpg" alt="Cycling">
-                    {% elif activity.type == "Gym" %}
-                        <img src="/static/images/Pic5.jpg" alt="Gym">
                     {% else %}
                         <img src="/static/images/Pic3.jpg" alt="Activity">
                     {% endif %} {#depending on the activity display the correct image and activity details below#}
@@ -99,7 +100,7 @@
             <button class="carouselbtn" id="next" type="button">></button>
         </div> <!--if no recent activites then all the user sees is the button-->
         {% else %} 
-            <p>No recent activities yet.</p>
+            <p>No recent activities yet. Log your first activity to get started.</p>
             <a href="/activities/new" class="btn btna">Log your first activity</a>
         {% endif %}
     </div>
@@ -144,7 +145,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <p>No plans yet.</p>
+        <p>No plans yet. Create your first training plan to get started.</p>
         {% endif %}
         <a href="/plans" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
     </div>
