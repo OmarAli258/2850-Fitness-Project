@@ -38,7 +38,7 @@
                                 <td>{{ race['date'] }}
                                     <span class="countdown">{{ race['countdown'] }}</span>
                                 </td>
-                                <td>{{ race['race_type'] }}</td>
+                                <td>{{ race['race_type'] }} km</td>
                                 <td>
                                     <form method="POST" action="/races/{{ race['id'] }}/delete">
                                         <button type="submit" class="delete-btn">🗑️</button>
@@ -64,6 +64,7 @@
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Date</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Length</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Time</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Rank</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Record</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
                                 </tr>
@@ -74,10 +75,19 @@
                                 <td>{{ race['name'] }}</td>
                                 <td>{{ race['location'] }}</td>
                                 <td>{{ race['date'] }}</td>
-                                <td>{{ race['race_type'] }}</td>
+                                <td>{{ race['race_type'] }} km</td>
                                 <td>{{ race['finish_time'] }}</td>
+                                <td>
+                                    {% if race['rank'] %}
+                                    <span class="rank-badge {{ 'rank-badge-first' if race['rank'] == 1 else '' }}">#{{ race['rank'] }}</span>
+                                    {% else %}
+                                    <span class="rank-empty">-</span>
+                                    {% endif %}
+                                </td>
                                 <td class="{{ 'pbcol' if race['is_pb'] == 1 else '' }}">
-                                    {{ '🥇 PB' if race['is_pb'] == 1 else '' }}
+                                    {% if race['is_pb'] == 1 %}
+                                    <span class="pb-badge">🥇 PB</span>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <form method="POST" action="/races/{{ race['id'] }}/delete">
@@ -87,7 +97,7 @@
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="7">No past races</td>
+                                <td colspan="8">No past races</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -101,7 +111,7 @@
                     <div class="nextrace-sport">{{ next_race['name'] }}</div>
                     <div class="nextrace-detail">📍 {{ next_race['location'] }}</div>
                     <div class="nextrace-detail">📅 {{ next_race['date'] }}</div>
-                    <div class="nextrace-detail">📏 {{ next_race['race_type'] }}km</div>
+                    <div class="nextrace-detail">📏 {{ next_race['race_type'] }} km</div>
                     <div class="nextrace-countdown">{{ next_race['countdown'] }}</div>
                 {% else %}
                     <p class="nextrace-label">NEXT RACE</p>

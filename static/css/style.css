@@ -728,8 +728,55 @@ th{
 td{
     text-align: center;
 }
-.pbrow{
-    background: rgb(198, 198, 20);
+.pbrow td {
+    background: rgba(245, 197, 24, 0.08);
+    border-top: 1px solid rgba(245, 197, 24, 0.35);
+    border-bottom: 1px solid rgba(245, 197, 24, 0.35);
+}
+
+.pbrow td:first-child {
+    border-left: 4px solid var(--yellow);
+}
+
+.pb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(245, 197, 24, 0.16);
+    color: var(--yellow);
+    border: 1px solid rgba(245, 197, 24, 0.45);
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    font-weight: 800;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
+    font-weight: 800;
+}
+
+.rank-badge-first {
+    background: rgba(245, 197, 24, 0.14);
+    color: var(--yellow);
+    border-color: rgba(245, 197, 24, 0.45);
+}
+
+.rank-empty {
+    color: var(--text-muted);
+}
+
+.form-helper {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 .delete-btn {
     background: transparent;

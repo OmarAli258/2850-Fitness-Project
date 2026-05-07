@@ -1,6 +1,119 @@
 from data.database import get_connection
 
 
+def parse_finish_time(finish_time):
+    finish_time = (finish_time or "").strip()
+    if finish_time == "":
+        return None
+
+    parts = finish_time.split(":")
+    if len(parts) > 3:
+        return None
+
+    if any(part == "" or not part.isdigit() for part in parts):
+        return None
+
+    numbers = [int(part) for part in parts]
+
+    if len(numbers) == 1:
+        total_seconds = numbers[0] * 60
+    elif len(numbers) == 2:
+        minutes, seconds = numbers
+        if seconds >= 60:
+            return None
+        total_seconds = (minutes * 60) + seconds
+    else:
+        hours, minutes, seconds = numbers
+        if minutes >= 60 or seconds >= 60:
+            return None
+        total_seconds = (hours * 3600) + (minutes * 60) + seconds
+
+    if total_seconds <= 0:
+        return None
+
+    return total_seconds
+
+
+def recalculate_personal_bests(user_id):
+    races = get_races_for_user(user_id)
+    fastest_by_race = {}
+
+    for race in races:
+        if race["status"] != "past":
+            continue
+
+        finish_seconds = parse_finish_time(race["finish_time"])
+        if finish_seconds is None:
+            continue
+
+        race_key = (race["name"], race["race_type"])
+        current_fastest = fastest_by_race.get(race_key)
+
+        if current_fastest is None or finish_seconds < current_fastest["finish_seconds"]:
+            fastest_by_race[race_key] = {
+                "id": race["id"],
+                "finish_seconds": finish_seconds
+            }
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE races
+        SET is_pb = 0
+        WHERE user_id = %s
+        """,
+        (user_id,)
+    )
+
+    for fastest_race in fastest_by_race.values():
+        cursor.execute(
+            """
+            UPDATE races
+            SET is_pb = 1
+            WHERE id = %s AND user_id = %s
+            """,
+            (fastest_race["id"], user_id)
+        )
+
+    connection.commit()
+    connection.close()
+
+
+def add_race_rankings(races):
+    race_groups = {}
+
+    for race in races:
+        race["rank"] = None
+        if race["status"] != "past":
+            continue
+
+        finish_seconds = parse_finish_time(race["finish_time"])
+        if finish_seconds is None:
+            continue
+
+        race_key = (race["name"], race["race_type"])
+        race_groups.setdefault(race_key, []).append({
+            "race": race,
+            "finish_seconds": finish_seconds
+        })
+
+    for grouped_races in race_groups.values():
+        grouped_races.sort(key=lambda item: (item["finish_seconds"], item["race"]["date"]))
+        current_rank = 0
+        previous_seconds = None
+
+        for item in grouped_races:
+            if item["finish_seconds"] != previous_seconds:
+                current_rank += 1
+                previous_seconds = item["finish_seconds"]
+
+            item["race"]["rank"] = current_rank
+
+    return races
+
+
 def create_race(user_id, name, race_type, location, date, finish_time, is_pb, status):
     connection = get_connection()
     cursor = connection.cursor()
@@ -10,11 +123,12 @@ def create_race(user_id, name, race_type, location, date, finish_time, is_pb, st
         INSERT INTO races (name, race_type, location, date, finish_time, is_pb, status, user_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
-        (name, race_type, location, date, finish_time, is_pb, status, user_id)
+        (name, race_type, location, date, finish_time, 0, status, user_id)
     )
 
     connection.commit()
     connection.close()
+    recalculate_personal_bests(user_id)
 
 
 def get_races_for_user(user_id):
@@ -65,6 +179,7 @@ def delete_race(race_id, user_id):
 
     connection.commit()
     connection.close()
+    recalculate_personal_bests(user_id)
 
 
 def get_race_summary(user_id):
@@ -111,3 +226,4 @@ def update_race_statuses(user_id):
 
     connection.commit()
     connection.close()
+    recalculate_personal_bests(user_id)

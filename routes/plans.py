@@ -17,15 +17,19 @@ def _build_form_data(request_form=None, plan=None):
         freq_num = ""
         freq_unit = "weekly"
         if plan.get("frequency"):
-            freq_parts = plan["frequency"].split(" ", 1)
-            if len(freq_parts) == 2:
+            freq_text = plan["frequency"].replace("x", "").strip()
+            freq_parts = freq_text.split()
+            if freq_parts and freq_parts[0].isdigit():
                 freq_num = freq_parts[0]
-                freq_unit = freq_parts[1]
-            elif freq_parts[0].isdigit():
-                freq_num = freq_parts[0]
+
+            if "day" in freq_text or "daily" in freq_text:
+                freq_unit = "daily"
+            elif "month" in freq_text or "monthly" in freq_text:
+                freq_unit = "monthly"
+            elif "year" in freq_text or "yearly" in freq_text:
+                freq_unit = "yearly"
             else:
-                freq_num = "1"
-                freq_unit = freq_parts[0]
+                freq_unit = "weekly"
 
         dur_unit = "minutes"
         if plan.get("target_duration"):
@@ -102,13 +106,13 @@ def _format_frequency(form_data):
     freq_num = form_data["frequency_number"]
     freq_unit = form_data["frequency_unit"]
     if freq_unit == "daily":
-        return f"{freq_num}x daily"
+        return f"{freq_num}x per day"
     elif freq_unit == "monthly":
-        return f"{freq_num}x monthly"
+        return f"{freq_num}x per month"
     elif freq_unit == "yearly":
-        return f"{freq_num}x yearly"
+        return f"{freq_num}x per year"
     else:
-        return f"{freq_num}x weekly"
+        return f"{freq_num}x per week"
 
 
 #this function converts target duration to minutes before saving
