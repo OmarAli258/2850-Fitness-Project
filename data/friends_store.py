@@ -15,7 +15,7 @@ def send_request(from_user_id, to_user_id):
         WHERE (from_user_id = %s AND to_user_id = %s)
            OR (from_user_id = %s AND to_user_id = %s)
         """,
-        (from_user_id, to_user_id, to_user_id, from_user_id)
+        (from_user_id, to_user_id, to_user_id, from_user_id),
     )
     existing = cursor.fetchone()
 
@@ -28,7 +28,7 @@ def send_request(from_user_id, to_user_id):
         INSERT INTO friendships (from_user_id, to_user_id, status)
         VALUES (%s, %s, 'pending')
         """,
-        (from_user_id, to_user_id)
+        (from_user_id, to_user_id),
     )
 
     connection.commit()
@@ -47,7 +47,7 @@ def accept_request(request_id, user_id):
         SET status = 'accepted'
         WHERE id = %s AND to_user_id = %s AND status = 'pending'
         """,
-        (request_id, user_id)
+        (request_id, user_id),
     )
 
     connection.commit()
@@ -64,7 +64,7 @@ def reject_request(request_id, user_id):
         DELETE FROM friendships
         WHERE id = %s AND to_user_id = %s AND status = 'pending'
         """,
-        (request_id, user_id)
+        (request_id, user_id),
     )
 
     connection.commit()
@@ -87,7 +87,7 @@ def get_friends(user_id):
         )
         WHERE friendships.status = 'accepted'
         """,
-        (user_id, user_id)
+        (user_id, user_id),
     )
 
     friends = [dict(row) for row in cursor.fetchall()]
@@ -107,7 +107,7 @@ def get_pending_requests(user_id):
         JOIN users ON friendships.from_user_id = users.id
         WHERE friendships.to_user_id = %s AND friendships.status = 'pending'
         """,
-        (user_id,)
+        (user_id,),
     )
 
     requests = [dict(row) for row in cursor.fetchall()]
@@ -134,7 +134,7 @@ def search_users(query, current_user_id):
         WHERE LOWER(name) LIKE %s AND id != %s
         LIMIT 10
         """,
-        (search, current_user_id)
+        (search, current_user_id),
     )
 
     users = [dict(row) for row in cursor.fetchall()]

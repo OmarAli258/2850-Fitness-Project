@@ -4,12 +4,15 @@ from datetime import date as today_date, datetime
 
 races = Blueprint("races", __name__)
 
+
 def check_valid(value):
     import re
-    cleaned = re.sub(r'[^\d.]', '', value)
-    if cleaned == '':
+
+    cleaned = re.sub(r"[^\d.]", "", value)
+    if cleaned == "":
         return None
     return cleaned
+
 
 @races.route("/racetracker")
 def racetracker():
@@ -24,32 +27,33 @@ def racetracker():
 
     for race in user_races:
         race_dict = dict(race)
-        if race_dict['status'] == 'upcoming':
-            race_date = datetime.strptime(race_dict['date'], '%Y-%m-%d').date()
+        if race_dict["status"] == "upcoming":
+            race_date = datetime.strptime(race_dict["date"], "%Y-%m-%d").date()
             diff = (race_date - today).days
             if diff == 0:
-                race_dict['countdown'] = 'Today!'
+                race_dict["countdown"] = "Today!"
             elif diff == 1:
-                race_dict['countdown'] = 'Tomorrow!'
+                race_dict["countdown"] = "Tomorrow!"
             else:
-                race_dict['countdown'] = f'In {diff} days'
+                race_dict["countdown"] = f"In {diff} days"
         else:
-            race_dict['countdown'] = ''
+            race_dict["countdown"] = ""
         races_with_countdown.append(race_dict)
 
     days_since_last = None
-    past_races = [r for r in races_with_countdown if r['status'] == 'past']
+    past_races = [r for r in races_with_countdown if r["status"] == "past"]
     if past_races:
-        most_recent_past = max(past_races, key=lambda r: r['date'])
-        last_date = datetime.strptime(most_recent_past['date'], '%Y-%m-%d').date()
+        most_recent_past = max(past_races, key=lambda r: r["date"])
+        last_date = datetime.strptime(most_recent_past["date"], "%Y-%m-%d").date()
         days_since_last = (today - last_date).days
 
     return render_template(
         "racetracker.html",
         races=races_with_countdown,
         summary=summary,
-        days_since_last=days_since_last
+        days_since_last=days_since_last,
     )
+
 
 @races.route("/races/<race_id>/edit", methods=["GET"])
 def edit_race_page(race_id):
@@ -73,17 +77,19 @@ def edit_race_submit(race_id):
     if race is None:
         return redirect("/racetracker")
 
-    name        = request.form.get("name", "").strip()
-    location    = request.form.get("location", "").strip()
-    date        = request.form.get("date", "").strip()
+    name = request.form.get("name", "").strip()
+    location = request.form.get("location", "").strip()
+    date = request.form.get("date", "").strip()
     finish_time = request.form.get("finish_time", "").strip()
-    is_pb       = 1 if request.form.get("is_pb") == "on" else 0
-    race_type   = check_valid(request.form.get("race_type", "").strip())
+    is_pb = 1 if request.form.get("is_pb") == "on" else 0
+    race_type = check_valid(request.form.get("race_type", "").strip())
 
     if not name or not race_type or not date:
-        return render_template("editrace.html", race=race, error="Please fill in all required fields.")
+        return render_template(
+            "editrace.html", race=race, error="Please fill in all required fields."
+        )
 
-    status = 'upcoming' if date >= str(today_date.today()) else 'past'
+    status = "upcoming" if date >= str(today_date.today()) else "past"
 
     race_store.update_race(
         race_id=race_id,
@@ -94,10 +100,11 @@ def edit_race_submit(race_id):
         date=date,
         finish_time=finish_time,
         is_pb=is_pb,
-        status=status
+        status=status,
     )
 
     return redirect("/racetracker")
+
 
 @races.route("/addrace", methods=["GET"])
 def addrace_page():
@@ -111,17 +118,19 @@ def add_race():
     if "user_id" not in session:
         return redirect("/login")
 
-    name        = request.form.get("name", "").strip()
-    location    = request.form.get("location", "").strip()
-    date        = request.form.get("date", "").strip()
+    name = request.form.get("name", "").strip()
+    location = request.form.get("location", "").strip()
+    date = request.form.get("date", "").strip()
     finish_time = request.form.get("finish_time", "").strip()
-    is_pb       = 1 if request.form.get("is_pb") == "on" else 0
-    race_type   = check_valid(request.form.get("race_type", "").strip())
+    is_pb = 1 if request.form.get("is_pb") == "on" else 0
+    race_type = check_valid(request.form.get("race_type", "").strip())
 
     if not name or not race_type or not date:
-        return render_template("addrace.html", error="Please fill in all required fields.")
+        return render_template(
+            "addrace.html", error="Please fill in all required fields."
+        )
 
-    status = 'upcoming' if date >= str(today_date.today()) else 'past'
+    status = "upcoming" if date >= str(today_date.today()) else "past"
 
     race_store.create_race(
         user_id=session["user_id"],
@@ -131,7 +140,7 @@ def add_race():
         date=date,
         finish_time=finish_time,
         is_pb=is_pb,
-        status=status
+        status=status,
     )
 
     return redirect("/racetracker")

@@ -10,7 +10,7 @@ def create_race(user_id, name, race_type, location, date, finish_time, is_pb, st
         INSERT INTO races (name, race_type, location, date, finish_time, is_pb, status, user_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
-        (name, race_type, location, date, finish_time, is_pb, status, user_id)
+        (name, race_type, location, date, finish_time, is_pb, status, user_id),
     )
 
     connection.commit()
@@ -27,7 +27,7 @@ def get_races_for_user(user_id):
         WHERE user_id = %s
         ORDER BY date ASC
         """,
-        (user_id,)
+        (user_id,),
     )
     rows = cursor.fetchall()
 
@@ -36,17 +36,19 @@ def get_races_for_user(user_id):
     races = []
 
     for row in rows:
-        races.append({
-            "id": row["id"],
-            "name": row["name"],
-            "race_type": row["race_type"],
-            "location": row["location"],
-            "date": row["date"],
-            "finish_time": row["finish_time"],
-            "is_pb": row["is_pb"],
-            "status": row["status"],
-            "user_id": row["user_id"]
-        })
+        races.append(
+            {
+                "id": row["id"],
+                "name": row["name"],
+                "race_type": row["race_type"],
+                "location": row["location"],
+                "date": row["date"],
+                "finish_time": row["finish_time"],
+                "is_pb": row["is_pb"],
+                "status": row["status"],
+                "user_id": row["user_id"],
+            }
+        )
 
     return races
 
@@ -60,7 +62,7 @@ def delete_race(race_id, user_id):
         DELETE FROM races
         WHERE id = %s AND user_id = %s
         """,
-        (race_id, user_id)
+        (race_id, user_id),
     )
 
     connection.commit()
@@ -89,12 +91,14 @@ def get_race_summary(user_id):
         "total_races": total_races,
         "upcoming_races": upcoming_races,
         "past_races": past_races,
-        "personal_bests": personal_bests
+        "personal_bests": personal_bests,
     }
 
-#function that auto sends races from upcoming to past when date passes
+
+# function that auto sends races from upcoming to past when date passes
 def update_race_statuses(user_id):
     from datetime import date
+
     today = str(date.today())
 
     connection = get_connection()
@@ -106,18 +110,19 @@ def update_race_statuses(user_id):
         SET status = 'past'
         WHERE user_id = %s AND status = 'upcoming' AND date < %s
         """,
-        (user_id, today)
+        (user_id, today),
     )
 
     connection.commit()
     connection.close()
+
+
 def get_race_by_id(race_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
-        "SELECT * FROM races WHERE id = %s AND user_id = %s",
-        (race_id, user_id)
+        "SELECT * FROM races WHERE id = %s AND user_id = %s", (race_id, user_id)
     )
     row = cursor.fetchone()
 
@@ -135,11 +140,13 @@ def get_race_by_id(race_id, user_id):
         "finish_time": row["finish_time"],
         "is_pb": row["is_pb"],
         "status": row["status"],
-        "user_id": row["user_id"]
+        "user_id": row["user_id"],
     }
 
 
-def update_race(race_id, user_id, name, race_type, location, date, finish_time, is_pb, status):
+def update_race(
+    race_id, user_id, name, race_type, location, date, finish_time, is_pb, status
+):
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -150,7 +157,7 @@ def update_race(race_id, user_id, name, race_type, location, date, finish_time, 
             finish_time = %s, is_pb = %s, status = %s
         WHERE id = %s AND user_id = %s
         """,
-        (name, race_type, location, date, finish_time, is_pb, status, race_id, user_id)
+        (name, race_type, location, date, finish_time, is_pb, status, race_id, user_id),
     )
 
     connection.commit()

@@ -8,6 +8,7 @@ auth = Blueprint("auth", __name__)
 # LOGIN
 # -------------------------
 
+
 @auth.route("/login", methods=["GET"])
 def login_page():
     if "user_id" in session:
@@ -24,10 +25,7 @@ def login_submit():
     user = user_store.login(email, password)
 
     if user is None:
-        return render_template(
-            "login.html",
-            error="Invalid email or password."
-        )
+        return render_template("login.html", error="Invalid email or password.")
 
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
@@ -38,6 +36,7 @@ def login_submit():
 # -------------------------
 # SIGNUP
 # -------------------------
+
 
 @auth.route("/signup", methods=["GET"])
 def signup_page():
@@ -67,10 +66,7 @@ def signup_submit():
 
     if error:
         return render_template(
-            "signup.html",
-            error=error,
-            prefill_name=name,
-            prefill_email=email
+            "signup.html", error=error, prefill_name=name, prefill_email=email
         )
 
     user = user_store.register(name, email, password)
@@ -80,7 +76,7 @@ def signup_submit():
             "signup.html",
             error="An account with that email already exists.",
             prefill_name=name,
-            prefill_email=email
+            prefill_email=email,
         )
 
     session["user_id"] = user["id"]
@@ -92,6 +88,7 @@ def signup_submit():
 # -------------------------
 # LOGOUT
 # -------------------------
+
 
 @auth.route("/logout", methods=["POST"])
 def logout():

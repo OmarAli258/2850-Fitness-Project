@@ -1,17 +1,19 @@
-#this file handles saving, loading, updating, deleting and summarising plan data from the database
-#it also handles sessions progress and consistency (adherence) records for plans
-#note: we changed the user-facing word adherence because it was too complex for users
-#we chose the simpler word consistency, but some code was already named adherence
-#so consistency is the main word in comments, with adherence shown because the code still uses that label
+# this file handles saving, loading, updating, deleting and summarising plan data from the database
+# it also handles sessions progress and consistency (adherence) records for plans
+# note: we changed the user-facing word adherence because it was too complex for users
+# we chose the simpler word consistency, but some code was already named adherence
+# so consistency is the main word in comments, with adherence shown because the code still uses that label
 
-#import uuid for unique ids, datetime for dates and get_connection for database access
+# import uuid for unique ids, datetime for dates and get_connection for database access
 import uuid
 from datetime import datetime
 from data.database import get_connection
 
 
-#this function creates a new plan in the database and starts it as active
-def create_plan(user_id, name, exercise_type, frequency, target_duration, target_distance, notes):
+# this function creates a new plan in the database and starts it as active
+def create_plan(
+    user_id, name, exercise_type, frequency, target_duration, target_distance, notes
+):
     plan_id = str(uuid.uuid4())
     created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -23,7 +25,17 @@ def create_plan(user_id, name, exercise_type, frequency, target_duration, target
         INSERT INTO plans (id, user_id, name, exercise_type, frequency, target_duration, target_distance, notes, created_at, status)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 'active')
         """,
-        (plan_id, user_id, name, exercise_type, frequency, int(target_duration) if target_duration else None, target_distance, notes, created_at)
+        (
+            plan_id,
+            user_id,
+            name,
+            exercise_type,
+            frequency,
+            int(target_duration) if target_duration else None,
+            target_distance,
+            notes,
+            created_at,
+        ),
     )
 
     connection.commit()
@@ -39,11 +51,11 @@ def create_plan(user_id, name, exercise_type, frequency, target_duration, target
         "target_distance": target_distance,
         "notes": notes,
         "created_at": created_at,
-        "status": "active"
+        "status": "active",
     }
 
 
-#this function gets all plans for a user, with optional filtering by status
+# this function gets all plans for a user, with optional filtering by status
 def get_plans_for_user(user_id, status=None):
     connection = get_connection()
     cursor = connection.cursor()
@@ -63,35 +75,36 @@ def get_plans_for_user(user_id, status=None):
 
     plans = []
     for row in rows:
-        plans.append({
-            "id": row["id"],
-            "user_id": row["user_id"],
-            "name": row["name"],
-            "exercise_type": row["exercise_type"],
-            "frequency": row["frequency"],
-            "target_duration": row["target_duration"],
-            "target_distance": row["target_distance"],
-            "notes": row["notes"],
-            "created_at": row["created_at"],
-            "status": row["status"]
-        })
+        plans.append(
+            {
+                "id": row["id"],
+                "user_id": row["user_id"],
+                "name": row["name"],
+                "exercise_type": row["exercise_type"],
+                "frequency": row["frequency"],
+                "target_duration": row["target_duration"],
+                "target_distance": row["target_distance"],
+                "notes": row["notes"],
+                "created_at": row["created_at"],
+                "status": row["status"],
+            }
+        )
 
     return plans
 
 
-#this function gets only active plans for a user
+# this function gets only active plans for a user
 def get_active_plans_for_user(user_id):
     return get_plans_for_user(user_id, status="active")
 
 
-#this function gets one plan by id, but only if it belongs to the user
+# this function gets one plan by id, but only if it belongs to the user
 def get_plan(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
-        "SELECT * FROM plans WHERE user_id = %s AND id = %s",
-        (user_id, plan_id)
+        "SELECT * FROM plans WHERE user_id = %s AND id = %s", (user_id, plan_id)
     )
     row = cursor.fetchone()
 
@@ -110,12 +123,22 @@ def get_plan(user_id, plan_id):
         "target_distance": row["target_distance"],
         "notes": row["notes"],
         "created_at": row["created_at"],
-        "status": row["status"]
+        "status": row["status"],
     }
 
 
-#this function updates an existing plan and can also update its status
-def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duration, target_distance, notes, status=None):
+# this function updates an existing plan and can also update its status
+def update_plan(
+    plan_id,
+    user_id,
+    name,
+    exercise_type,
+    frequency,
+    target_duration,
+    target_distance,
+    notes,
+    status=None,
+):
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -126,7 +149,17 @@ def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duratio
             SET name = %s, exercise_type = %s, frequency = %s, target_duration = %s, target_distance = %s, notes = %s, status = %s
             WHERE id = %s AND user_id = %s
             """,
-            (name, exercise_type, frequency, int(target_duration) if target_duration else None, target_distance, notes, status, plan_id, user_id)
+            (
+                name,
+                exercise_type,
+                frequency,
+                int(target_duration) if target_duration else None,
+                target_distance,
+                notes,
+                status,
+                plan_id,
+                user_id,
+            ),
         )
     else:
         cursor.execute(
@@ -135,33 +168,41 @@ def update_plan(plan_id, user_id, name, exercise_type, frequency, target_duratio
             SET name = %s, exercise_type = %s, frequency = %s, target_duration = %s, target_distance = %s, notes = %s
             WHERE id = %s AND user_id = %s
             """,
-            (name, exercise_type, frequency, int(target_duration) if target_duration else None, target_distance, notes, plan_id, user_id)
+            (
+                name,
+                exercise_type,
+                frequency,
+                int(target_duration) if target_duration else None,
+                target_distance,
+                notes,
+                plan_id,
+                user_id,
+            ),
         )
 
     connection.commit()
     connection.close()
 
 
-#this function deletes a plan and unlinks any activities that were connected to it
+# this function deletes a plan and unlinks any activities that were connected to it
 def delete_plan(plan_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
         "UPDATE activities SET plan_id = NULL WHERE plan_id = %s AND user_id = %s",
-        (plan_id, user_id)
+        (plan_id, user_id),
     )
 
     cursor.execute(
-        "DELETE FROM plans WHERE id = %s AND user_id = %s",
-        (plan_id, user_id)
+        "DELETE FROM plans WHERE id = %s AND user_id = %s", (plan_id, user_id)
     )
 
     connection.commit()
     connection.close()
 
 
-#this function calculates a plan's linked sessions, progress numbers and completed activities
+# this function calculates a plan's linked sessions, progress numbers and completed activities
 def get_plan_completion(user_id, plan_id):
     plan = get_plan(user_id, plan_id)
     if plan is None:
@@ -176,7 +217,7 @@ def get_plan_completion(user_id, plan_id):
         WHERE user_id = %s AND plan_id = %s AND type = %s
         ORDER BY date DESC
         """,
-        (user_id, plan_id, plan["exercise_type"])
+        (user_id, plan_id, plan["exercise_type"]),
     )
     completed_activities = cursor.fetchall()
 
@@ -191,7 +232,7 @@ def get_plan_completion(user_id, plan_id):
             "date": row["date"],
             "duration": row["duration"],
             "distance": row["distance"],
-            "notes": row["notes"]
+            "notes": row["notes"],
         }
         activities.append(activity)
         total_duration += int(row["duration"])
@@ -206,7 +247,9 @@ def get_plan_completion(user_id, plan_id):
 
     completion_rate = 0
     if expected_sessions > 0 and len(activities) > 0:
-        completion_rate = min(100, round((len(activities) / expected_sessions) * 100, 1))
+        completion_rate = min(
+            100, round((len(activities) / expected_sessions) * 100, 1)
+        )
 
     return {
         "plan": plan,
@@ -215,11 +258,11 @@ def get_plan_completion(user_id, plan_id):
         "frequency_target": frequency_target,
         "completion_rate": completion_rate,
         "total_duration": total_duration,
-        "activities": activities
+        "activities": activities,
     }
 
 
-#this function estimates expected sessions based on frequency and how long the plan has existed
+# this function estimates expected sessions based on frequency and how long the plan has existed
 def _calculate_expected_sessions(frequency, days):
     weeks = days / 7.0
 
@@ -264,7 +307,7 @@ def _calculate_expected_sessions(frequency, days):
     return int(weeks)
 
 
-#this function gets the target session number directly from the plan frequency
+# this function gets the target session number directly from the plan frequency
 def _get_frequency_target(frequency):
     if "x" in frequency:
         try:
@@ -276,7 +319,7 @@ def _get_frequency_target(frequency):
     return 1
 
 
-#this function calculates summary numbers for all of a user's plans
+# this function calculates summary numbers for all of a user's plans
 def get_plan_summary(user_id):
     plans = get_plans_for_user(user_id)
 
@@ -284,7 +327,7 @@ def get_plan_summary(user_id):
     active_plans = sum(1 for p in plans if p["status"] == "active")
     paused_plans = sum(1 for p in plans if p["status"] == "paused")
     completed_plans = sum(1 for p in plans if p["status"] == "completed")
-    
+
     total_activities_logged = 0
 
     for plan in plans:
@@ -297,11 +340,11 @@ def get_plan_summary(user_id):
         "active_plans": active_plans,
         "paused_plans": paused_plans,
         "completed_plans": completed_plans,
-        "total_activities_logged": total_activities_logged
+        "total_activities_logged": total_activities_logged,
     }
 
 
-#this function records a consistency (adherence) rating for a plan session
+# this function records a consistency (adherence) rating for a plan session
 def record_adherence(user_id, plan_id, session_date, rating, notes):
     adherence_id = str(uuid.uuid4())
     created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -314,7 +357,7 @@ def record_adherence(user_id, plan_id, session_date, rating, notes):
         INSERT INTO plan_adherence (id, user_id, plan_id, session_date, rating, notes, created_at)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         """,
-        (adherence_id, user_id, plan_id, session_date, int(rating), notes, created_at)
+        (adherence_id, user_id, plan_id, session_date, int(rating), notes, created_at),
     )
 
     connection.commit()
@@ -330,7 +373,7 @@ def record_adherence(user_id, plan_id, session_date, rating, notes):
     }
 
 
-#this function gets all consistency (adherence) records for one plan
+# this function gets all consistency (adherence) records for one plan
 def get_adherence_for_plan(user_id, plan_id):
     connection = get_connection()
     cursor = connection.cursor()
@@ -341,7 +384,7 @@ def get_adherence_for_plan(user_id, plan_id):
         WHERE user_id = %s AND plan_id = %s
         ORDER BY session_date DESC
         """,
-        (user_id, plan_id)
+        (user_id, plan_id),
     )
     rows = cursor.fetchall()
 
@@ -349,24 +392,32 @@ def get_adherence_for_plan(user_id, plan_id):
 
     records = []
     for row in rows:
-        records.append({
-            "id": row["id"],
-            "plan_id": row["plan_id"],
-            "session_date": row["session_date"],
-            "rating": row["rating"],
-            "notes": row["notes"],
-            "created_at": row["created_at"],
-        })
+        records.append(
+            {
+                "id": row["id"],
+                "plan_id": row["plan_id"],
+                "session_date": row["session_date"],
+                "rating": row["rating"],
+                "notes": row["notes"],
+                "created_at": row["created_at"],
+            }
+        )
 
     return records
 
 
-#this function calculates a consistency (adherence) summary for one plan
+# this function calculates a consistency (adherence) summary for one plan
 def get_adherence_summary(user_id, plan_id):
     records = get_adherence_for_plan(user_id, plan_id)
 
     if not records:
-        return {"avg_rating": 0, "total_sessions": 0, "missed_sessions": 0, "on_track_sessions": 0, "excellent_sessions": 0}
+        return {
+            "avg_rating": 0,
+            "total_sessions": 0,
+            "missed_sessions": 0,
+            "on_track_sessions": 0,
+            "excellent_sessions": 0,
+        }
 
     total = len(records)
     avg_rating = round(sum(r["rating"] for r in records) / total, 1)
@@ -383,21 +434,22 @@ def get_adherence_summary(user_id, plan_id):
     }
 
 
-#this function deletes one consistency (adherence) record from the database
+# this function deletes one consistency (adherence) record from the database
 def delete_adherence(adherence_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
         "DELETE FROM plan_adherence WHERE id = %s AND user_id = %s",
-        (adherence_id, user_id)
+        (adherence_id, user_id),
     )
 
     connection.commit()
     connection.close()
 
-#done comments for data/plan_store.py
-#summary of comments:
+
+# done comments for data/plan_store.py
+# summary of comments:
 # - create_plan adds a new training plan to the database with name, exercise type, frequency and optional targets
 # - get_plans_for_user retrieves all plans for the logged in user with optional status filter
 # - get_one_plan fetches a single plan by its unique id
@@ -408,5 +460,5 @@ def delete_adherence(adherence_id, user_id):
 # - get_consistency_records fetches all recorded ratings for one plan with dates
 # - get_consistency_summary totals up all consistency ratings for the plan detail page
 # - delete_consistency removes one consistency record from the database
-#note: consistency is the user friendly word we use because it is easier to understand
-#the code still uses adherence in some function and variable names from the original implementation
+# note: consistency is the user friendly word we use because it is easier to understand
+# the code still uses adherence in some function and variable names from the original implementation
