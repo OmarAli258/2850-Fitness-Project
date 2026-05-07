@@ -25,8 +25,9 @@
 
         <section class="feed-container">
             {% if feed_activities %}
+                <!-- this loop displays each public activity card in the community feed -->
                 {% for activity in feed_activities %}
-                <article class="feed-card">
+                <article class="feed-card" id="activity-{{ activity.id }}">
                     <div class="feed-header">
                         <div class="feed-user-action">
                             <strong>{{ activity.user_name }}</strong> went on a <span class="feed-sport">{{ activity.type }}</span>
@@ -48,6 +49,58 @@
                     {% if activity.route_data %}
                     <div class="feed-map" data-route="{{ activity.route_data | safe }}"></div>
                     {% endif %}
+
+                    <div class="feed-actions">
+                        <!-- this section shows the like button and social counts for the activity -->
+                        {% if session.get('user_id') %}
+                        <form method="POST" action="/feed/{{ activity.id }}/like">
+                            <button type="submit" class="feed-like-button {% if activity.liked_by_user %}feed-like-button-liked{% endif %}" aria-label="{% if activity.liked_by_user %}Unlike{% else %}Like{% endif %} {{ activity.type }} activity by {{ activity.user_name }}">
+                                {% if activity.liked_by_user %}Liked{% else %}Like{% endif %}
+                            </button>
+                        </form>
+                        {% else %}
+                        <a class="feed-login-link" href="/login">Log in to like</a>
+                        {% endif %}
+                        <span class="feed-action-count">{{ activity.like_count }} {{ 'like' if activity.like_count == 1 else 'likes' }}</span>
+                        <span class="feed-action-count">{{ activity.comment_count }} {{ 'comment' if activity.comment_count == 1 else 'comments' }}</span>
+                    </div>
+
+                    <!-- this section displays existing comments and lets logged in users add a new one -->
+                    <section class="feed-comments" aria-label="Comments on {{ activity.type }} activity by {{ activity.user_name }}">
+                        {% if activity.comments %}
+                            {% for comment in activity.comments %}
+                            <div class="feed-comment">
+                                <div class="feed-comment-header">
+                                    <strong>{{ comment.user_name }}</strong>
+                                    <div class="feed-comment-meta">
+                                        <span>{{ comment.created_at }}</span>
+                                        {% if session.get('user_id') == comment.user_id %}
+                                        <!-- this button lets users delete their own feed comments -->
+                                        <form method="POST" action="/feed/comments/{{ comment.id }}/delete">
+                                            <button type="submit" class="feed-comment-delete">Delete</button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p>{{ comment.body }}</p>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="feed-no-comments">No comments yet.</p>
+                        {% endif %}
+
+                        {% if session.get('user_id') %}
+                        <!-- this form posts a new comment for the selected feed activity -->
+                        <form class="feed-comment-form" method="POST" action="/feed/{{ activity.id }}/comments">
+                            <label for="comment-{{ activity.id }}">Add a comment</label>
+                            <textarea id="comment-{{ activity.id }}" name="comment" rows="2" maxlength="500" placeholder="Encourage {{ activity.user_name }}..."></textarea>
+                            <button type="submit" class="btn btna">Post Comment</button>
+                        </form>
+                        {% else %}
+                        <!-- this prompt appears when visitors need to log in before commenting -->
+                        <p class="feed-login-prompt"><a href="/login">Log in</a> to leave a comment.</p>
+                        {% endif %}
+                    </section>
                 </article>
                 {% endfor %}
             {% else %}
