@@ -1,7 +1,7 @@
-#this file defines routes and logic for creating, viewing, editing and deleting activities
-#also shows main activities page with search, filtering and grouping by upcoming and past
+# this file defines routes and logic for creating, viewing, editing and deleting activities
+# also shows main activities page with search, filtering and grouping by upcoming and past
 
-#import libraries for gpx parsing, json handling, flask routing/session features, activity/plan data access and date comparisons
+# import libraries for gpx parsing, json handling, flask routing/session features, activity/plan data access and date comparisons
 
 import gpxpy
 import json
@@ -12,7 +12,8 @@ from datetime import date
 activities = Blueprint("activities", __name__)
 
 
-#this function prepares activity form data for creating, editing, or redisplaying the form after an error
+# this function prepares activity form data for creating, editing, or redisplaying the form after an error
+
 
 def _build_form_data(request_form=None, activity=None):
     if activity is not None:
@@ -40,7 +41,7 @@ def _build_form_data(request_form=None, activity=None):
     }
 
 
-#this function validates the required activity form fields before saving or updating an activity
+# this function validates the required activity form fields before saving or updating an activity
 def _validate_activity(form_data):
     if form_data["activity_type"] == "":
         return "Please choose an activity type."
@@ -59,7 +60,7 @@ def _validate_activity(form_data):
     if duration <= 0:
         return "Duration must be more than 0."
 
-    #max limits to prevent unrealistic inputs
+    # max limits to prevent unrealistic inputs
     if duration > 480:
         return "Duration cannot exceed 8 hours (480 minutes)."
 
@@ -81,7 +82,7 @@ def _validate_activity(form_data):
     return ""
 
 
-#this function converts the activity duration into minutes before it is saved
+# this function converts the activity duration into minutes before it is saved
 def _duration_to_minutes(form_data):
     duration = float(form_data["duration"])
     if form_data["duration_unit"] == "hours":
@@ -90,7 +91,7 @@ def _duration_to_minutes(form_data):
     return max(1, int(round(duration)))
 
 
-#this function shows the blank activity form for logging a new workout
+# this function shows the blank activity form for logging a new workout
 @activities.route("/activities/new", methods=["GET"])
 def show_activity_form():
     if "user_id" not in session:
@@ -110,7 +111,7 @@ def show_activity_form():
     )
 
 
-#this function saves a new activity, including optional GPX route parsing and plan linking
+# this function saves a new activity, including optional GPX route parsing and plan linking
 @activities.route("/activities/new", methods=["POST"])
 def save_activity():
     if "user_id" not in session:
@@ -121,7 +122,7 @@ def save_activity():
 
     route_data_json = None
     gpx_file = request.files.get("gpx_file")
-    if gpx_file and gpx_file.filename.endswith('.gpx'):
+    if gpx_file and gpx_file.filename.endswith(".gpx"):
         try:
             gpx = gpxpy.parse(gpx_file)
             route_points = []
@@ -129,23 +130,25 @@ def save_activity():
                 for segment in track.segments:
                     for point in segment.points:
                         route_points.append([point.latitude, point.longitude])
-            
+
             if route_points:
                 route_data_json = json.dumps(route_points)
-                
-                #this autofills duration and distance if they are empty
-                #using basic gpxpy properties
+
+                # this autofills duration and distance if they are empty
+                # using basic gpxpy properties
                 moving_data = gpx.get_moving_data()
                 if moving_data and form_data["distance"] == "":
                     distance_km = moving_data.moving_distance / 1000.0
                     form_data["distance"] = str(round(distance_km, 2))
-                
+
                 if form_data["duration"] == "":
-                    #approximate duration in minutes
-                    duration_min = gpx.get_duration() / 60.0 if gpx.get_duration() else 0
+                    # approximate duration in minutes
+                    duration_min = (
+                        gpx.get_duration() / 60.0 if gpx.get_duration() else 0
+                    )
                     form_data["duration"] = str(int(duration_min))
-                
-                #revalidate after autofill
+
+                # revalidate after autofill
                 error = _validate_activity(form_data)
         except Exception:
             error = "Could not parse GPX file. Please ensure it's a valid GPX file."
@@ -174,13 +177,13 @@ def save_activity():
         notes=form_data["notes"],
         route_data=route_data_json,
         is_public=form_data.get("is_public", 0),
-        plan_id=plan_id
+        plan_id=plan_id,
     )
 
     return redirect("/activities")
 
 
-#this function shows the detail page for one activity if it belongs to the logged in user
+# this function shows the detail page for one activity if it belongs to the logged in user
 @activities.route("/activities/<activity_id>", methods=["GET"])
 def view_activity(activity_id):
     if "user_id" not in session:
@@ -190,12 +193,10 @@ def view_activity(activity_id):
     if activity is None:
         return redirect("/activities")
 
-    return render_template(
-        "activity_detail.html",
-        activity=activity
-    )
+    return render_template("activity_detail.html", activity=activity)
 
-#this function shows the edit form for an existing activity
+
+# this function shows the edit form for an existing activity
 @activities.route("/activities/<activity_id>/edit", methods=["GET"])
 def edit_activity(activity_id):
     if "user_id" not in session:
@@ -219,7 +220,7 @@ def edit_activity(activity_id):
     )
 
 
-#this function validates and saves changes to an existing activity
+# this function validates and saves changes to an existing activity
 @activities.route("/activities/<activity_id>/edit", methods=["POST"])
 def save_edited_activity(activity_id):
     if "user_id" not in session:
@@ -252,13 +253,13 @@ def save_edited_activity(activity_id):
         distance=form_data["distance"],
         notes=form_data["notes"],
         is_public=form_data.get("is_public", 0),
-        plan_id=plan_id
+        plan_id=plan_id,
     )
 
     return redirect("/activities")
 
 
-#this function deletes an activity owned by the logged in user
+# this function deletes an activity owned by the logged in user
 @activities.route("/activities/<activity_id>/delete", methods=["POST"])
 def delete_activity(activity_id):
     if "user_id" not in session:
@@ -268,7 +269,7 @@ def delete_activity(activity_id):
     return redirect("/activities")
 
 
-#this function shows the activities page with search, type filtering, and upcomign and past grouping
+# this function shows the activities page with search, type filtering, and upcomign and past grouping
 @activities.route("/activities", methods=["GET"])
 def show_activities():
     if "user_id" not in session:
@@ -290,7 +291,7 @@ def show_activities():
 
     for activity in activities_list:
         activity_date = activity.get("date", "")
-        
+
         if activity_date >= today_str:
             upcoming_activities.append(activity)
         else:
@@ -307,8 +308,9 @@ def show_activities():
         search=search,
     )
 
-#done comments for routes/activities.py 
-#summary of comments:
+
+# done comments for routes/activities.py
+# summary of comments:
 # - blank form route shows an empty activity form so users can log a new workout
 # - create route handles saving a newly logged workout to the database
 # - view route displays one activity with all its details like date, duration and distance

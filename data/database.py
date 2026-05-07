@@ -1,12 +1,12 @@
-#this file creates the database connection and sets up all tables used by the app
+# this file creates the database connection and sets up all tables used by the app
 
-#import os for environment variables and psycopg2 for the neon postgres database
+# import os for environment variables and psycopg2 for the neon postgres database
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
 
-#this function opens a database connection and lets rows behave like dictionaries
+# this function opens a database connection and lets rows behave like dictionaries
 def get_connection():
     DATABASE_URL = os.getenv("DATABASE_URL")
     connection = psycopg2.connect(DATABASE_URL)
@@ -14,12 +14,12 @@ def get_connection():
     return connection
 
 
-#this function creates the database tables if they do not already exist
+# this function creates the database tables if they do not already exist
 def setup_database():
     connection = get_connection()
     cursor = connection.cursor()
 
-    #this table stores registered users
+    # this table stores registered users
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
@@ -33,7 +33,7 @@ def setup_database():
     except Exception:
         connection.rollback()
 
-    #this table stores logged workout activities
+    # this table stores logged workout activities
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS activities (
@@ -53,15 +53,15 @@ def setup_database():
         connection.commit()
     except Exception:
         connection.rollback()
-    
-    #this adds route data to older activity tables if it is missing
+
+    # this adds route data to older activity tables if it is missing
     try:
         cursor.execute("ALTER TABLE activities ADD COLUMN route_data TEXT")
         connection.commit()
     except Exception:
         connection.rollback()
 
-    #this table stores likes that users add to public feed activities
+    # this table stores likes that users add to public feed activities
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS activity_likes (
@@ -78,7 +78,7 @@ def setup_database():
     except Exception:
         connection.rollback()
 
-    #this table stores comments users leave on public feed activities
+    # this table stores comments users leave on public feed activities
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS activity_comments (
@@ -95,7 +95,7 @@ def setup_database():
     except Exception:
         connection.rollback()
 
-    #this table stores race tracker information
+    # this table stores race tracker information
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS races (
@@ -115,7 +115,7 @@ def setup_database():
     except Exception:
         connection.rollback()
 
-    #this table stores exercise plans
+    # this table stores exercise plans
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS plans (
@@ -141,21 +141,23 @@ def setup_database():
             SELECT column_name FROM information_schema.columns
             WHERE table_name = 'activities'
         """)
-        columns = [row['column_name'] for row in cursor.fetchall()]
-    
-        #this adds the public activity column for older databases if it is missing
+        columns = [row["column_name"] for row in cursor.fetchall()]
+
+        # this adds the public activity column for older databases if it is missing
         if "is_public" not in columns:
-            cursor.execute("ALTER TABLE activities ADD COLUMN is_public INTEGER DEFAULT 0")
+            cursor.execute(
+                "ALTER TABLE activities ADD COLUMN is_public INTEGER DEFAULT 0"
+            )
             connection.commit()
-        
-        #this adds the plan link column for older databases if it is missing
+
+        # this adds the plan link column for older databases if it is missing
         if "plan_id" not in columns:
             cursor.execute("ALTER TABLE activities ADD COLUMN plan_id TEXT")
             connection.commit()
     except Exception:
         connection.rollback()
 
-    #this table stores consistency records for how well planned sessions were followed
+    # this table stores consistency records for how well planned sessions were followed
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS plan_adherence (
@@ -173,15 +175,30 @@ def setup_database():
         connection.commit()
     except Exception:
         connection.rollback()
-
+    # this table stores friend requests and accepted friendships
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS friendships (
+                id SERIAL PRIMARY KEY,
+                from_user_id TEXT NOT NULL,
+                to_user_id TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending',
+                FOREIGN KEY (from_user_id) REFERENCES users(id),
+                FOREIGN KEY (to_user_id) REFERENCES users(id),
+                UNIQUE(from_user_id, to_user_id)
+            )
+        """)
+        connection.commit()
+    except Exception:
+        connection.rollback()
     connection.close()
 
 
-#done comments for data/database.py
-#summary of comments:
-#- explains the database connection setup
-#- shows where the users table is created
-#- shows where the activities table is created
-#- handles older activity tables with missing columns
-#- shows where race and plan tables are created
-#- shows where plan consistency records are stored
+# done comments for data/database.py
+# summary of comments:
+# - explains the database connection setup
+# - shows where the users table is created
+# - shows where the activities table is created
+# - handles older activity tables with missing columns
+# - shows where race and plan tables are created
+# - shows where plan consistency records are stored

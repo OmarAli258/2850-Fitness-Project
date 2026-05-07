@@ -1,15 +1,36 @@
-#this file handles saving, loading, updating, deleting and summarising activity data from the database
-#its used by the activity routes, dashboard and search features
+# this file handles saving, loading, updating, deleting and summarising activity data from the database
+# its used by the activity routes, dashboard and search features
 
-#import uuid for unique activity ids and get connection for database access
+# import uuid for unique activity ids and get connection for database access
 import uuid
 from data.database import get_connection
 
-ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifting", "Crossfit", "Football", "Yoga", "Hiking", "Rowing", "Gym", "Weights"]
+ACTIVITY_TYPES = [
+    "Running",
+    "Walking",
+    "Cycling",
+    "Swimming",
+    "Weightlifting",
+    "Crossfit",
+    "Football",
+    "Yoga",
+    "Hiking",
+    "Rowing",
+]
 
 
-#this function creates new activity in  atabase and returns saved activity data
-def create_activity(user_id, activity_type, date, duration, distance, notes, route_data=None, is_public=0, plan_id=None):
+# this function creates new activity in  atabase and returns saved activity data
+def create_activity(
+    user_id,
+    activity_type,
+    date,
+    duration,
+    distance,
+    notes,
+    route_data=None,
+    is_public=0,
+    plan_id=None,
+):
     activity_id = str(uuid.uuid4())
 
     connection = get_connection()
@@ -20,7 +41,18 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
         INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, is_public, plan_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """,
-        (activity_id, user_id, activity_type, date, int(duration), distance, notes, route_data, is_public, plan_id)
+        (
+            activity_id,
+            user_id,
+            activity_type,
+            date,
+            int(duration),
+            distance,
+            notes,
+            route_data,
+            is_public,
+            plan_id,
+        ),
     )
 
     connection.commit()
@@ -35,11 +67,11 @@ def create_activity(user_id, activity_type, date, duration, distance, notes, rou
         "distance": distance,
         "notes": notes,
         "is_public": is_public,
-        "plan_id": plan_id
+        "plan_id": plan_id,
     }
 
 
-#this function gets all activities for user, with optional type filtering and search
+# this function gets all activities for user, with optional type filtering and search
 def get_activities_for_user(user_id, activity_type=None, search=None):
     connection = get_connection()
     cursor = connection.cursor()
@@ -69,28 +101,30 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
     activities = []
 
     for row in rows:
-        #this checks if plan id exists in the row so older databases do not break
+        # this checks if plan id exists in the row so older databases do not break
         plan_id = row["plan_id"] if "plan_id" in row.keys() else None
-        #this checks if is public exists in the row so older databases do not break
+        # this checks if is public exists in the row so older databases do not break
         is_public = row["is_public"] if "is_public" in row.keys() else 0
-        
-        activities.append({
-            "id": row["id"],
-            "user_id": row["user_id"],
-            "type": row["type"],
-            "date": row["date"],
-            "duration": row["duration"],
-            "distance": row["distance"],
-            "notes": row["notes"],
-            "route_data": row["route_data"],
-            "is_public": is_public,
-            "plan_id": plan_id
-        })
+
+        activities.append(
+            {
+                "id": row["id"],
+                "user_id": row["user_id"],
+                "type": row["type"],
+                "date": row["date"],
+                "duration": row["duration"],
+                "distance": row["distance"],
+                "notes": row["notes"],
+                "route_data": row["route_data"],
+                "is_public": is_public,
+                "plan_id": plan_id,
+            }
+        )
 
     return activities
 
 
-#this function gets one activity by id, but only if it belongs to the user
+# this function gets one activity by id, but only if it belongs to the user
 def get_activity(user_id, activity_id):
     connection = get_connection()
     cursor = connection.cursor()
@@ -100,7 +134,7 @@ def get_activity(user_id, activity_id):
         SELECT * FROM activities
         WHERE user_id = %s AND id = %s
         """,
-        (user_id, activity_id)
+        (user_id, activity_id),
     )
     row = cursor.fetchone()
 
@@ -122,12 +156,22 @@ def get_activity(user_id, activity_id):
         "notes": row["notes"],
         "route_data": row["route_data"],
         "is_public": is_public,
-        "plan_id": plan_id
+        "plan_id": plan_id,
     }
 
 
-#this function updates an existing activity for the logged in user
-def update_activity(activity_id, user_id, activity_type, date, duration, distance, notes, is_public=0, plan_id=None):
+# this function updates an existing activity for the logged in user
+def update_activity(
+    activity_id,
+    user_id,
+    activity_type,
+    date,
+    duration,
+    distance,
+    notes,
+    is_public=0,
+    plan_id=None,
+):
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -137,25 +181,35 @@ def update_activity(activity_id, user_id, activity_type, date, duration, distanc
         SET type = %s, date = %s, duration = %s, distance = %s, notes = %s, is_public = %s, plan_id = %s
         WHERE id = %s AND user_id = %s
         """,
-        (activity_type, date, int(duration), distance, notes, is_public, plan_id, activity_id, user_id)
+        (
+            activity_type,
+            date,
+            int(duration),
+            distance,
+            notes,
+            is_public,
+            plan_id,
+            activity_id,
+            user_id,
+        ),
     )
 
     connection.commit()
     connection.close()
 
 
-#this function deletes an activity from the database if it belongs to the user
+# this function deletes an activity from the database if it belongs to the user
 def delete_activity(activity_id, user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    #this checks ownership first, then clears feed likes and comments before deleting the activity
+    # this checks ownership first, then clears feed likes and comments before deleting the activity
     cursor.execute(
         """
         SELECT id FROM activities
         WHERE id = %s AND user_id = %s
         """,
-        (activity_id, user_id)
+        (activity_id, user_id),
     )
 
     if cursor.fetchone() is None:
@@ -167,7 +221,7 @@ def delete_activity(activity_id, user_id):
         DELETE FROM activity_likes
         WHERE activity_id = %s
         """,
-        (activity_id,)
+        (activity_id,),
     )
 
     cursor.execute(
@@ -175,7 +229,7 @@ def delete_activity(activity_id, user_id):
         DELETE FROM activity_comments
         WHERE activity_id = %s
         """,
-        (activity_id,)
+        (activity_id,),
     )
 
     cursor.execute(
@@ -183,14 +237,14 @@ def delete_activity(activity_id, user_id):
         DELETE FROM activities
         WHERE id = %s AND user_id = %s
         """,
-        (activity_id, user_id)
+        (activity_id, user_id),
     )
 
     connection.commit()
     connection.close()
 
 
-#this function calculates dashboard summary numbers from the users past activities
+# this function calculates dashboard summary numbers from the users past activities
 def get_activity_summary(user_id):
     from datetime import date
 
@@ -229,11 +283,11 @@ def get_activity_summary(user_id):
         "total_workouts": total_workouts,
         "total_minutes": total_minutes,
         "total_distance": round(total_distance, 2),
-        "favorite_activity": favorite_activity
+        "favorite_activity": favorite_activity,
     }
 
 
-#this function prepares the last 7 days of activity data for dashboard charts
+# this function prepares the last 7 days of activity data for dashboard charts
 def get_chart_data(user_id):
     from datetime import date, timedelta
 
@@ -272,11 +326,11 @@ def get_chart_data(user_id):
         "minutes": minutes_per_day,
         "distance": [round(d, 2) for d in distance_per_day],
         "type_labels": list(type_counts.keys()),
-        "type_counts": list(type_counts.values())
+        "type_counts": list(type_counts.values()),
     }
 
 
-#this function gets this weeks workout, minute and distance totals for each day
+# this function gets this weeks workout, minute and distance totals for each day
 def get_weekly_activity_data(user_id):
     from datetime import datetime, timedelta
 
@@ -301,7 +355,7 @@ def get_weekly_activity_data(user_id):
             FROM activities
             WHERE user_id = %s AND date = %s
             """,
-            (user_id, date_str)
+            (user_id, date_str),
         ).fetchone()
 
         dist_row = cursor.execute(
@@ -309,7 +363,7 @@ def get_weekly_activity_data(user_id):
             SELECT distance FROM activities
             WHERE user_id = %s AND date = %s AND distance IS NOT NULL AND distance != ''
             """,
-            (user_id, date_str)
+            (user_id, date_str),
         ).fetchall()
 
         connection.close()
@@ -327,11 +381,11 @@ def get_weekly_activity_data(user_id):
         "labels": days,
         "workouts": workouts,
         "minutes": minutes,
-        "distances": [round(d, 2) for d in distances]
+        "distances": [round(d, 2) for d in distances],
     }
 
 
-#this function counts how many activities the user has for each activity type
+# this function counts how many activities the user has for each activity type
 def get_activity_type_counts(user_id):
     activities = get_activities_for_user(user_id)
 
@@ -349,7 +403,7 @@ def get_activity_type_counts(user_id):
     return {"labels": labels, "data": data}
 
 
-#this function searches the user's activities and limits the number of results shown
+# this function searches the user's activities and limits the number of results shown
 def search_activities(user_id, query, limit=10):
     if not query or not query.strip():
         return []
@@ -357,8 +411,9 @@ def search_activities(user_id, query, limit=10):
     activities = get_activities_for_user(user_id, search=query.strip())
     return activities[:limit]
 
-#done comments for data/activity_store.py
-#summary of comments:
+
+# done comments for data/activity_store.py
+# summary of comments:
 # - create_activity adds a new workout to the database with type, date, duration and optional distance
 # - get_activities_for_user retrieves all workouts for the logged in user with optional search and type filters
 # - get_one_activity fetches a single activity by its unique id

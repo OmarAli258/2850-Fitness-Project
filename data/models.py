@@ -1,12 +1,12 @@
-#this file keeps the dataclass models used to describe the main app data
-#these models make user, activity, race and plan data easier to pass around
+# this file keeps the dataclass models used to describe the main app data
+# these models make user, activity, race and plan data easier to pass around
 
-#import dataclass for simple data objects and optional for fields that can be empty
+# import dataclass for simple data objects and optional for fields that can be empty
 from dataclasses import dataclass
 from typing import Optional
 
 
-#this class stores the main details for a registered user
+# this class stores the main details for a registered user
 @dataclass
 class User:
     id: str
@@ -15,7 +15,7 @@ class User:
     password: str
 
 
-#this class stores one workout activity logged by a user
+# this class stores one workout activity logged by a user
 @dataclass
 class Activity:
     id: str
@@ -29,7 +29,7 @@ class Activity:
     plan_id: Optional[str]
 
 
-#this class stores one race event saved by a user
+# this class stores one race event saved by a user
 @dataclass
 class Race:
     id: int
@@ -43,7 +43,7 @@ class Race:
     status: str
 
 
-#this class stores one structured training plan created by a user
+# this class stores one structured training plan created by a user
 @dataclass
 class Plan:
     id: str
@@ -58,10 +58,10 @@ class Plan:
     status: str
 
 
-#done comments for data/models.py
-#summary of comments:
-#- explains that this file holds dataclass models
-#- shows the user model fields
-#- shows the activity model fields
-#- shows the race model fields
-#- shows the plan model fields
+# done comments for data/models.py
+# summary of comments:
+# - explains that this file holds dataclass models
+# - shows the user model fields
+# - shows the activity model fields
+# - shows the race model fields
+# - shows the plan model fields
