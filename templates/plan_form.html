@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <label>Frequency</label>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-                        <input type="number" name="frequency_number" value="{{ form_data.frequency_number }}" placeholder="e.g. 3" min="1" step="1" style="flex:1; min-width:100px;">
+                        <input type="number" name="frequency_number" value="{{ form_data.frequency_number }}" placeholder="e.g. 3" min="1" step="1" oninput="this.value = Math.round(this.value) || ''" style="flex:1; min-width:100px;">
                         <select name="frequency_unit" style="flex:2; min-width:180px;">
                             <option value="daily" {% if form_data.frequency_unit == "daily" %}selected{% endif %}>daily</option>
                             <option value="weekly" {% if form_data.frequency_unit == "weekly" %}selected{% endif %}>weekly</option>
@@ -73,7 +73,7 @@
                 <div class="form-group">
                     <label>Target Duration per Session</label>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-                        <input type="number" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45" min="0" step="1" style="flex:2; min-width:160px;">
+                        <input type="text" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" style="flex:2; min-width:160px;">
                         <select name="target_duration_unit" style="flex:1; min-width:120px;">
                             <option value="minutes" {% if form_data.target_duration_unit != "hours" %}selected{% endif %}>minutes</option>
                             <option value="hours" {% if form_data.target_duration_unit == "hours" %}selected{% endif %}>hours</option>
@@ -83,7 +83,7 @@
 
                 <!-- this lets the user add an optional distance target for the plan -->
                 <div class="form-group">
-                    <label>Target Distance (optional)</label>
+                    <label>Target Distance in km (optional)</label>
                     <input type="number" name="target_distance" value="{{ form_data.target_distance }}" placeholder="e.g. 5" min="0" step="0.01">
                 </div>
 

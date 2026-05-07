@@ -57,7 +57,7 @@
                     <p style="font-weight: 700; font-size: 1.5rem;">{{ completion.plan.target_duration ~ ' min' if completion.plan.target_duration else 'N/A' }}</p>
                 </div>
                 <div>
-                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Target Distance</span>
+                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Target Distance in km</span>
                     <p style="font-weight: 700; font-size: 1.5rem;">{{ completion.plan.target_distance if completion.plan.target_distance else 'N/A' }}</p>
                 </div>
                 {% if completion.plan.notes %}
@@ -133,14 +133,14 @@
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Consistency Log</h2>
             <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1.5rem;">
                 <table style="min-width: 700px; border-collapse: separate; border-spacing: 0 0.75rem;">
-                    <thead>
-                        <tr style="background: var(--bg-raised);">
-                            <th style="text-align:left; padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--text-muted);">Date</th>
-                            <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--text-muted);">Rating</th>
-                            <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--text-muted);">Notes</th>
-                            <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--text-muted);">Delete</th>
-                        </tr>
-                    </thead>
+<thead>
+                            <tr>
+                                <th style="text-align:left; padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Date</th>
+                                <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Rating</th>
+                                <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Notes</th>
+                                <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
+                            </tr>
+                        </thead>
                     <tbody>
                         {% if adherence|length == 0 %}
                         <tr>

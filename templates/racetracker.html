@@ -12,23 +12,24 @@
     <main>
         <div class="racetracker">
             <h1>Racetracker</h1> 
-            <a href="/addrace" class="btn btna">+ Add Race</a>
+            <a href="/addrace" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Add Race</a>
         </div>
 
         <div class="racetracker-layout">
             <div class="racetracker-tables">
                 <section class="upcomingraces">
                     <h2>Upcoming Races</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sport</th>
-                                <th>Location</th>
-                                <th>Date</th>
-                                <th>Length</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1rem;">
+                        <table style="min-width: 1000px; border-collapse: separate; border-spacing: 0 0.5rem;">
+                            <thead>
+                                <tr style="background: var(--bg-raised);">
+                                    <th style="text-align:left; padding: 1.5rem 2rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Sport</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Location</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Date</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Length</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
+                                </tr>
+                            </thead>
                         <tbody>
                             {% for race in races if race['status'] == 'upcoming' %}
                             <tr>
@@ -54,18 +55,19 @@
                 </section>
                 <section class="pastraces">
                     <h2>Past Races</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sport</th>
-                                <th>Location</th>
-                                <th>Date</th>
-                                <th>Length</th>
-                                <th>Time</th>
-                                <th>Record</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1rem;">
+                        <table style="min-width: 1000px; border-collapse: separate; border-spacing: 0 0.5rem;">
+                            <thead>
+                                <tr style="background: var(--bg-raised);">
+                                    <th style="text-align:left; padding: 1.5rem 2rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Sport</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Location</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Date</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Length</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Time</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Record</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
+                                </tr>
+                            </thead>
                         <tbody>
                             {% for race in races if race['status'] == 'past' %}
                             <tr class="{{ 'pbrow' if race['is_pb'] == 1 else '' }}">
@@ -104,7 +106,7 @@
                 {% else %}
                     <p class="nextrace-label">NEXT RACE</p>
                     <p class="nextrace-empty">No upcoming races</p>
-                    <a href="/addrace" class="btn btna" style="margin-top: 1rem;">+ Add Race</a>
+                    <a href="/addrace" class="btn btna" style="margin-top: 1rem; padding: 1rem 1.5rem; font-size: 1.1rem;">Add Race</a>
                 {% endif %}
 
                 {% if days_since_last is not none %}
