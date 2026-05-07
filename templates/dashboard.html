@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <!--connecting the css, fonts favicon etc-->
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link rel="icon" href="/static/images/favicon.ico">
-</head>
+</head> 
 <body>
     {% include "navbar.html" %}
-
+    <!--including the nav bar-->
 <main> 
-    <section class="dash-header">
+    <section class="dash-header"> <!--the first main section below the nav bar including the name used for login search bar and log activites button-->
         <div>
             <h1>Welcome back, {{ user_name }} 👋</h1>
             <p>Here's your fitness summary</p>
         </div>
             <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                <div class="search-wrapper">
+                <div class="search-wrapper"> <!--javascript handles the the results and uses a dropdown menu-->
                     <form class="nav-search" id="searchForm" onsubmit="return false;">
                         <input type="text" id="searchInput" name="q" placeholder="   Search activities..." autocomplete="off">
                         <button type="submit">Search</button>
                     </form>
-                    <div id="searchResults" class="search-dropdown"></div>
+                    <div id="searchResults" class="search-dropdown"></div> <!--this is where the results appear-->
                 </div>
                 <a href="/activities/new" class="btn btna">+ Log Activity</a>
             </div>
     </section>
-
+    <!--The second main section of the dashboard the stats and graphs total workouts, time this week distance covered this week favorite workout and races done-->
     <section class="statsRow">
         <div class="statscard" id="workouts">
             <span class="stat-icon">🏃</span>
@@ -55,17 +55,17 @@
             <span class="stat-number">{{ race_summary.total_races }}</span>
             <span class="stat-label">Total Races</span>
         </div>
-    </section>
+    </section> <!-- the data is filled in using from the database-->
 
     <section class="statsRight" id="chartArea">
-        <canvas id="chart"></canvas>
+        <canvas id="chart"></canvas> <!--the charts themselves are made in javascript theyre hidden in css until clicked -->
     </section>
-
+<!-- the carousel for recent activity also made using JS-->
     <section class="recentActivity">
         <div class="activityLeft">
             <h2>Recent Activity</h2>
 
-            {% if recent_activities %}
+            {% if recent_activities %} {#appears only if there is recent activity#}
             <div class="carouselall">
                 <button class="carouselbtn" id="previous" type="button"><</button>
                 <div class="carousel">
@@ -81,7 +81,7 @@
                             <img src="/static/images/Pic5.jpg" alt="Gym">
                         {% else %}
                             <img src="/static/images/Pic3.jpg" alt="Activity">
-                        {% endif %}
+                        {% endif %} {#depending on the activity display the correct image and activity details below#}
                         <div class="recentCardBody">
                             <h3>{{ activity.type }}</h3>
                             <p class="recentMeta">
@@ -97,21 +97,21 @@
                     {% endfor %}
                 </div>
                 <button class="carouselbtn" id="next" type="button">></button>
-            </div>
-            {% else %}
+            </div> <!--if no recent activites then all the user sees is the button-->
+            {% else %} 
                 <p>No recent activities yet.</p>
                 <a href="/activities/new" class="btn btna">Log your first activity</a>
             {% endif %}
         </div>
-
+<!--final segment in dashboard view all the activites btn on the right -->
         <div class="activityRight">
             <h2>View All Activities</h2>
             <p>See your full workout history</p>
             <a href="/activities" class="btn btna">View All</a>
         </div>
     </section>
-</main>
-<script>
+</main> <!--chart is sent from flask to JS-->
+<script> 
     const CHART_DATA = {{ chart_data | tojson }};
     console.log(CHART_DATA);
 </script>

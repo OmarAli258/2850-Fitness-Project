@@ -1,12 +1,12 @@
-<nav>
-    <a href="/" class="nav-brand">FitTrack</a>
+<nav> <!--Nav bar which is the top bar at the top of every page -->
+    <a href="/" class="nav-brand">FitTrack</a> <!-- this is the name on the left of the screen-->
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/activities">Activities</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/feed">Feed</a></li>
         <li><a href="/racetracker">Racetracker</a></li>
-        {% if not session.get('user_id') %}
+        {% if not session.get('user_id') %} {# this is the jinja code that makes login/sign in and sign out rotate depending on status #}
             <li><a href="/login">Login</a></li>
             <li><a href="/signup">Sign Up</a></li>
         {% else %}
