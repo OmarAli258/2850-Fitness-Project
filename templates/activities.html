@@ -98,7 +98,7 @@
                     <tbody>
                         {% if upcoming_activities|length == 0 %}
                         <tr>
-                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities.</td>
+                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No upcoming activities yet. Log a future workout to plan ahead.</td>
                         </tr>
                         {% else %}
                         {% for activity in upcoming_activities %}
@@ -143,7 +143,7 @@
                     <tbody>
                         {% if past_activities|length == 0 %}
                         <tr>
-                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities.</td>
+                            <td colspan="8" style="padding: 2rem; text-align:center; color: var(--text-muted);">No past activities yet. Complete a workout to see it here.</td>
                         </tr>
                         {% else %}
                         {% for activity in past_activities %}

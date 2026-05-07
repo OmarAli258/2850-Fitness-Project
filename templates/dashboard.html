@@ -102,7 +102,7 @@
             <button class="carouselbtn" id="next" type="button">></button>
         </div> <!--if no recent activites then all the user sees is the button-->
         {% else %} 
-            <p>No recent activities yet.</p>
+            <p>No recent activities yet. Log your first activity to get started.</p>
             <a href="/activities/new" class="btn btna">Log your first activity</a>
         {% endif %}
     </div>
@@ -147,7 +147,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <p>No plans yet.</p>
+        <p>No plans yet. Create your first training plan to get started.</p>
         {% endif %}
         <a href="/plans" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
     </div>
