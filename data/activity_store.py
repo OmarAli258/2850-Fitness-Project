@@ -5,7 +5,7 @@
 import uuid
 from data.database import get_connection
 
-ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifting", "Crossfit", "Football", "Yoga", "Hiking", "Rowing", "Gym", "Weights"]
+ACTIVITY_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Weightlifting", "Crossfit", "Football", "Yoga", "Hiking", "Rowing"]
 
 
 #this function creates new activity in  atabase and returns saved activity data

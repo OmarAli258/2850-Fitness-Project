@@ -37,29 +37,7 @@
             border-radius: 7px;
         }
 
-        .progress-high::-webkit-progress-value {
-            background: #4caf50 !important;
-        }
-
-        .progress-medium::-webkit-progress-value {
-            background: #f1c40f !important;
-        }
-
-        .progress-low::-webkit-progress-value {
-            background: #ff4d4d !important;
-        }
-
-        .progress-high::-moz-progress-bar {
-            background: #4caf50 !important;
-        }
-
-        .progress-medium::-moz-progress-bar {
-            background: #f1c40f !important;
-        }
-
-        .progress-low::-moz-progress-bar {
-            background: #ff4d4d !important;
-        }
+        
     </style>
 </head>
 <body>
@@ -129,11 +107,11 @@
                             </td>
                             <td style="padding: 1.5rem 1.5rem;">
                                 <!-- progress bar compares completed sessions with the target number of sessions -->
-                                {% set progress_class = 'progress-high' if plan.completion_rate >= 80 else 'progress-medium' if plan.completion_rate >= 50 else 'progress-low' %}
+                                
                                 <div style="display: flex; flex-direction: column; gap: 0.5rem;" onclick="event.stopPropagation()">
                                     <div style="display: flex; align-items: center; gap: 1rem;">
                                         <div style="flex: 1; min-width: 120px;">
-                                            <progress class="plan-progress {{ progress_class }}" value="{{ plan.completion_rate }}" max="100"></progress>
+                                            <progress class="plan-progress" value="{{ plan.completion_rate }}" max="100"></progress>
                                         </div>
                                         <span style="font-size: 1rem; color: var(--text-muted); min-width: 60px; text-align: right;">{{ plan.completed_count }}/{{ plan.frequency_target }}</span>
                                     </div>
