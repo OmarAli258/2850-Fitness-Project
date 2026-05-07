@@ -1178,6 +1178,32 @@ tr:hover td  {
     font-size: 0.9rem;
 }
 
+.feed-comment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.feed-comment-meta form {
+    margin: 0;
+}
+
+.feed-comment-delete {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0;
+}
+
+.feed-comment-delete:hover {
+    color: #ff8585;
+}
+
 .feed-comment p {
     color: var(--text);
     line-height: 1.5;

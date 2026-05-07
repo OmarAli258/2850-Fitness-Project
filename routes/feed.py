@@ -18,6 +18,15 @@ def _activity_is_public(cursor, activity_id):
     )
     return cursor.fetchone() is not None
 
+
+#this helper formats stored comment timestamps into a cleaner feed display
+def _format_comment_time(timestamp):
+    try:
+        comment_time = datetime.fromisoformat(timestamp)
+        return comment_time.strftime("%b %d, %Y at %I:%M %p").replace(" 0", " ")
+    except ValueError:
+        return timestamp
+
 @feed.route('/feed')
 def index():
     #this route loads public activities and adds social counts for likes and comments
@@ -72,6 +81,7 @@ def index():
 
         for row in cursor.fetchall():
             comment = dict(row)
+            comment["display_created_at"] = _format_comment_time(comment["created_at"])
             comments_by_activity.setdefault(comment["activity_id"], []).append(comment)
 
     for activity in activities:
@@ -149,6 +159,43 @@ def add_comment(activity_id):
         VALUES (%s, %s, %s, %s, %s)
         """,
         (str(uuid.uuid4()), activity_id, session["user_id"], body, datetime.now().isoformat(timespec="seconds"))
+    )
+
+    connection.commit()
+    connection.close()
+    return redirect(f"/feed#activity-{activity_id}")
+
+
+@feed.route('/feed/comments/<comment_id>/delete', methods=["POST"])
+def delete_comment(comment_id):
+    #this route lets users delete comments they wrote on the feed
+    if "user_id" not in session:
+        return redirect("/login")
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT activity_id FROM activity_comments
+        WHERE id = %s AND user_id = %s
+        """,
+        (comment_id, session["user_id"])
+    )
+    comment = cursor.fetchone()
+
+    if comment is None:
+        connection.close()
+        return redirect("/feed")
+
+    activity_id = comment["activity_id"]
+
+    cursor.execute(
+        """
+        DELETE FROM activity_comments
+        WHERE id = %s AND user_id = %s
+        """,
+        (comment_id, session["user_id"])
     )
 
     connection.commit()
