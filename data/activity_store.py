@@ -56,9 +56,9 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
         values.append(activity_type)
 
     if search:
-        query += " AND (type LIKE %s OR date LIKE %s OR notes LIKE %s)"
-        search_text = f"%{search}%"
-        values.extend([search_text, search_text, search_text])
+        query += " AND (LOWER(type) LIKE %s OR LOWER(notes) LIKE %s)"
+        search_text = f"%{search.lower()}%"
+        values.extend([search_text, search_text])
 
     query += " ORDER BY date DESC"
 

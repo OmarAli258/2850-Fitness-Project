@@ -85,10 +85,11 @@
                     </select>
                 </div>
 
-                <!-- this lets the user upload a gpx file to auto-fill route, distance and duration -->
+                <!-- this lets the user upload a gpx file to show route map -->
                 <div class="form-group">
-                    <label>Upload GPX File (Optional, auto-fills details & adds map)</label>
-                    <input type="file" name="gpx_file" accept=".gpx">
+                    <label>Import from Strava/GPS (Optional)</label>
+                    <input type="file" name="gpx_file" accept=".gpx" placeholder="Upload GPX file">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Upload a GPX file from Strava or your GPS watch to see your route on a map</p>
                 </div>
 
                 <!-- this lets the user add optional notes about the activity -->
@@ -100,9 +101,9 @@
                 <!-- this lets the user choose if the activity should appear in the community feed -->
                 <div class="form-group">
                     <label>Activity Visibility</label>
-                    <select name="visibility">
-                        <option value="private" {% if not form_data.is_public %}selected{% endif %}>private</option>
-                        <option value="public" {% if form_data.is_public %}selected{% endif %}>public</option>
+                    <select name="visibility" style="padding: 0.85rem 1rem; border-radius: 12px; border: 2px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 1rem; width: 100%;">
+                        <option value="Private" {% if not form_data.is_public %}selected{% endif %}>Private</option>
+                        <option value="Public" {% if form_data.is_public %}selected{% endif %}>Public</option>
                     </select>
                 </div>
 
