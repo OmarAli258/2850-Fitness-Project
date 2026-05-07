@@ -59,21 +59,22 @@
 
                 <!-- this lets the user enter how often they want to follow the plan -->
                 <div class="form-group">
-                    <label for="frequency">Frequency</label>
+                    <label for="frequency">How often?</label>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                         <input type="number" id="frequency" name="frequency_number" value="{{ form_data.frequency_number }}" placeholder="e.g. 3" min="1" step="1" oninput="this.value = Math.round(this.value) || ''" style="flex:1; min-width:100px;">
                         <select name="frequency_unit" style="flex:2; min-width:180px;">
-                            <option value="daily" {% if form_data.frequency_unit == "daily" %}selected{% endif %}>daily</option>
-                            <option value="weekly" {% if form_data.frequency_unit == "weekly" %}selected{% endif %}>weekly</option>
-                            <option value="monthly" {% if form_data.frequency_unit == "monthly" %}selected{% endif %}>monthly</option>
-                            <option value="yearly" {% if form_data.frequency_unit == "yearly" %}selected{% endif %}>yearly</option>
+                            <option value="daily" {% if form_data.frequency_unit == "daily" %}selected{% endif %}>per day</option>
+                            <option value="weekly" {% if form_data.frequency_unit == "weekly" %}selected{% endif %}>per week</option>
+                            <option value="monthly" {% if form_data.frequency_unit == "monthly" %}selected{% endif %}>per month</option>
+                            <option value="yearly" {% if form_data.frequency_unit == "yearly" %}selected{% endif %}>per year</option>
                         </select>
                     </div>
+                    <p class="form-helper">Example: 3x per week</p>
                 </div>
 
                 <!-- this lets the user add an optional duration target for each session -->
                 <div class="form-group">
-                    <label for="target-duration">Target Duration per Session</label>
+                    <label for="target-duration">Session time</label>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                         <input type="text" id="target-duration" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" style="flex:2; min-width:160px;">
                         <select name="target_duration_unit" style="flex:1; min-width:120px;">
@@ -81,6 +82,7 @@
                             <option value="hours" {% if form_data.target_duration_unit == "hours" %}selected{% endif %}>hours</option>
                         </select>
                     </div>
+                    <p class="form-helper">How long each workout should last. Example: 45 minutes</p>
                 </div>
 
                 <!-- this lets the user add an optional distance target for the plan -->
