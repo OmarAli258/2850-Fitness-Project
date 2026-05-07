@@ -16,14 +16,76 @@
         <section class="dash-header">
             <div>
                 <h1>Community Feed 🌍</h1>
-                <p>See what other FitTrack users are up to</p>
+                <p>See what your friends are up to</p>
             </div>
             <div>
                 <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
             </div>
         </section>
 
+        <section class="friends-page">
+            <div class="friends-section">
+                <h2>Find Friends</h2>
+                <div class="search-wrapper">
+                    <form class="nav-search" id="friendSearchForm" onsubmit="return false;">
+                        <input type="text" id="friendSearchInput" placeholder="   Search by name..." autocomplete="off">
+                        <button type="submit">Search</button>
+                    </form>
+                    <div id="friendSearchResults" class="search-dropdown"></div>
+                </div>
+            </div>
+
+            {% if pending %}
+            <div class="friends-section">
+                <h2>Pending Requests</h2>
+                <div class="friends-list">
+                    {% for req in pending %}
+                    <div class="friend-card">
+                        <div class="friend-info">
+                            <strong>{{ req.name }}</strong>
+                            <p class="friend-email">{{ req.email }}</p>
+                        </div>
+                        <div class="friend-actions">
+                            <form method="POST" action="/friends/accept/{{ req.request_id }}" style="display: inline;">
+                                <button type="submit" class="btn btna">Accept</button>
+                            </form>
+                            <form method="POST" action="/friends/reject/{{ req.request_id }}" style="display: inline;">
+                                <button type="submit" class="btn btnb">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="friends-section">
+                <h2>Your Friends ({{ friends|length }})</h2>
+                {% if friends %}
+                    <div class="friends-list">
+                        {% for friend in friends %}
+                        <div class="friend-card">
+                            <div class="friend-info">
+                                <strong>{{ friend.name }}</strong>
+                                <p class="friend-email">{{ friend.email }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="friends-empty">No friends yet. Use the search above to find people!</p>
+                {% endif %}
+            </div>
+        </section>
+
         <section class="feed-container">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; align-items: center;">
+                <h2 style="margin: 0;">Activities</h2>
+                <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                    <a href="/feed?view=friends" class="btn {% if view == 'friends' %}btna{% else %}btnb{% endif %}" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Friends</a>
+                    <a href="/feed?view=everyone" class="btn {% if view == 'everyone' %}btna{% else %}btnb{% endif %}" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Everyone</a>
+                </div>
+            </div>
             {% if feed_activities %}
                 <!-- this loop displays each public activity card in the community feed -->
                 {% for activity in feed_activities %}
@@ -107,12 +169,13 @@
                 </article>
                 {% endfor %}
             {% else %}
-                <p class="feed-empty">No activities to show yet. Be the first to log something!</p>
+                <p class="feed-empty">No activities to show. Add friends to see what they're up to!</p>
             {% endif %}
         </section>
     </main>
 
     <script src="/static/js/main.js"></script>
+    <script src="/static/js/friends.js"></script>
     <script>
         initFeedMaps();
     </script>

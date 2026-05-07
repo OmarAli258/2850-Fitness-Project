@@ -111,3 +111,47 @@ def update_race_statuses(user_id):
 
     connection.commit()
     connection.close()
+def get_race_by_id(race_id, user_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "SELECT * FROM races WHERE id = %s AND user_id = %s",
+        (race_id, user_id)
+    )
+    row = cursor.fetchone()
+
+    connection.close()
+
+    if row is None:
+        return None
+
+    return {
+        "id": row["id"],
+        "name": row["name"],
+        "race_type": row["race_type"],
+        "location": row["location"],
+        "date": row["date"],
+        "finish_time": row["finish_time"],
+        "is_pb": row["is_pb"],
+        "status": row["status"],
+        "user_id": row["user_id"]
+    }
+
+
+def update_race(race_id, user_id, name, race_type, location, date, finish_time, is_pb, status):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE races
+        SET name = %s, race_type = %s, location = %s, date = %s,
+            finish_time = %s, is_pb = %s, status = %s
+        WHERE id = %s AND user_id = %s
+        """,
+        (name, race_type, location, date, finish_time, is_pb, status, race_id, user_id)
+    )
+
+    connection.commit()
+    connection.close()
