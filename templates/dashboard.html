@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> <!--connecting the css, fonts favicon etc-->
+<head>
+    <!-- accessibility - skip link lets keyboard users bypass the navigation and go straight to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <!-- linking the css, fonts, favicon and chart.js library -->
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -10,8 +13,8 @@
 </head> 
 <body>
     {% include "navbar.html" %}
-    <!--including the nav bar-->
-<main> 
+    <!-- accessibility - main-content id is the target for the skip link above -->
+<main id="main-content"> 
     <section class="dash-header"> <!--the first main section below the nav bar including the name used for login search bar and log activites button-->
         <div>
             <h1>Welcome back, {{ user_name }} 👋</h1>

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <!-- this page displays all training plans allowing users to view, create, edit and track their exercise programmes -->
+    <!-- accessibility - skip link lets keyboard users bypass navigation and go straight to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <meta charset="UTF-8">
     <title>FitTrack | Plans</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -63,7 +65,7 @@
 <body>
     <!-- include the shared navigation bar used across the site -->
     {% include "navbar.html" %}
-    <main>
+    <main id="main-content">
         <!-- hero section introduces the plans page and gives users a quick way to create a new plan -->
         <section class="hero" style="padding: 4rem 5% 3rem; min-height: auto;">
             <div class="hero-text" style="max-width: 800px; padding-left: 0; padding-right: 0;">

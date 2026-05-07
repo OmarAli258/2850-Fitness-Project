@@ -40,8 +40,8 @@
             <form action="{{ action }}" method="post" enctype="multipart/form-data" class="auth-form">
                 <!-- this lets the user pick the type of workout they did -->
                 <div class="form-group">
-                    <label>Activity Type</label>
-                    <select name="activity_type">
+                    <label for="activity-type">Activity Type</label>
+                    <select id="activity-type" name="activity_type">
                         <option value="">Select one</option>
                         {% for type in activity_types %}
                         <option value="{{ type }}" {% if form_data.activity_type == type %}selected{% endif %}>{{ type }}</option>
@@ -51,15 +51,15 @@
 
                 <!-- this lets the user choose the date of the activity -->
                 <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" name="date" value="{{ form_data.date }}">
+                    <label for="activity-date">Date</label>
+                    <input type="date" id="activity-date" name="date" value="{{ form_data.date }}">
                 </div>
 
                 <!-- this lets the user enter how long the activity lasted and choose minutes or hours -->
                 <div class="form-group">
-                    <label>Duration</label>
+                    <label for="activity-duration">Duration</label>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-                        <input type="number" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45" min="0" step="0.01" style="flex:2; min-width:160px;">
+                        <input type="number" id="activity-duration" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45" min="0" step="0.01" style="flex:2; min-width:160px;">
                         <select name="duration_unit" style="flex:1; min-width:120px;">
                             <option value="minutes" {% if form_data.duration_unit != "hours" %}selected{% endif %}>minutes</option>
                             <option value="hours" {% if form_data.duration_unit == "hours" %}selected{% endif %}>hours</option>
@@ -70,14 +70,14 @@
 
                 <!-- this lets the user enter distance if the activity has one -->
                 <div class="form-group">
-                    <label>Distance in km (optional)</label>
-                    <input type="number" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5.5" min="0" step="0.01">
+                    <label for="activity-distance">Distance in km (optional)</label>
+                    <input type="number" id="activity-distance" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5.5" min="0" step="0.01">
                 </div>
 
                 <!-- this lets the user connect the activity to one of their plans -->
                 <div class="form-group">
-                    <label>Link to Plan (optional)</label>
-                    <select name="plan_id">
+                    <label for="plan-link">Link to Plan (optional)</label>
+                    <select id="plan-link" name="plan_id">
                         <option value="">No plan</option>
                         {% for plan in active_plans %}
                         <option value="{{ plan.id }}" {% if form_data.plan_id == plan.id %}selected{% endif %}>{{ plan.name }} ({{ plan.exercise_type }})</option>
@@ -87,21 +87,21 @@
 
                 <!-- this lets the user upload a gpx file to show route map -->
                 <div class="form-group">
-                    <label>Import from Strava/GPS (Optional)</label>
-                    <input type="file" name="gpx_file" accept=".gpx" placeholder="Upload GPX file">
+                    <label for="gpx-file">Import from Strava/GPS (Optional)</label>
+                    <input type="file" id="gpx-file" name="gpx_file" accept=".gpx" placeholder="Upload GPX file">
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Upload a GPX file from Strava or your GPS watch to see your route on a map</p>
                 </div>
 
                 <!-- this lets the user add optional notes about the activity -->
                 <div class="form-group">
-                    <label>Notes (optional)</label>
-                    <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
+                    <label for="activity-notes">Notes (optional)</label>
+                    <textarea id="activity-notes" name="notes" rows="4">{{ form_data.notes }}</textarea>
                 </div>
 
                 <!-- this lets the user choose if the activity should appear in the community feed -->
                 <div class="form-group">
-                    <label>Activity Visibility</label>
-                    <select name="visibility" style="padding: 0.85rem 1rem; border-radius: 12px; border: 2px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 1rem; width: 100%;">
+                    <label for="activity-visibility">Activity Visibility</label>
+                    <select id="activity-visibility" name="visibility" style="padding: 0.85rem 1rem; border-radius: 12px; border: 2px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 1rem; width: 100%;">
                         <option value="Private" {% if not form_data.is_public %}selected{% endif %}>Private</option>
                         <option value="Public" {% if form_data.is_public %}selected{% endif %}>Public</option>
                     </select>
