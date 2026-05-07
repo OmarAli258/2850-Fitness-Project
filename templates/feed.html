@@ -30,7 +30,10 @@
                 <article class="feed-card" id="activity-{{ activity.id }}">
                     <div class="feed-header">
                         <div class="feed-user-action">
-                            <strong>{{ activity.user_name }}</strong> {{ activity.feed_message }}
+                            <div class="feed-avatar" aria-hidden="true">{{ activity.user_name[0] }}</div>
+                            <div>
+                                <strong>{{ activity.user_name }}</strong> {{ activity.feed_message }}
+                            </div>
                         </div>
                         <div class="feed-meta">{{ activity.date }}</div>
                     </div>

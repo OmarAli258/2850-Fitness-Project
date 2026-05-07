@@ -1048,7 +1048,25 @@ tr:hover td  {
 }
 
 .feed-user-action {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
     font-size: 1.1rem;
+}
+
+.feed-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
 }
 
 .feed-user-action strong {
