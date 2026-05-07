@@ -38,7 +38,7 @@
 
                     <div class="form-area">
                         <label for="location">Location</label>
-                        <input type="text" id="location" name="location" placeholder="e.g. Leeds">
+                        <input type="text" id="location" name="location" placeholder="e.g. Leeds" oninput="this.value = this.value.replace(/[0-9]/g, '')">
                     </div>
 
                     <div class="form-area">
@@ -47,8 +47,8 @@
                     </div>
 
                     <div class="form-area">
-                        <label for="race_type">Length</label>
-                        <input type="text" id="race_type" name="race_type" placeholder="e.g. 10K" required>
+                        <label for="race_type">Length in km</label>
+                        <input type="text" id="race_type" name="race_type" placeholder="e.g. 10" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" required>
                     </div>
                 </div>
             </div>
@@ -63,10 +63,7 @@
                     </div>
                 </div>
 
-                <div class="checkbox-field">
-                    <input type="checkbox" id="is_pb" name="is_pb">
-                    <label for="is_pb">Mark as Personal Best</label>
-                </div>
+                <p class="form-helper">Personal bests are calculated automatically from your finish time.</p>
             </div>
 
             <div class="form-actions">

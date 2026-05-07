@@ -7,11 +7,15 @@ races = Blueprint("races", __name__)
 
 def check_valid(value):
     import re
-
-    cleaned = re.sub(r"[^\d.]", "", value)
-    if cleaned == "":
+    match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*(?:km)?\s*", value, re.IGNORECASE)
+    if match is None:
         return None
-    return cleaned
+    distance = float(match.group(1))
+    if distance <= 0:
+        return None
+    if distance.is_integer():
+        return str(int(distance))
+    return str(distance).rstrip("0").rstrip(".")
 
 
 @races.route("/racetracker")
@@ -39,6 +43,8 @@ def racetracker():
         else:
             race_dict["countdown"] = ""
         races_with_countdown.append(race_dict)
+
+    races_with_countdown = race_store.add_race_rankings(races_with_countdown)
 
     days_since_last = None
     past_races = [r for r in races_with_countdown if r["status"] == "past"]
@@ -122,15 +128,20 @@ def add_race():
     location = request.form.get("location", "").strip()
     date = request.form.get("date", "").strip()
     finish_time = request.form.get("finish_time", "").strip()
-    is_pb = 1 if request.form.get("is_pb") == "on" else 0
-    race_type = check_valid(request.form.get("race_type", "").strip())
+    race_type   = check_valid(request.form.get("race_type", "").strip())
 
     if not name or not race_type or not date:
         return render_template(
             "addrace.html", error="Please fill in all required fields."
         )
 
-    status = "upcoming" if date >= str(today_date.today()) else "past"
+    if any(char.isdigit() for char in location):
+        return render_template("addrace.html", error="Location cannot contain numbers.")
+
+    if finish_time and race_store.parse_finish_time(finish_time) is None:
+        return render_template("addrace.html", error="Finish time must be minutes, MM:SS, or HH:MM:SS.")
+
+    status = 'upcoming' if date >= str(today_date.today()) else 'past'
 
     race_store.create_race(
         user_id=session["user_id"],
@@ -139,8 +150,8 @@ def add_race():
         location=location,
         date=date,
         finish_time=finish_time,
-        is_pb=is_pb,
-        status=status,
+        is_pb=0,
+        status=status
     )
 
     return redirect("/racetracker")
