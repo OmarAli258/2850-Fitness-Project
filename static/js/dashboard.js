@@ -1,9 +1,10 @@
+//first thing in the javascript is the carousel 
 const backbtn = document.getElementById("previous")
 const forwardbtn = document.getElementById("next")
 const cards = document.querySelectorAll(".recentCard")
-
+// getting the buttons to work with in js
 let currentindex = 0
-
+// if the buttons exist on the page aka there is an activity then move forward or back till you make it to last or first
 if (forwardbtn && backbtn && cards.length > 0) {
     forwardbtn.addEventListener("click", function () {
         if (currentindex < cards.length - 1) {
@@ -19,24 +20,24 @@ if (forwardbtn && backbtn && cards.length > 0) {
         }
     })
 }
-
+// hide all the cards then show the one with the specifed index 
 function carousel(index) {
     cards.forEach(function (card) {
         card.style.display = "none"
     })
     cards[index].style.display = "block"
 }
-
+// second part is the Stats cards
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
 const distancebtn = document.getElementById("distance")
 const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
-
+//get the cards so that when theyre clicked they work
 let currenttype = null
 let currentchart = null
-
+//when button clicked show the chart
 if (workoutbtn) {
     workoutbtn.addEventListener("click", function () {
         showchart("workouts")
@@ -66,13 +67,13 @@ if (favoritebtn) {
         showchart("favorite")
     })
 }
-
+//The function that shows and builds the charts based on whats clicked  
 function showchart(type) {
     if (!mycanvas) {
         return
     }
 
-    if (currenttype == type && currentchart != null) {
+    if (currenttype == type && currentchart != null) { //if the same card is clicked twice destroy the chart
         currentchart.destroy()
         currentchart = null
         currenttype = null
@@ -80,12 +81,12 @@ function showchart(type) {
         return
     }
 
-    if (currentchart != null) {
+    if (currentchart != null) { //destroy previous chart 
         currentchart.destroy()
     }
 
     let chartData = {}
-
+    //chart data is gotten from flask in the html and the data is used to build the charts labels, data etc
     if (type == "workouts") {
     chartData = {
         labels: CHART_DATA.labels,
@@ -133,7 +134,7 @@ function showchart(type) {
         type: "bar"
     }
 }
-
+//adding some nice colors to me the charts look nice using the same yellow as the rest of the site
     let chartColours = "#f5c518"
     let borderColours = "#f5c518"
 
@@ -168,7 +169,7 @@ function showchart(type) {
             "#0a0a0a"
         ]
     }
-
+    //actually making the chart that the data was enterd in above using Chart.js library
     currentchart = new Chart(mycanvas, {
         type: chartData.type,
         data: {
@@ -206,37 +207,37 @@ function showchart(type) {
         }
     })
 
-    document.querySelector("#chartArea").classList.add("active")
+    document.querySelector("#chartArea").classList.add("active") //show the area around the chart
     currenttype = type
 }
-
+//The Drop Down search bar which was made instead of a seperate page for searching
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
-let searchTimer = null;
+let searchTimer = null; //make search bar a bit delayed so its not instant after every stroke
 
 if (searchInput) {
-    searchInput.addEventListener("input", function () {
+    searchInput.addEventListener("input", function () { //activate if typing
         const query = searchInput.value.trim();
 
-        clearTimeout(searchTimer);
+        clearTimeout(searchTimer); //cancel a search until user is done typing
 
-        if (query === "") {
+        if (query === "") { //hide if the input is empty 
             hideDropdown();
             return;
         }
 
-        searchTimer = setTimeout(function () {
+        searchTimer = setTimeout(function () { //search the database only after 250ms after the last letter typed to not waste database searches on every letter
             fetchSearchResults(query);
         }, 250);
     });
 
-    document.addEventListener("click", function (event) {
+    document.addEventListener("click", function (event) { //if the user clicks off get rid of dropdown
         if (!event.target.closest(".search-wrapper")) {
             hideDropdown();
         }
     });
 }
-
+//calls the flask api and passes results to the renderresults function
 function fetchSearchResults(query) {
     fetch("/api/search?q=" + encodeURIComponent(query))
         .then(function (response) {
@@ -250,7 +251,7 @@ function fetchSearchResults(query) {
             hideDropdown();
         });
 }
-
+//makes the html for the drop down using the search results 
 function renderResults(results) {
     if (results.length === 0) {
         searchResults.innerHTML = '<div class="search-empty">No activities found</div>';
@@ -258,7 +259,7 @@ function renderResults(results) {
         return;
     }
 
-    let html = "";
+    let html = ""; //go through and make a clickable link to the its view activity page
     for (const activity of results) {
         const distance = activity.distance ? activity.distance + " km" : "No distance";
         html += `
@@ -272,7 +273,7 @@ function renderResults(results) {
     searchResults.innerHTML = html;
     showDropdown();
 }
-
+//helper functions for showing and hiding the dropdown 
 function showDropdown() {
     searchResults.classList.add("active");
 }

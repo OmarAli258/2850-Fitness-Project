@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <!--connecting the css, fonts favicon etc-->
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link rel="icon" href="/static/images/favicon.ico">
-</head>
+</head> 
 <body>
     {% include "navbar.html" %}
-
+    <!--including the nav bar-->
 <main> 
-    <section class="dash-header">
+    <section class="dash-header"> <!--the first main section below the nav bar including the name used for login search bar and log activites button-->
         <div>
             <h1>Welcome back, {{ user_name }} 👋</h1>
             <p>Here's your fitness summary</p>
         </div>
             <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                <div class="search-wrapper">
+                <div class="search-wrapper"> <!--javascript handles the the results and uses a dropdown menu-->
                     <form class="nav-search" id="searchForm" onsubmit="return false;">
                         <input type="text" id="searchInput" name="q" placeholder="   Search activities..." autocomplete="off">
                         <button type="submit">Search</button>
                     </form>
-                    <div id="searchResults" class="search-dropdown"></div>
+                    <div id="searchResults" class="search-dropdown"></div> <!--this is where the results appear-->
                 </div>
                 <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
             </div>
     </section>
-
+    <!--The second main section of the dashboard the stats and graphs total workouts, time this week distance covered this week favorite workout and races done-->
     <section class="statsRow">
         <div class="statscard" id="workouts">
             <span class="stat-icon">🏃</span>
@@ -55,83 +55,102 @@
             <span class="stat-number">{{ race_summary.total_races }}</span>
             <span class="stat-label">Total Races</span>
         </div>
-    </section>
+    </section> <!-- the data is filled in using from the database-->
 
     <section class="statsRight" id="chartArea">
-        <canvas id="chart"></canvas>
+        <canvas id="chart"></canvas> <!--the charts themselves are made in javascript theyre hidden in css until clicked -->
     </section>
-
+<!-- the carousel for recent activity also made using JS-->
 <section class="recentActivity">
-        <div class="activityLeft" style="text-align: center;">
-            <h2 style="text-align: center;">Recent Activity</h2>
+    <div class="activityLeft">
+        <h2>Recent Activity</h2>
 
-            {% if recent_activities %}
-            <div style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1; overflow-y: auto;">
+        {% if recent_activities %} {#appears only if there is recent activity#}
+        <div class="carouselall">
+            <button class="carouselbtn" id="previous" type="button"><</button>
+            <div class="carousel">
                 {% for activity in recent_activities %}
-                <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <div style="text-align: left;">
-                        <strong>{{ activity.type }}</strong>
-                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">
-                            {{ activity.date }} · {{ activity.duration }} min
-                            {% if activity.distance %} · {{ activity.distance }} km{% endif %}
+                <div class="recentCard {% if loop.first %}active{% endif %}">
+                    {% if activity.type == "Running" %}
+                        <img src="/static/images/Pic1.jpg" alt="Running">
+                    {% elif activity.type == "Swimming" %}
+                        <img src="/static/images/Pic2.jpg" alt="Swimming">
+                    {% elif activity.type == "Cycling" %}
+                        <img src="/static/images/Pic4.jpg" alt="Cycling">
+                    {% elif activity.type == "Gym" %}
+                        <img src="/static/images/Pic5.jpg" alt="Gym">
+                    {% else %}
+                        <img src="/static/images/Pic3.jpg" alt="Activity">
+                    {% endif %} {#depending on the activity display the correct image and activity details below#}
+                    <div class="recentCardBody">
+                        <h3>{{ activity.type }}</h3>
+                        <p class="recentMeta">
+                            {{ activity.date }} | {{ activity.duration }} min |
+                            {% if activity.distance %}{{ activity.distance }}{% else %}No distance{% endif %}
                         </p>
+                        <div class="recentfooter">
+                            <a href="/activities/{{ activity.id }}" class="btn btnb recentbtn">View</a>
+                            <a href="/activities/{{ activity.id }}/edit" class="btn btnb recentbtn">Edit</a>
+                        </div>
                     </div>
-                    <a href="/activities/{{ activity.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
                 </div>
                 {% endfor %}
             </div>
-            <a href="/activities" class="btn btna" style="margin-top: auto; padding: 0.5rem 1rem; font-size: 0.85rem; display: inline-block;">View All</a>
-            {% else %}
+            <button class="carouselbtn" id="next" type="button">></button>
+        </div> <!--if no recent activites then all the user sees is the button-->
+        {% else %} 
             <p>No recent activities yet.</p>
             <a href="/activities/new" class="btn btna">Log your first activity</a>
-            {% endif %}
-        </div>
+        {% endif %}
+    </div>
 
-        <div class="activityRight" style="text-align: center;">
-            <h2>Upcoming Activities</h2>
-            {% if upcoming_activities %}
-            <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
-                {% for activity in upcoming_activities %}
-                <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <div style="text-align: left;">
-                        <strong>{{ activity.type }}</strong>
-                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">
-                            {{ activity.date }} · {{ activity.duration }} min
-                            {% if activity.distance %} · {{ activity.distance }} km{% endif %}
-                        </p>
-                    </div>
-                    <a href="/activities/{{ activity.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
+    <!-- Upcoming Activities card from friend's update -->
+    <div class="activityRight" style="text-align: center;">
+        <h2>Upcoming Activities</h2>
+        {% if upcoming_activities %}
+        <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for activity in upcoming_activities %}
+            <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="text-align: left;">
+                    <strong>{{ activity.type }}</strong>
+                    <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">
+                        {{ activity.date }} · {{ activity.duration }} min
+                        {% if activity.distance %} · {{ activity.distance }} km{% endif %}
+                    </p>
                 </div>
-                {% endfor %}
+                <a href="/activities/{{ activity.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
             </div>
-            {% else %}
-            <p>No upcoming activities.</p>
-            {% endif %}
-            <a href="/activities" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+            {% endfor %}
         </div>
+        {% else %}
+        <p>No upcoming activities.</p>
+        {% endif %}
+        <a href="/activities" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+    </div>
 
-        <div class="activityRight" style="text-align: center;">
-            <h2>Recent Plans</h2>
-            {% if plans %}
-            <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
-                {% for plan in plans[:5] %}
-                <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>{{ plan.name }}</strong>
-                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">{{ plan.exercise }}</p>
-                    </div>
-                    <a href="/plans/{{ plan.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
+    <!-- Recent Plans card from friend's update -->
+    <div class="activityRight" style="text-align: center;">
+        <h2>Recent Plans</h2>
+        {% if plans %}
+        <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for plan in plans[:5] %}
+            <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>{{ plan.name }}</strong>
+                    <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">{{ plan.exercise }}</p>
                 </div>
-                {% endfor %}
+                <a href="/plans/{{ plan.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
             </div>
-            {% else %}
-            <p>No plans yet.</p>
-            {% endif %}
-            <a href="/plans" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+            {% endfor %}
         </div>
-    </section>
-</main>
-<script>
+        {% else %}
+        <p>No plans yet.</p>
+        {% endif %}
+        <a href="/plans" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+    </div>
+</section>
+</main> <!--chart is sent from flask to JS-->
+<script> 
     const CHART_DATA = {{ chart_data | tojson }};
 </script>
 <script src="/static/js/dashboard.js"></script>

@@ -6,14 +6,14 @@
         <meta charset="UTF-8">
         <title>FitTrack</title> 
         <link rel="icon" href="/static/images/favicon.ico">
-    </head>
+    </head> <!--Linking to the correct css page linking to icon etc-->
     <body>
-        {% include "navbar.html" %}
+        {% include "navbar.html" %} {# connecting the nav bar#}
         <main>  
             <section class="banner">
                 <p id="quotes">One Day Or Day One</p>
-            </section>
-            <section class="hero">
+            </section> <!--The banner is hooked up to a javascript array that rotates thru some quotes-->
+            <section class="hero"> <!-- The hero section, login signup buttons that rotate with logous and dashboard -->
                 <div class="hero-text">
                     <h1>Your fitness <span>journey</span></h1>
                     <p>Track Workouts, develop new skills, level up.</p>
@@ -30,14 +30,14 @@
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="/static/images/Hero.jpg" alt="Fitness">
+                    <img src="/static/images/Hero.jpg" alt="Fitness"> <!--the main image you have in the homepage from unsplash-->
                 </div>
             </section>
-            <section class="activities">
+            <section class="activities"> <!--the scrollable cards that display all available activities -->
                 <div class="activitiesLeft">
                     <h2>Explore Activities</h2>
                     <div class="exerciseCards">
-                        <div class="exerciseCard">
+                        <div class="exerciseCard"> <!--The images for all the possible exercises come from unsplash or google(mostly unsplash)-->
                             <img src="/static/images/Pic1.jpg" alt="Running">
                             <p>Running</p>
                         </div>
@@ -78,14 +78,14 @@
                             <p>Rowing</p>
                         </div>
                     </div>
-                </div>
+                </div> <!--the button on the rightside that takes you to the logging activites page-->
                 <div class="activitesRight">
                     <p>Track your workouts here</p>
                     <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
                 </div>
             </section>
         </main>
-        <script>
+<script>
     const quotes = [
         "One Day Or Day One",
         "The Only Bad Workout Is The One That Didn't Happen",
