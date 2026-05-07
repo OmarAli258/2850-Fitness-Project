@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>FitTrack | Sign Up</title>
+
+    <!-- Main stylesheet for the signup/auth page -->
     <link rel="stylesheet" href="/static/css/main.css">
+
+    <!-- Inter font used for a consistent modern layout -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Full-page container that centres the signup card -->
     <div class="auth-page">
         <div class="auth-card">
 
+            <!-- Signup page heading -->
             <div class="auth-header">
                 <h1>Create account</h1>
                 <p class="auth-sub">Start tracking your fitness today.</p>
             </div>
 
+            <!-- Error message shown if validation fails -->
             {% if error %}
                 <div class="auth-error">⚠ {{ error }}</div>
             {% endif %}
@@ -58,11 +66,13 @@ screen readers announce each label when user focuses on each input field -->
                     <input type="password" id="signup-confirm" name="confirm" placeholder="••••••••" required>
                 </div>
 
+                <!-- Submits signup details to the /signup POST route -->
                 <button type="submit" class="btn btn-primary btn-full">
                     Create account
                 </button>
             </form>
 
+            <!-- Link for users who already have an account -->
             <p class="auth-switch">
                 Already have an account?
                 <a href="/login">Log in</a>
