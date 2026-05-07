@@ -73,7 +73,7 @@
                                 <div class="feed-comment-header">
                                     <strong>{{ comment.user_name }}</strong>
                                     <div class="feed-comment-meta">
-                                        <span>{{ comment.created_at }}</span>
+                                        <span>{{ comment.display_created_at }}</span>
                                         {% if session.get('user_id') == comment.user_id %}
                                         <!-- this button lets users delete their own feed comments -->
                                         <form method="POST" action="/feed/comments/{{ comment.id }}/delete">

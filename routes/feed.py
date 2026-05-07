@@ -18,6 +18,15 @@ def _activity_is_public(cursor, activity_id):
     )
     return cursor.fetchone() is not None
 
+
+#this helper formats stored comment timestamps into a cleaner feed display
+def _format_comment_time(timestamp):
+    try:
+        comment_time = datetime.fromisoformat(timestamp)
+        return comment_time.strftime("%b %d, %Y at %I:%M %p").replace(" 0", " ")
+    except ValueError:
+        return timestamp
+
 @feed.route('/feed')
 def index():
     #this route loads public activities and adds social counts for likes and comments
@@ -72,6 +81,7 @@ def index():
 
         for row in cursor.fetchall():
             comment = dict(row)
+            comment["display_created_at"] = _format_comment_time(comment["created_at"])
             comments_by_activity.setdefault(comment["activity_id"], []).append(comment)
 
     for activity in activities:
