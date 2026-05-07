@@ -961,6 +961,12 @@ tr:hover td  {
     outline: none;
     border-color: var(--yellow);
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
 .checkbox-field {
     display: flex;
     align-items: center;

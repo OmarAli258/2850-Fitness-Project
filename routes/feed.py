@@ -1,10 +1,13 @@
 import uuid
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from flask import Blueprint, redirect, render_template, request, session
 from data.database import get_connection
 
 feed = Blueprint('feed', __name__)
+
+UK_TIMEZONE = ZoneInfo("Europe/London")
 
 
 ACTIVITY_FEED_MESSAGES = {
@@ -39,9 +42,19 @@ def _activity_is_public(cursor, activity_id):
 def _format_comment_time(timestamp):
     try:
         comment_time = datetime.fromisoformat(timestamp)
-        return comment_time.strftime("%b %d, %Y at %I:%M %p").replace(" 0", " ")
-    except ValueError:
+        if comment_time.tzinfo is None:
+            comment_time = comment_time.replace(tzinfo=UK_TIMEZONE)
+        else:
+            comment_time = comment_time.astimezone(UK_TIMEZONE)
+        time_text = comment_time.strftime("%I:%M %p").lstrip("0")
+        return f"{comment_time.strftime('%b')} {comment_time.day}, {comment_time.year} at {time_text}"
+    except (TypeError, ValueError):
         return timestamp
+
+
+#this helper stores new feed timestamps in UK time
+def _now_uk_iso():
+    return datetime.now(UK_TIMEZONE).isoformat(timespec="seconds")
 
 
 #this helper creates natural feed text for each activity type
@@ -150,7 +163,7 @@ def toggle_like(activity_id):
             INSERT INTO activity_likes (id, activity_id, user_id, created_at)
             VALUES (%s, %s, %s, %s)
             """,
-            (str(uuid.uuid4()), activity_id, session["user_id"], datetime.now().isoformat(timespec="seconds"))
+            (str(uuid.uuid4()), activity_id, session["user_id"], _now_uk_iso())
         )
 
     connection.commit()
@@ -180,7 +193,7 @@ def add_comment(activity_id):
         INSERT INTO activity_comments (id, activity_id, user_id, body, created_at)
         VALUES (%s, %s, %s, %s, %s)
         """,
-        (str(uuid.uuid4()), activity_id, session["user_id"], body, datetime.now().isoformat(timespec="seconds"))
+        (str(uuid.uuid4()), activity_id, session["user_id"], body, _now_uk_iso())
     )
 
     connection.commit()
