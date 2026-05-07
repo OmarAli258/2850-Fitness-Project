@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- this page shows the form used to create or edit a training plan -->
+    <!-- this page shows a form for creating a new training plan or editing an existing one -->
+    <!-- collects plan name, exercise type, target frequency, optional duration/distance goals and notes -->
     <meta charset="UTF-8">
     <title>FitTrack | {{ heading }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -119,8 +120,13 @@
 
 <!-- done comments for templates/plan_form.html -->
 <!-- summary of comments: -->
-<!-- - shows the form for creating or editing a training plan -->
-<!-- - displays validation errors when form input is wrong -->
-<!-- - collects plan name, exercise type, frequency, targets and notes -->
-<!-- - lets users update the plan status when editing -->
-<!-- - gives save and cancel actions -->
+<!-- - form page allows creating a new training plan or editing an existing one -->
+<!-- - displays validation errors when required fields are missing or invalid -->
+<!-- - plan name input field is required - user must give their plan a name -->
+<!-- - exercise type dropdown lets user choose what type of workout the plan is for -->
+<!-- - frequency section combines a number input with daily/weekly/monthly/yearly dropdown -->
+<!-- - optional target duration input lets user set how long each session should last -->
+<!-- - optional target distance input lets user set a distance goal for the plan -->
+<!-- - notes textarea lets user add extra details or goals for their training plan -->
+<!-- - status dropdown only appears when editing an existing plan to pause/activate it -->
+<!-- - save button submits the form, cancel button returns to plans list without saving -->

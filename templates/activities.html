@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- this page shows the main activities screen with stats, search, filters and activity tables -->
+    <!-- this page displays all user activities with search, filtering options and upcoming/past groupings -->
+    <!-- allows users to view, edit and delete their logged workouts -->
     <meta charset="UTF-8">
     <title>FitTrack | Activities</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -21,7 +22,8 @@
 <body>
     {% include "navbar.html" %}
     <main>
-        <!-- this section shows the page title and gives the user a button to log a new activity -->
+        <!-- page header section displays the activities page title and provides a button to log a new workout -->
+        <!-- also shows quick summary cards with total number of activities, upcoming scheduled workouts and past completed ones -->
         <section class="hero" style="padding: 3rem 5% 2rem; min-height: auto;">
             <div class="hero-text" style="max-width: 680px; padding-left: 0; padding-right: 0;">
                 <h1>Activities</h1>
@@ -30,7 +32,7 @@
             <a href="/activities/new" class="btn btna" style="margin-left: auto; margin-right: 2rem; padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
         </section>
 
-        <!-- this section shows quick totals for all, upcoming and past activities -->
+        <!-- quick stats section displays three cards showing total activities, number of upcoming workouts and count of past activities -->
         <section class="statsRow" style="padding: 0 5% 2rem; grid-template-columns: repeat(3, 1fr);">
             <div class="statscard">
                 <span class="stat-number">{{ upcoming_activities|length + past_activities|length }}</span>
@@ -46,7 +48,8 @@
             </div>
         </section>
 
-        <!-- this section lets the user search activities, filter by type, apply filters or clear them -->
+        <!-- search and filter section lets users find activities by typing a search term or selecting a specific activity type -->
+        <!-- provides apply and clear buttons to run the search or reset all filters back to showing everything -->
         <section style="padding: 0 5%; margin-bottom: 1.5rem; display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between;">
             <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
                 <label style="display:flex; align-items:center; gap:0.75rem;">
@@ -168,9 +171,10 @@
 
 <!-- done comments for templates/activities.html -->
 <!-- summary of comments: -->
-<!-- - shows the activities page title and log activity button -->
-<!-- - shows activity totals for all, upcoming and past activities -->
-<!-- - handles search and filter controls -->
-<!-- - displays upcoming activities in one table -->
-<!-- - displays past activities in another table -->
-<!-- - gives users view, edit and delete actions for each activity -->
+<!-- - page header shows activities page title and provides a button to log a new workout -->
+<!-- - quick stats cards display three numbers: total activities, upcoming count and past count -->
+<!-- - search input lets users find activities by typing any word like activity type or date -->
+<!-- - filter dropdown lets users show only a specific activity type like Running or Cycling -->
+<!-- - upcoming section displays all activities dated today or in the future in a table with view, edit and delete buttons -->
+<!-- - past section displays all previous activities in a separate table with the same action buttons -->
+<!-- - hidden form sends search and filter values to the server when apply button is clicked -->

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- this page shows the full details for one training plan -->
+    <!-- this page shows the full details for one individual training plan -->
+    <!-- displays plan name, exercise type, frequency, targets and all recorded consistency ratings -->
     <meta charset="UTF-8">
     <title>FitTrack | {{ completion.plan.name }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -174,14 +175,15 @@
         </section>
     </main>
     <script src="/static/js/main.js"></script>
-    <!-- done comments for templates/plan_detail.html -->
-    <!-- summary of comments: -->
-    <!-- - shows one training plan detail page -->
-    <!-- - displays the plan name, basic details and navigation buttons -->
-    <!-- - shows session completion progress -->
-    <!-- - displays saved targets and notes for the plan -->
-    <!-- - shows consistency rating totals -->
-    <!-- - lets users record a consistency rating for a session -->
-    <!-- - lists saved consistency records for the plan -->
+<!-- done comments for templates/plan_detail.html -->
+<!-- summary of comments: -->
+<!-- - this page shows all details for one specific training plan -->
+<!-- - displays plan name, exercise type, frequency and whether the plan is currently active -->
+<!-- - shows total sessions planned versus how many have been completed with a progress bar -->
+<!-- - displays any target duration, target distance and notes the user saved -->
+<!-- - consistency section shows summary of how well user followed the plan with percentages -->
+<!-- - form lets user rate their performance for a session as poor, fair, good or excellent -->
+<!-- - table lists each recorded consistency rating with the date it was recorded -->
+<!-- - edit button changes plan details, delete button removes the entire plan -->
 </body>
 </html>

@@ -330,8 +330,11 @@ def search_activities(user_id, query, limit=10):
 
 #done comments for data/activity_store.py
 #summary of comments:
-# - creates, gets, updates and deletes activities from the database
-# - filters and searches activities for the activities page
-# - calculates dashboard summary numbers like workouts, minutes, distance and favourite activity
-# - prepares activity data for dashboard charts
-# - counts activity types and limits search results
+# - create_activity adds a new workout to the database with type, date, duration and optional distance
+# - get_activities_for_user retrieves all workouts for the logged in user with optional search and type filters
+# - get_one_activity fetches a single activity by its unique id
+# - update_activity saves changes to an existing workout like duration or distance
+# - delete_activity removes an activity from the database permanently
+# - get_activity_summary calculates totals for workouts, minutes, distance and favourite activity type
+# - get_chart_data prepares activity data formatted for the dashboard chart display
+# - search_activities provides quick search results for the search dropdown

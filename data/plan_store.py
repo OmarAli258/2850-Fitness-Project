@@ -398,12 +398,15 @@ def delete_adherence(adherence_id, user_id):
 
 #done comments for data/plan_store.py
 #summary of comments:
-# - creates, gets, updates and deletes plans from the database
-# - filters plans by status and gets active plans
-# - calculates plan session progress and frequency targets
-# - calculates plan summary numbers for the plans page
-# - records, gets, summarises and deletes consistency (adherence) records
-# - keeps consistency as the main user word while adherence remains in some code names
-#note: consistency is the main word we use for users because it is easier to understand than adherence
-#the code still says adherence in some function, table and variable names because that was the original label
-#that is why comments show consistency (adherence), so the simple user word and the code word both make sense
+# - create_plan adds a new training plan to the database with name, exercise type, frequency and optional targets
+# - get_plans_for_user retrieves all plans for the logged in user with optional status filter
+# - get_one_plan fetches a single plan by its unique id
+# - update_plan saves changes to an existing plan like name, exercise type or status
+# - delete_plan removes a plan from the database permanently
+# - get_plan_summary calculates total plans and active plans counts for the plans page
+# - record_consistency lets users rate how well they followed the plan after each session
+# - get_consistency_records fetches all recorded ratings for one plan with dates
+# - get_consistency_summary totals up all consistency ratings for the plan detail page
+# - delete_consistency removes one consistency record from the database
+#note: consistency is the user friendly word we use because it is easier to understand
+#the code still uses adherence in some function and variable names from the original implementation

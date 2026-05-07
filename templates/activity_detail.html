@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- this page shows the full details for one activity -->
+    <!-- this page shows the full details for one single activity including type, date, duration, distance and notes -->
+    <!-- provides options to edit the activity details or delete the entire activity from the database -->
     <meta charset="UTF-8">
     <title>FitTrack | View Activity</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -151,9 +152,9 @@
 
 <!-- done comments for templates/activity_detail.html -->
 <!-- summary of comments: -->
-<!-- - shows one activity detail page -->
-<!-- - displays activity type, privacy status and back button -->
-<!-- - shows date, duration and distance stats -->
-<!-- - shows notes when they exist -->
-<!-- - shows a route map when gpx route data exists -->
-<!-- - gives edit and delete actions for the activity -->
+<!-- - page shows full details for one activity including type, date, duration and distance -->
+<!-- - displays a green Public badge or yellow Private badge depending on visibility setting -->
+<!-- - shows a back button to return to the activities list -->
+<!-- - displays any notes the user added when logging the activity -->
+<!-- - shows an interactive map when GPX route data was uploaded -->
+<!-- - provides an edit button to change activity details and a delete button to remove activity -->

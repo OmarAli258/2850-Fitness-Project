@@ -1,5 +1,5 @@
 #this file defines routes and logic for creating, viewing, editing and deleting activities
-#also shows main activities page with search, filtering and grouping by upcming and past
+#also shows main activities page with search, filtering and grouping by upcoming and past
 
 #import libraries for gpx parsing, json handling, flask routing/session features, activity/plan data access and date comparisons
 
@@ -302,9 +302,11 @@ def show_activities():
 
 #done comments for routes/activities.py 
 #summary of comments:
-# - shows blank activity form for logging new workout
-# - shows activity form
-# - validates input
-# - saves new and edited activities
-# - shows activity details
-# - deletes activities and shows main activities page with search, filtering and grouping by upcoming and past
+# - blank form route shows an empty activity form so users can log a new workout
+# - create route handles saving a newly logged workout to the database
+# - view route displays one activity with all its details like date, duration and distance
+# - edit route shows the activity form pre filled with existing data for changes
+# - update route saves any edits made to an existing activity in the database
+# - delete route removes an activity from the database and shows the activities list
+# - main activities page shows all activities split into upcoming and past groups
+# - search and filter parameters work together to find specific activities
