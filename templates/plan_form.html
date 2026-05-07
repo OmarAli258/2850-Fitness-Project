@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- this page shows a form for creating a new training plan or editing an existing one -->
+    <!-- collects plan name, exercise type, target frequency, optional duration/distance goals and notes -->
+    <meta charset="UTF-8">
+    <title>FitTrack | {{ heading }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <main class="auth-page">
+        <!-- this card holds the plan form and keeps the page layout consistent with the other forms -->
+        <section class="auth-card">
+            <div class="auth-header">
+                <span class="auth-logo">FitTrack</span>
+                <h1>{{ heading }}</h1>
+                <p class="auth-sub">Set up your exercise programme with goals and targets.</p>
+            </div>
+
+            <!-- this shows validation errors if the plan form is submitted with missing or invalid details -->
+            {% if error %}
+            <div class="auth-error">{{ error }}</div>
+            {% endif %}
+
+            <!-- this form sends plan details to either the create route or edit route -->
+            <form action="{{ action }}" method="post" class="auth-form">
+                <!-- this lets the user name their training plan -->
+                <div class="form-group">
+                    <label>Plan Name</label>
+                    <input type="text" name="name" value="{{ form_data.name }}" placeholder="e.g. Marathon Training">
+                </div>
+
+                <!-- this lets the user choose what type of exercise the plan is for -->
+                <div class="form-group">
+                    <label>Exercise Type</label>
+                    <select name="exercise_type">
+                        <option value="">Select one</option>
+                        {% for type in activity_types %}
+                        <option value="{{ type }}" {% if form_data.exercise_type == type %}selected{% endif %}>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- this lets the user enter how often they want to follow the plan -->
+                <div class="form-group">
+                    <label>Frequency</label>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <input type="number" name="frequency_number" value="{{ form_data.frequency_number }}" placeholder="e.g. 3" min="1" step="1" oninput="this.value = Math.round(this.value) || ''" style="flex:1; min-width:100px;">
+                        <select name="frequency_unit" style="flex:2; min-width:180px;">
+                            <option value="daily" {% if form_data.frequency_unit == "daily" %}selected{% endif %}>daily</option>
+                            <option value="weekly" {% if form_data.frequency_unit == "weekly" %}selected{% endif %}>weekly</option>
+                            <option value="monthly" {% if form_data.frequency_unit == "monthly" %}selected{% endif %}>monthly</option>
+                            <option value="yearly" {% if form_data.frequency_unit == "yearly" %}selected{% endif %}>yearly</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- this lets the user add an optional duration target for each session -->
+                <div class="form-group">
+                    <label>Target Duration per Session</label>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <input type="text" name="target_duration" value="{{ form_data.target_duration }}" placeholder="e.g. 45" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" style="flex:2; min-width:160px;">
+                        <select name="target_duration_unit" style="flex:1; min-width:120px;">
+                            <option value="minutes" {% if form_data.target_duration_unit != "hours" %}selected{% endif %}>minutes</option>
+                            <option value="hours" {% if form_data.target_duration_unit == "hours" %}selected{% endif %}>hours</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- this lets the user add an optional distance target for the plan -->
+                <div class="form-group">
+                    <label>Target Distance in km (optional)</label>
+                    <input type="number" name="target_distance" value="{{ form_data.target_distance }}" placeholder="e.g. 5" min="0" step="0.01">
+                </div>
+
+                <!-- this lets the user add extra notes or goals for the plan -->
+                <div class="form-group">
+                    <label>Notes / Goals (optional)</label>
+                    <textarea name="notes" rows="4" placeholder="e.g. Build up to half marathon distance">{{ form_data.notes }}</textarea>
+                </div>
+
+                <!-- this lets the user update the plan status when editing an existing plan -->
+                {% if form_data.status %}
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="active" {% if form_data.status == "active" %}selected{% endif %}>Active</option>
+                        <option value="paused" {% if form_data.status == "paused" %}selected{% endif %}>Paused</option>
+                        <option value="completed" {% if form_data.status == "completed" %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+                {% endif %}
+
+                <!-- this gives the user buttons to save the form or cancel back to plans -->
+                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                    <button class="btn btn-primary btn-full" type="submit">{{ submit_label }}</button>
+                    <a class="btn btn-ghost" href="/plans">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+
+<!-- done comments for templates/plan_form.html -->
+<!-- summary of comments: -->
+<!-- - form page allows creating a new training plan or editing an existing one -->
+<!-- - displays validation errors when required fields are missing or invalid -->
+<!-- - plan name input field is required - user must give their plan a name -->
+<!-- - exercise type dropdown lets user choose what type of workout the plan is for -->
+<!-- - frequency section combines a number input with daily/weekly/monthly/yearly dropdown -->
+<!-- - optional target duration input lets user set how long each session should last -->
+<!-- - optional target distance input lets user set a distance goal for the plan -->
+<!-- - notes textarea lets user add extra details or goals for their training plan -->
+<!-- - status dropdown only appears when editing an existing plan to pause/activate it -->
+<!-- - save button submits the form, cancel button returns to plans list without saving -->

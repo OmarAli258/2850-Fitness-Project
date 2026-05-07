@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- this page shows the full details for one single activity including type, date, duration, distance and notes -->
+    <!-- provides options to edit the activity details or delete the entire activity from the database -->
     <meta charset="UTF-8">
     <title>FitTrack | View Activity</title>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -8,18 +10,18 @@
     <link rel="icon" href="/static/images/favicon.ico">
     
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         .detail-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 3rem auto;
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 2rem;
+            padding: 3rem;
             color: var(--text);
         }
         .detail-header {
@@ -77,11 +79,20 @@
     {% include "navbar.html" %}
 
     <main class="detail-container">
+        <!-- this header shows the activity type, private badge if needed and back button -->
         <div class="detail-header">
-            <h1>{{ activity.type }}</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <h1>{{ activity.type }}</h1>
+                {% if activity.is_public %}
+                <span style="background: #2ecc71; color: #fff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600;">Public</span>
+                {% else %}
+                <span style="background: var(--yellow); color: #000; padding: 0.5rem 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600;">Private</span>
+                {% endif %}
+            </div>
             <a href="/activities" class="btn btnb">← Back</a>
         </div>
 
+        <!-- this section shows the main stats for the activity -->
         <div class="detail-stats">
             <div class="stat-item">
                 <span>Date</span>
@@ -97,6 +108,7 @@
             </div>
         </div>
 
+        <!-- this section shows notes only when the activity has notes saved -->
         {% if activity.notes %}
         <div class="detail-notes">
             <h3 style="color: var(--yellow); margin-bottom: 0.5rem;">Notes</h3>
@@ -104,35 +116,32 @@
         </div>
         {% endif %}
 
+        <!-- this section shows a map only when route data exists from a gpx upload -->
         {% if activity.route_data %}
         <div id="map"></div>
         <script>
-            // Get the route data from the server
+            // load the map with the route from gpx
             var routeData = {{ activity.route_data | safe }};
             
             if (routeData && routeData.length > 0) {
-                // Initialize map centered at the first point
                 var map = L.map('map').setView([routeData[0][0], routeData[0][1]], 13);
                 
-                // Add OpenStreetMap tiles
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '© OpenStreetMap'
                 }).addTo(map);
                 
-                // Draw the polyline
-                var polyline = L.polyline(routeData, {color: '#f5c518', weight: 4}).addTo(map);
-                
-                // Zoom the map to the polyline
+                var polyline = L.polyline(routeData, {color: '#3498db', weight: 6}).addTo(map);
                 map.fitBounds(polyline.getBounds());
             }
         </script>
         {% endif %}
 
-        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-            <a href="/activities/{{ activity.id }}/edit" class="btn btnb">Edit</a>
-            <form action="/activities/{{ activity.id }}/delete" method="post" style="margin:0;">
-                <button type="submit" class="btn" style="background: #ff4d4d; color: white; border: none; cursor: pointer;">Delete</button>
+        <!-- this section gives the user buttons to edit or delete the activity -->
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+            <a href="/activities/{{ activity.id }}/edit" class="btn btna">Edit</a>
+            <form method="POST" action="/activities/{{ activity.id }}/delete" style="display: inline;">
+                <button type="submit" class="btn btna btn-delete">Delete</button>
             </form>
         </div>
     </main>
@@ -140,3 +149,12 @@
     <script src="/static/js/main.js"></script>
 </body>
 </html>
+
+<!-- done comments for templates/activity_detail.html -->
+<!-- summary of comments: -->
+<!-- - page shows full details for one activity including type, date, duration and distance -->
+<!-- - displays a green Public badge or yellow Private badge depending on visibility setting -->
+<!-- - shows a back button to return to the activities list -->
+<!-- - displays any notes the user added when logging the activity -->
+<!-- - shows an interactive map when GPX route data was uploaded -->
+<!-- - provides an edit button to change activity details and a delete button to remove activity -->

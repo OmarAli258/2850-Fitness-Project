@@ -9,10 +9,11 @@ def register(name, email, password):
     cursor = connection.cursor()
 
     # Check if this email is already registered
-    existing_user = cursor.execute(
-        "SELECT * FROM users WHERE email = ?",
+    cursor.execute(
+        "SELECT * FROM users WHERE email = %s",
         (email,)
-    ).fetchone()
+    )
+    existing_user = cursor.fetchone()
 
     if existing_user is not None:
         connection.close()
@@ -26,7 +27,7 @@ def register(name, email, password):
     cursor.execute(
         """
         INSERT INTO users (id, name, email, password)
-        VALUES (?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s)
         """,
         (user_id, name, email, password_hash)
     )
@@ -47,10 +48,11 @@ def login(email, password):
     connection = get_connection()
     cursor = connection.cursor()
 
-    user = cursor.execute(
-        "SELECT * FROM users WHERE email = ?",
+    cursor.execute(
+        "SELECT * FROM users WHERE email = %s",
         (email,)
-    ).fetchone()
+    )
+    user = cursor.fetchone()
 
     connection.close()
 
@@ -72,10 +74,11 @@ def find_by_id(user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    user = cursor.execute(
-        "SELECT * FROM users WHERE id = ?",
+    cursor.execute(
+        "SELECT * FROM users WHERE id = %s",
         (user_id,)
-    ).fetchone()
+    )
+    user = cursor.fetchone()
 
     connection.close()
 

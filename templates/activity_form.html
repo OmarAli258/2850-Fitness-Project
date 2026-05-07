@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- this page shows the form used to create or edit an activity -->
     <meta charset="UTF-8">
     <title>FitTrack | {{ heading }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="/static/images/favicon.ico">
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     {% include "navbar.html" %}
 
     <main class="auth-page">
+        <!-- this card holds the activity form and keeps the layout consistent with other forms -->
         <section class="auth-card">
             <div class="auth-header">
                 <span class="auth-logo">FitTrack</span>
@@ -19,11 +31,14 @@
                 <p class="auth-sub">Save or update your workout details here.</p>
             </div>
 
+            <!-- this shows validation errors if the form is submitted with missing or invalid details -->
             {% if error %}
             <div class="auth-error">{{ error }}</div>
             {% endif %}
 
+            <!-- this form sends activity details to either the create route or edit route -->
             <form action="{{ action }}" method="post" enctype="multipart/form-data" class="auth-form">
+                <!-- this lets the user pick the type of workout they did -->
                 <div class="form-group">
                     <label>Activity Type</label>
                     <select name="activity_type">
@@ -34,34 +49,65 @@
                     </select>
                 </div>
 
+                <!-- this lets the user choose the date of the activity -->
                 <div class="form-group">
                     <label>Date</label>
                     <input type="date" name="date" value="{{ form_data.date }}">
                 </div>
 
+                <!-- this lets the user enter how long the activity lasted and choose minutes or hours -->
                 <div class="form-group">
-                    <label>Duration (minutes)</label>
-                    <input type="text" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45">
+                    <label>Duration</label>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <input type="number" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45" min="0" step="0.01" style="flex:2; min-width:160px;">
+                        <select name="duration_unit" style="flex:1; min-width:120px;">
+                            <option value="minutes" {% if form_data.duration_unit != "hours" %}selected{% endif %}>minutes</option>
+                            <option value="hours" {% if form_data.duration_unit == "hours" %}selected{% endif %}>hours</option>
+                        </select>
+                    </div>
                 </div>
 
 
+                <!-- this lets the user enter distance if the activity has one -->
                 <div class="form-group">
                     <label>Distance in km (optional)</label>
-                    <input type="text" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5">
+                    <input type="number" name="distance" value="{{ form_data.distance }}" placeholder="e.g. 5.5" min="0" step="0.01">
                 </div>
 
-            
-
+                <!-- this lets the user connect the activity to one of their plans -->
                 <div class="form-group">
-                    <label>Upload GPX File (Optional, auto-fills details & adds map)</label>
-                    <input type="file" name="gpx_file" accept=".gpx">
+                    <label>Link to Plan (optional)</label>
+                    <select name="plan_id">
+                        <option value="">No plan</option>
+                        {% for plan in active_plans %}
+                        <option value="{{ plan.id }}" {% if form_data.plan_id == plan.id %}selected{% endif %}>{{ plan.name }} ({{ plan.exercise_type }})</option>
+                        {% endfor %}
+                    </select>
                 </div>
 
+                <!-- this lets the user upload a gpx file to show route map -->
+                <div class="form-group">
+                    <label>Import from Strava/GPS (Optional)</label>
+                    <input type="file" name="gpx_file" accept=".gpx" placeholder="Upload GPX file">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Upload a GPX file from Strava or your GPS watch to see your route on a map</p>
+                </div>
+
+                <!-- this lets the user add optional notes about the activity -->
                 <div class="form-group">
                     <label>Notes (optional)</label>
                     <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
                 </div>
 
+                <!-- this lets the user choose if the activity should appear in the community feed -->
+                <div class="form-group">
+                    <label>Activity Visibility</label>
+                    <select name="visibility" style="padding: 0.85rem 1rem; border-radius: 12px; border: 2px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 1rem; width: 100%;">
+                        <option value="Private" {% if not form_data.is_public %}selected{% endif %}>Private</option>
+                        <option value="Public" {% if form_data.is_public %}selected{% endif %}>Public</option>
+                    </select>
+                </div>
+
+                <!-- this gives the user buttons to save the form or cancel back to activities -->
                 <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                     <button class="btn btn-primary btn-full" type="submit">{{ submit_label }}</button>
                     <a class="btn btn-ghost" href="/activities">Cancel</a>
@@ -72,3 +118,13 @@
     <script src="/static/js/main.js"></script>
 </body>
 </html>
+
+<!-- done comments for templates/activity_form.html -->
+<!-- summary of comments: -->
+<!-- - shows the form for creating or editing an activity -->
+<!-- - displays validation errors when form input is wrong -->
+<!-- - collects workout type, date, duration, distance and notes -->
+<!-- - lets users link an activity to a plan -->
+<!-- - supports optional gpx upload for route data -->
+<!-- - lets users make an activity public or private -->
+<!-- - gives save and cancel actions -->

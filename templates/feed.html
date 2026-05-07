@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Community Feed - FitTrack</title>
     <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     {% include "navbar.html" %}
@@ -17,7 +19,7 @@
                 <p>See what other FitTrack users are up to</p>
             </div>
             <div>
-                <a href="/activities/new" class="btn btna">+ Log Activity</a>
+                <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
             </div>
         </section>
 
@@ -44,9 +46,7 @@
                     {% endif %}
 
                     {% if activity.route_data %}
-                    <div class="feed-map">
-                        🗺️ [ GPX Route Available ]
-                    </div>
+                    <div class="feed-map" data-route="{{ activity.route_data | safe }}"></div>
                     {% endif %}
                 </article>
                 {% endfor %}
@@ -55,5 +55,10 @@
             {% endif %}
         </section>
     </main>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        initFeedMaps();
+    </script>
 </body>
-</html>30
+</html>

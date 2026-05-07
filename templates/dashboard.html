@@ -25,7 +25,7 @@
                     </form>
                     <div id="searchResults" class="search-dropdown"></div> <!--this is where the results appear-->
                 </div>
-                <a href="/activities/new" class="btn btna">+ Log Activity</a>
+                <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
             </div>
     </section>
     <!--The second main section of the dashboard the stats and graphs total workouts, time this week distance covered this week favorite workout and races done-->
@@ -41,7 +41,7 @@
             <span class="stat-label">Total Time</span>
         </div>
         <div class="statscard" id="distance">
-            <span class="stat-icon"></span>
+            <span class="stat-icon">📍</span>
             <span class="stat-number">{{ summary.total_distance }} km</span>
             <span class="stat-label">Total Distance</span>
         </div>
@@ -61,59 +61,97 @@
         <canvas id="chart"></canvas> <!--the charts themselves are made in javascript theyre hidden in css until clicked -->
     </section>
 <!-- the carousel for recent activity also made using JS-->
-    <section class="recentActivity">
-        <div class="activityLeft">
-            <h2>Recent Activity</h2>
+<section class="recentActivity">
+    <div class="activityLeft">
+        <h2>Recent Activity</h2>
 
-            {% if recent_activities %} {#appears only if there is recent activity#}
-            <div class="carouselall">
-                <button class="carouselbtn" id="previous" type="button"><</button>
-                <div class="carousel">
-                    {% for activity in recent_activities %}
-                    <div class="recentCard {% if loop.first %}active{% endif %}">
-                        {% if activity.type == "Running" %}
-                            <img src="/static/images/Pic1.jpg" alt="Running">
-                        {% elif activity.type == "Swimming" %}
-                            <img src="/static/images/Pic2.jpg" alt="Swimming">
-                        {% elif activity.type == "Cycling" %}
-                            <img src="/static/images/Pic4.jpg" alt="Cycling">
-                        {% elif activity.type == "Gym" %}
-                            <img src="/static/images/Pic5.jpg" alt="Gym">
-                        {% else %}
-                            <img src="/static/images/Pic3.jpg" alt="Activity">
-                        {% endif %} {#depending on the activity display the correct image and activity details below#}
-                        <div class="recentCardBody">
-                            <h3>{{ activity.type }}</h3>
-                            <p class="recentMeta">
-                                {{ activity.date }} | {{ activity.duration }} min |
-                                {% if activity.distance %}{{ activity.distance }}{% else %}No distance{% endif %}
-                            </p>
-                            <div class="recentfooter">
-                                <a href="/activities/{{ activity.id }}" class="btn btnb recentbtn">View</a>
-                                <a href="/activities/{{ activity.id }}/edit" class="btn btnb recentbtn">Edit</a>
-                            </div>
+        {% if recent_activities %} {#appears only if there is recent activity#}
+        <div class="carouselall">
+            <button class="carouselbtn" id="previous" type="button"><</button>
+            <div class="carousel">
+                {% for activity in recent_activities %}
+                <div class="recentCard {% if loop.first %}active{% endif %}">
+                    {% if activity.type == "Running" %}
+                        <img src="/static/images/Pic1.jpg" alt="Running">
+                    {% elif activity.type == "Swimming" %}
+                        <img src="/static/images/Pic2.jpg" alt="Swimming">
+                    {% elif activity.type == "Cycling" %}
+                        <img src="/static/images/Pic4.jpg" alt="Cycling">
+                    {% elif activity.type == "Gym" %}
+                        <img src="/static/images/Pic5.jpg" alt="Gym">
+                    {% else %}
+                        <img src="/static/images/Pic3.jpg" alt="Activity">
+                    {% endif %} {#depending on the activity display the correct image and activity details below#}
+                    <div class="recentCardBody">
+                        <h3>{{ activity.type }}</h3>
+                        <p class="recentMeta">
+                            {{ activity.date }} | {{ activity.duration }} min |
+                            {% if activity.distance %}{{ activity.distance }}{% else %}No distance{% endif %}
+                        </p>
+                        <div class="recentfooter">
+                            <a href="/activities/{{ activity.id }}" class="btn btnb recentbtn">View</a>
+                            <a href="/activities/{{ activity.id }}/edit" class="btn btnb recentbtn">Edit</a>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
-                <button class="carouselbtn" id="next" type="button">></button>
-            </div> <!--if no recent activites then all the user sees is the button-->
-            {% else %} 
-                <p>No recent activities yet.</p>
-                <a href="/activities/new" class="btn btna">Log your first activity</a>
-            {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carouselbtn" id="next" type="button">></button>
+        </div> <!--if no recent activites then all the user sees is the button-->
+        {% else %} 
+            <p>No recent activities yet.</p>
+            <a href="/activities/new" class="btn btna">Log your first activity</a>
+        {% endif %}
+    </div>
+
+    <!-- Upcoming Activities card from friend's update -->
+    <div class="activityRight" style="text-align: center;">
+        <h2>Upcoming Activities</h2>
+        {% if upcoming_activities %}
+        <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for activity in upcoming_activities %}
+            <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="text-align: left;">
+                    <strong>{{ activity.type }}</strong>
+                    <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">
+                        {{ activity.date }} · {{ activity.duration }} min
+                        {% if activity.distance %} · {{ activity.distance }} km{% endif %}
+                    </p>
+                </div>
+                <a href="/activities/{{ activity.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
+            </div>
+            {% endfor %}
         </div>
-<!--final segment in dashboard view all the activites btn on the right -->
-        <div class="activityRight">
-            <h2>View All Activities</h2>
-            <p>See your full workout history</p>
-            <a href="/activities" class="btn btna">View All</a>
+        {% else %}
+        <p>No upcoming activities.</p>
+        {% endif %}
+        <a href="/activities" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+    </div>
+
+    <!-- Recent Plans card from friend's update -->
+    <div class="activityRight" style="text-align: center;">
+        <h2>Recent Plans</h2>
+        {% if plans %}
+        <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for plan in plans[:5] %}
+            <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>{{ plan.name }}</strong>
+                    <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">{{ plan.exercise }}</p>
+                </div>
+                <a href="/plans/{{ plan.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
+            </div>
+            {% endfor %}
         </div>
-    </section>
+        {% else %}
+        <p>No plans yet.</p>
+        {% endif %}
+        <a href="/plans" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+    </div>
+</section>
 </main> <!--chart is sent from flask to JS-->
 <script> 
     const CHART_DATA = {{ chart_data | tojson }};
-    console.log(CHART_DATA);
 </script>
 <script src="/static/js/dashboard.js"></script>
 </body>
