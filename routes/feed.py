@@ -7,6 +7,22 @@ from data.database import get_connection
 feed = Blueprint('feed', __name__)
 
 
+ACTIVITY_FEED_MESSAGES = {
+    "Running": "went for a run",
+    "Walking": "went for a walk",
+    "Cycling": "went cycling",
+    "Swimming": "went swimming",
+    "Weightlifting": "did a weightlifting session",
+    "Crossfit": "completed a Crossfit workout",
+    "Football": "played football",
+    "Yoga": "did a yoga session",
+    "Hiking": "went hiking",
+    "Rowing": "went rowing",
+    "Gym": "completed a gym workout",
+    "Weights": "did a weights session",
+}
+
+
 #this helper checks that users can only interact with activities that are public on the feed
 def _activity_is_public(cursor, activity_id):
     cursor.execute(
@@ -26,6 +42,11 @@ def _format_comment_time(timestamp):
         return comment_time.strftime("%b %d, %Y at %I:%M %p").replace(" 0", " ")
     except ValueError:
         return timestamp
+
+
+#this helper creates natural feed text for each activity type
+def _get_feed_message(activity_type):
+    return ACTIVITY_FEED_MESSAGES.get(activity_type, f"logged a {activity_type} workout")
 
 @feed.route('/feed')
 def index():
@@ -85,6 +106,7 @@ def index():
             comments_by_activity.setdefault(comment["activity_id"], []).append(comment)
 
     for activity in activities:
+        activity["feed_message"] = _get_feed_message(activity["type"])
         activity["comments"] = comments_by_activity.get(activity["id"], [])
 
     connection.close()
