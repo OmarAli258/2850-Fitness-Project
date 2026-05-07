@@ -61,6 +61,40 @@ def setup_database():
     except Exception:
         connection.rollback()
 
+    #this table stores likes that users add to public feed activities
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS activity_likes (
+                id TEXT PRIMARY KEY,
+                activity_id TEXT NOT NULL,
+                user_id TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                UNIQUE (activity_id, user_id),
+                FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        connection.commit()
+    except Exception:
+        connection.rollback()
+
+    #this table stores comments users leave on public feed activities
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS activity_comments (
+                id TEXT PRIMARY KEY,
+                activity_id TEXT NOT NULL,
+                user_id TEXT NOT NULL,
+                body TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        connection.commit()
+    except Exception:
+        connection.rollback()
+
     #this table stores race tracker information
     try:
         cursor.execute("""
