@@ -3,25 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>FitTrack | Sign Up</title>
+
+    <!-- Main stylesheet for the signup/auth page -->
     <link rel="stylesheet" href="/static/css/main.css">
+
+    <!-- Inter font used for a consistent modern layout -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Full-page container that centres the signup card -->
     <div class="auth-page">
         <div class="auth-card">
 
+            <!-- Signup page heading -->
             <div class="auth-header">
                 <h1>Create account</h1>
                 <p class="auth-sub">Start tracking your fitness today.</p>
             </div>
 
+            <!-- Error message shown if validation fails -->
             {% if error %}
                 <div class="auth-error">⚠ {{ error }}</div>
             {% endif %}
 
+            <!-- Signup form used to create a new user account -->
             <form action="/signup" method="post" class="auth-form">
                 <div class="form-group">
                     <label>Full name</label>
+
+                    <!-- User's full name is saved with the account -->
                     <input
                         type="text"
                         name="name"
@@ -33,6 +44,8 @@
 
                 <div class="form-group">
                     <label>Email</label>
+
+                    <!-- Email is used as the unique login identifier -->
                     <input
                         type="email"
                         name="email"
@@ -44,19 +57,25 @@
 
                 <div class="form-group">
                     <label>Password</label>
+
+                    <!-- Password is hashed in user_store.py before being saved -->
                     <input type="password" name="password" placeholder="At least 6 characters" required>
                 </div>
 
                 <div class="form-group">
                     <label>Confirm password</label>
+
+                    <!-- Confirmation field helps prevent typing mistakes -->
                     <input type="password" name="confirm" placeholder="••••••••" required>
                 </div>
 
+                <!-- Submits signup details to the /signup POST route -->
                 <button type="submit" class="btn btn-primary btn-full">
                     Create account
                 </button>
             </form>
 
+            <!-- Link for users who already have an account -->
             <p class="auth-switch">
                 Already have an account?
                 <a href="/login">Log in</a>
