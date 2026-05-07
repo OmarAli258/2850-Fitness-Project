@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from flask import Flask, session, redirect, render_template
+from flask import Flask, render_template  # noqa: E402
 from routes.auth import auth
 from routes.activities import activities
 from routes.dashboard import dashboard
