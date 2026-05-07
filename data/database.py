@@ -139,7 +139,22 @@ def setup_database():
         connection.commit()
     except Exception:
         connection.rollback()
-
+    # this table stores friend requests and accepted friendships
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS friendships (
+                id SERIAL PRIMARY KEY,
+                from_user_id TEXT NOT NULL,
+                to_user_id TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending',
+                FOREIGN KEY (from_user_id) REFERENCES users(id),
+                FOREIGN KEY (to_user_id) REFERENCES users(id),
+                UNIQUE(from_user_id, to_user_id)
+            )
+        """)
+        connection.commit()
+    except Exception:
+        connection.rollback()
     connection.close()
 
 

@@ -9,7 +9,7 @@ from routes.races import races
 from routes.feed import feed
 from routes.plans import plans
 from data.database import setup_database
-
+from routes.friends import friends
 app = Flask(__name__)
 app.secret_key = "fittrack-secret-2025"
 
@@ -21,6 +21,7 @@ app.register_blueprint(dashboard)
 app.register_blueprint(races)
 app.register_blueprint(feed) 
 app.register_blueprint(plans) 
+app.register_blueprint(friends)
 
 @app.route("/")
 def home():

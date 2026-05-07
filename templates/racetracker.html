@@ -27,32 +27,38 @@
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Location</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Date</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Length</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Edit</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
                                 </tr>
                             </thead>
-                        <tbody>
-                            {% for race in races if race['status'] == 'upcoming' %}
-                            <tr>
-                                <td>{{ race['name'] }}</td>
-                                <td>{{ race['location'] }}</td>
-                                <td>{{ race['date'] }}
-                                    <span class="countdown">{{ race['countdown'] }}</span>
-                                </td>
-                                <td>{{ race['race_type'] }}</td>
-                                <td>
-                                    <form method="POST" action="/races/{{ race['id'] }}/delete">
-                                        <button type="submit" class="delete-btn">🗑️</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="5">No upcoming races</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            <tbody>
+                                {% for race in races if race['status'] == 'upcoming' %}
+                                <tr>
+                                    <td>{{ race['name'] }}</td>
+                                    <td>{{ race['location'] }}</td>
+                                    <td>{{ race['date'] }}
+                                        <span class="countdown">{{ race['countdown'] }}</span>
+                                    </td>
+                                    <td>{{ race['race_type'] }}</td>
+                                    <td>
+                                        <a href="/races/{{ race['id'] }}/edit" class="edit-btn">✏️</a>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="/races/{{ race['id'] }}/delete">
+                                            <button type="submit" class="delete-btn">🗑️</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="6">No upcoming races</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
+
                 <section class="pastraces">
                     <h2>Past Races</h2>
                     <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1rem;">
@@ -65,35 +71,41 @@
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Length</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Time</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Record</th>
+                                    <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Edit</th>
                                     <th style="padding: 1.5rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
                                 </tr>
                             </thead>
-                        <tbody>
-                            {% for race in races if race['status'] == 'past' %}
-                            <tr class="{{ 'pbrow' if race['is_pb'] == 1 else '' }}">
-                                <td>{{ race['name'] }}</td>
-                                <td>{{ race['location'] }}</td>
-                                <td>{{ race['date'] }}</td>
-                                <td>{{ race['race_type'] }}</td>
-                                <td>{{ race['finish_time'] }}</td>
-                                <td class="{{ 'pbcol' if race['is_pb'] == 1 else '' }}">
-                                    {{ '🥇 PB' if race['is_pb'] == 1 else '' }}
-                                </td>
-                                <td>
-                                    <form method="POST" action="/races/{{ race['id'] }}/delete">
-                                        <button type="submit" class="delete-btn">🗑️</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="7">No past races</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            <tbody>
+                                {% for race in races if race['status'] == 'past' %}
+                                <tr class="{{ 'pbrow' if race['is_pb'] == 1 else '' }}">
+                                    <td>{{ race['name'] }}</td>
+                                    <td>{{ race['location'] }}</td>
+                                    <td>{{ race['date'] }}</td>
+                                    <td>{{ race['race_type'] }}</td>
+                                    <td>{{ race['finish_time'] }}</td>
+                                    <td class="{{ 'pbcol' if race['is_pb'] == 1 else '' }}">
+                                        {{ '🥇 PB' if race['is_pb'] == 1 else '' }}
+                                    </td>
+                                    <td>
+                                        <a href="/races/{{ race['id'] }}/edit" class="edit-btn">✏️</a>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="/races/{{ race['id'] }}/delete">
+                                            <button type="submit" class="delete-btn">🗑️</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="8">No past races</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
             </div>
+
             <div class="nextrace-panel">
                 {% set next_race = races | selectattr('status', 'equalto', 'upcoming') | first %}
                 {% if next_race %}
@@ -118,4 +130,4 @@
         </div>
     </main>
 </body>
-</html>
+</html> 
