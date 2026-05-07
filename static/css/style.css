@@ -13,6 +13,51 @@
     box-sizing: border-box;
 }
 
+/* accessibility - focus styles for keyboard navigation
+shows a yellow outline around any element that is currently selected
+helps keyboard-only users see where they are on the page */
+*:focus {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - only show focus outline for keyboard users, not mouse clicks */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* accessibility - strong yellow outline for keyboardTab navigation */
+*:focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - ensure focus is visible even after clicking with mouse */
+*:focus:active {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - skip navigation link
+hidden link that appears at top of page when user presses Tab
+lets keyboard users skip past the navigation menu and go straight to main content */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--yellow);
+    color: #000;
+    padding: 1rem 2rem;
+    z-index: 10000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* accessibility - show skip link when it receives keyboard focus */
+.skip-link:focus {
+    top: 0;
+}
+
 body {
     background: var(--bg);
     color: var(--text);
