@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- this page shows the full details for one individual training plan -->
+    <!-- displays plan name, exercise type, frequency, targets and all recorded consistency ratings -->
+    <meta charset="UTF-8">
+    <title>FitTrack | {{ completion.plan.name }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/images/favicon.ico">
+</head>
+<body>
+    {% include "navbar.html" %}
+    <main id="main-content">
+        <!-- this section shows the plan name, basic details and navigation buttons -->
+        <section class="hero" style="padding: 4rem 5% 3rem; min-height: auto;">
+            <div class="hero-text" style="max-width: 800px; padding-left: 0; padding-right: 0;">
+                <h1 style="font-size: 3rem;">{{ completion.plan.name }}</h1>
+                <p style="font-size: 1.2rem; color: var(--text-muted);">{{ completion.plan.exercise_type }} &middot; {{ completion.plan.frequency }} &middot; Created {{ completion.plan.created_at[:10] }}</p>
+            </div>
+            <div style="display:flex; gap:1rem; margin-left:auto; margin-right:2rem; align-items:center;">
+                <a href="/plans/{{ completion.plan.id }}/edit" class="btn btnb" style="padding:1rem 1.5rem; font-size: 1.1rem;">Edit Plan</a>
+                <a href="/plans" class="btn btna" style="padding:1rem 1.5rem; font-size: 1.1rem;">Back to Plans</a>
+            </div>
+        </section>
+
+        <!-- this section shows how many planned sessions the user has completed -->
+        <section style="padding: 3rem 5%; margin-bottom: 3rem;">
+            {% set target = completion.frequency_target %}
+            {% set pct = (completion.completed_count / target * 100)|round|int if target > 0 else 0 %}
+            {% set progress_width = pct ~ '%' %}
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span style="font-size: 1.1rem; font-weight: 600;">Sessions</span>
+                    <span style="font-size: 1.1rem; font-weight: 600;">{{ completion.completed_count }} / {{ target }}</span>
+                </div>
+                <div style="background: var(--bg-raised); border-radius: 12px; height: 2.5rem; overflow: hidden;">
+                    <div style="background: var(--primary); height: 100%; width: {{ progress_width }}; min-width: 4px; border-radius: 12px; transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- this section shows the targets and notes saved for the plan -->
+        <section style="padding: 3rem 5%; margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Plan Targets</h2>
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem;">
+                <div>
+                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Exercise Type</span>
+                    <p style="font-weight: 700; font-size: 1.5rem;">{{ completion.plan.exercise_type }}</p>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Frequency</span>
+                    <p style="font-weight: 700; font-size: 1.5rem;">{{ completion.plan.frequency }}</p>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Target Duration</span>
+                    <p style="font-weight: 700; font-size: 1.5rem;">{{ completion.plan.target_duration ~ ' min' if completion.plan.target_duration else 'N/A' }}</p>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Target Distance in km</span>
+                    <p style="font-weight: 700; font-size: 1.5rem;">{{ completion.plan.target_distance if completion.plan.target_distance else 'N/A' }}</p>
+                </div>
+                {% if completion.plan.notes %}
+                <div style="grid-column: 1 / -1;">
+                    <span style="color: var(--text-muted); font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Notes</span>
+                    <p style="font-weight: 700; font-size: 1.25rem;">{{ completion.plan.notes }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- this section shows a quick summary of how consistent the user has been -->
+        <section style="padding: 3rem 5%; margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Consistency Summary</h2>
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 3rem;">
+                <div style="text-align: center; padding: 1.5rem; background: var(--bg-raised); border-radius: 12px;">
+                    <span style="color: var(--text-muted); font-size: 1rem; display: block; margin-bottom: 0.5rem;">Avg Rating</span>
+                    <p style="font-weight: 700; font-size: 2rem;">
+                        {% if adherence_summary.avg_rating > 0 %}
+                            {{ adherence_summary.avg_rating }}/5
+                        {% else %}
+                            —
+                        {% endif %}
+                    </p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem; background: var(--bg-raised); border-radius: 12px;">
+                    <span style="color: var(--text-muted); font-size: 1rem; display: block; margin-bottom: 0.5rem;">Total Rated</span>
+                    <p style="font-weight: 700; font-size: 2rem;">{{ adherence_summary.total_sessions }}</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem; background: rgba(76, 175, 80, 0.15); border-radius: 12px;">
+                    <span style="color: #4caf50; font-size: 1rem; display: block; margin-bottom: 0.5rem;">Excellent (4-5)</span>
+                    <p style="font-weight: 700; font-size: 2rem; color: #4caf50;">{{ adherence_summary.excellent_sessions }}</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem; background: rgba(245, 197, 24, 0.15); border-radius: 12px;">
+                    <span style="color: var(--yellow); font-size: 1rem; display: block; margin-bottom: 0.5rem;">On Track (3)</span>
+                    <p style="font-weight: 700; font-size: 2rem; color: var(--yellow);">{{ adherence_summary.on_track_sessions }}</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem; background: rgba(255, 77, 77, 0.15); border-radius: 12px;">
+                    <span style="color: #ff4d4d; font-size: 1rem; display: block; margin-bottom: 0.5rem;">Missed (1-2)</span>
+                    <p style="font-weight: 700; font-size: 2rem; color: #ff4d4d;">{{ adherence_summary.missed_sessions }}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- this form lets the user rate how well they followed the plan for a session -->
+        <section style="padding: 3rem 5%; margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Rate Session Consistency</h2>
+            <form action="/plans/{{ completion.plan.id }}/adherence" method="post" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">Session Date</label>
+                    <input type="date" name="session_date" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
+                </div>
+                <div style="flex: 2; min-width: 280px;">
+                    <label style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">How well did you follow the plan?</label>
+                    <select name="rating" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
+                        <option value="5">5 - Excellent (fully followed)</option>
+                        <option value="4">4 - Good (mostly followed)</option>
+                        <option value="3">3 - On Track (partially followed)</option>
+                        <option value="2">2 - Below (barely followed)</option>
+                        <option value="1">1 - Missed (did not follow)</option>
+                    </select>
+                </div>
+                <div style="flex: 2; min-width: 250px;">
+                    <label style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">Notes (optional)</label>
+                    <input type="text" name="adherence_notes" placeholder="e.g. Cut session short, ran extra, etc." style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
+                </div>
+                <button type="submit" class="btn btna" style="padding: 1rem 2rem; font-size: 1.1rem;">Record</button>
+            </form>
+        </section>
+
+        <!-- this section lists all saved consistency ratings for the plan -->
+        <section style="padding: 3rem 5% 4rem;">
+            <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Consistency Log</h2>
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1.5rem;">
+                <table style="min-width: 700px; border-collapse: separate; border-spacing: 0 0.75rem;">
+<thead>
+                            <tr>
+                                <th style="text-align:left; padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Date</th>
+                                <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Rating</th>
+                                <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Notes</th>
+                                <th style="padding: 1.25rem 1.5rem; font-size: 1rem; color: var(--yellow); font-weight: 700;">Delete</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        {% if adherence|length == 0 %}
+                        <tr>
+                            <td colspan="4" style="padding: 3rem; text-align:center; color: var(--text-muted); font-size: 1.1rem;">No consistency records yet. Use the form above to rate each session.</td>
+                        </tr>
+                        {% else %}
+                        {% for record in adherence %}
+                        <tr style="background: var(--bg-raised); border-bottom: 1px solid var(--border);">
+                            <td style="text-align:left; padding: 1.25rem 1.5rem; font-size: 1.1rem;">{{ record.session_date }}</td>
+                            <td style="padding: 1.25rem 1.5rem;">
+                                {% if record.rating >= 4 %}
+                                <span class="status-badge status-completed">{{ record.rating }}/5</span>
+                                {% elif record.rating == 3 %}
+                                <span class="status-badge status-active">{{ record.rating }}/5</span>
+                                {% else %}
+                                <span class="status-badge status-paused">{{ record.rating }}/5</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 1.25rem 1.5rem; color: var(--text-muted); font-size: 1rem;">{{ record.notes if record.notes else '—' }}</td>
+                            <td style="padding: 1.25rem 1.5rem;">
+                                <form action="/plans/{{ completion.plan.id }}/adherence/{{ record.id }}/delete" method="post" style="margin:0;">
+                                    <button type="submit" class="deletebtn-plan" title="Delete" style="padding: 0.5rem 0.75rem;">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="/static/js/main.js"></script>
+<!-- done comments for templates/plan_detail.html -->
+<!-- summary of comments: -->
+<!-- - this page shows all details for one specific training plan -->
+<!-- - displays plan name, exercise type, frequency and whether the plan is currently active -->
+<!-- - shows total sessions planned versus how many have been completed with a progress bar -->
+<!-- - displays any target duration, target distance and notes the user saved -->
+<!-- - consistency section shows summary of how well user followed the plan with percentages -->
+<!-- - form lets user rate their performance for a session as poor, fair, good or excellent -->
+<!-- - table lists each recorded consistency rating with the date it was recorded -->
+<!-- - edit button changes plan details, delete button removes the entire plan -->
+</body>
+</html>

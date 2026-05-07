@@ -1,13 +1,27 @@
-<nav>
+<!-- this is the navigation bar that appears at the top of every page -->
+<!-- accessibility - role and aria-label help screen readers understand this is the main navigation -->
+<nav role="navigation" aria-label="Main navigation">
+    <!-- this is the FitTrack logo that links back to the home page -->
     <a href="/" class="nav-brand">FitTrack</a>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/activities">Activities</a></li>
-        <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/racetracker">Racetracker</a></li>
+    <!-- this is the list of navigation links -->
+    <ul role="menubar">
+        <!-- accessibility - role="menuitem" helps screen readers identify each link as a menu item -->
+        <li role="none"><a href="/" role="menuitem">Home</a></li>
+        <li role="none"><a href="/activities" role="menuitem">Activities</a></li>
+        <li role="none"><a href="/plans" role="menuitem">Plans</a></li>
+        <li role="none"><a href="/dashboard" role="menuitem">Dashboard</a></li>
+        <li role="none"><a href="/feed" role="menuitem">Feed</a></li>
+        <li role="none"><a href="/racetracker" role="menuitem">Racetracker</a></li>
         {% if not session.get('user_id') %}
-        <li><a href="/login">Login</a></li>
-        <li><a href="/signup">Sign Up</a></li>
+            <li role="none"><a href="/login" role="menuitem">Login</a></li>
+            <li role="none"><a href="/signup" role="menuitem">Sign Up</a></li>
+        {% else %}
+            <li role="none">
+                <!-- accessibility - aria-label tells screen readers this button signs the user out -->
+                <form method="POST" action="/logout" style="display: inline;">
+                    <button type="submit" class="nav-logout" aria-label="Sign out">Sign Out</button>
+                </form>
+            </li>
         {% endif %}
     </ul>
 </nav>

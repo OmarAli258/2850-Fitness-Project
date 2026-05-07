@@ -13,6 +13,51 @@
     box-sizing: border-box;
 }
 
+/* accessibility - focus styles for keyboard navigation
+shows a yellow outline around any element that is currently selected
+helps keyboard-only users see where they are on the page */
+*:focus {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - only show focus outline for keyboard users, not mouse clicks */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* accessibility - strong yellow outline for keyboardTab navigation */
+*:focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - ensure focus is visible even after clicking with mouse */
+*:focus:active {
+    outline: 3px solid var(--yellow);
+    outline-offset: 2px;
+}
+
+/* accessibility - skip navigation link
+hidden link that appears at top of page when user presses Tab
+lets keyboard users skip past the navigation menu and go straight to main content */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--yellow);
+    color: #000;
+    padding: 1rem 2rem;
+    z-index: 10000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* accessibility - show skip link when it receives keyboard focus */
+.skip-link:focus {
+    top: 0;
+}
+
 body {
     background: var(--bg);
     color: var(--text);
@@ -61,6 +106,26 @@ nav ul a {
 nav ul a:hover {
     color: var(--yellow);
 }
+.nav-logout {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 1.05rem;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.nav-logout:hover {
+    color: var(--yellow);
+}
+
+nav form {
+    margin: 0;
+    padding: 0;
+}
 .hero {
     display: flex;
     align-items: center;
@@ -108,39 +173,99 @@ nav ul a:hover {
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
+    align-items: center;
 }
-/*website wide buttons */
-.btn {
-    padding: 0.8rem 2rem;
-    border-radius: 0.375rem;
+
+.hero-buttons a:link,
+.hero-buttons a:visited,
+.hero-buttons a:active {
+    background: var(--yellow) !important;
+    color: #0a0a0a !important;
+    border: 2px solid var(--yellow) !important;
+    padding: 0.85rem 1.5rem;
+    border-radius: 12px;
     text-decoration: none;
-    font-weight: 700;
-    display: inline-block;
-    box-sizing: border-box;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
 }
+
+.hero-buttons a:hover {
+    background: #0a0a0a !important;
+    color: var(--yellow) !important;
+}
+
+.hero-buttons button:link,
+.hero-buttons button:visited,
+.hero-buttons button:active {
+    background: transparent !important;
+    color: var(--yellow) !important;
+    border: 2px solid var(--yellow) !important;
+    padding: 0.85rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.hero-buttons button:hover {
+    background: var(--yellow) !important;
+    color: #0a0a0a !important;
+}
+
 
 .btna {
-    background: var(--yellow);
-    color: #0a0a0a;
+    background: var(--yellow) !important;
+    color: #0a0a0a !important;
     cursor: pointer;
     border: 2px solid transparent;
+    padding: 0.85rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 12px;
 }
 
-.btna:hover { 
-    background: transparent;
-    color: var(--yellow);
+.btna:hover {
+    background: transparent !important;
+    color: var(--yellow) !important;
     border: 2px solid var(--yellow);
+}
+
+.btn-delete {
+    background: #ff4d4d !important;
+    color: white !important;
+    border: 2px solid #ff4d4d !important;
+    font-weight: 700;
+}
+
+.btn-delete:hover {
+    background: transparent !important;
+    color: #ff4d4d !important;
 }
 
 .btnb {
-    border: 2px solid var(--yellow);
-    color: var(--yellow);
+    border: 2px solid var(--yellow) !important;
+    color: var(--yellow) !important;
     background: transparent;
+    padding: 0.85rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 12px;
 }
 
 .btnb:hover {
-    background: var(--yellow);
-    color: #0a0a0a;
+    background: var(--yellow) !important;
+    color: #0a0a0a !important;
 }
 
 /* banner segment*/
@@ -157,37 +282,100 @@ nav ul a:hover {
     text-align: center;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
 }
 
-/* explore activites section*/
+.banner p {
+    display: inline-block;
+    padding-left: 100%;
+    animation: slideQuotes 30s linear infinite;
+    -webkit-animation: slideQuotes 30s linear infinite;
+    font-size: 1rem;
+}
+
+.banner p span {
+    display: inline;
+}
+
+.quote-sep {
+    color: var(--yellow);
+    margin: 0 2rem;
+}
+
+@keyframes slideQuotes {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+@-webkit-keyframes slideQuotes {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* explore activities section*/
 .activities {
     display: flex;
-    padding: 2rem 5%;
+    padding: 3rem 5%;
+    background: var(--card);
+    border-radius: 20px;
+    margin: 2rem 5%;
 }
-.activitesRight{ 
-    width: 20%;
+
+.activitesRight { 
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+    padding: 2rem;
+    background: var(--bg-raised);
+    border-radius: 16px;
+    gap: 1.5rem;
 }
+
 .activitesRight p {
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
 }
+
 .activitiesLeft{
     width: 70%;
 }
+
 .activitiesLeft h2{
-    padding: 0 3.5rem;
+    font-size: 1.75rem;
+    color: var(--text);
+    margin-bottom: 1.5rem;
 
 }
+
 .activitybtn{
-    background: #f5c518;
-    padding: 0.8rem;
-    border-radius: 0.375rem;
-    color: #000000; 
+    background: var(--yellow);
+    color: #0a0a0a;
+    padding: 0.85rem 1.5rem;
+    border-radius: 12px;
     text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--yellow);
+    transition: all 0.2s ease;
+}
+
+.activitybtn:hover {
+    background: transparent;
+    color: var(--yellow);
+}
+
+table th {
+    color: var(--yellow) !important;
+    font-weight: 700;
 }
 /* the scrolling cards  */
 .exerciseCards{
@@ -244,62 +432,153 @@ nav ul a:hover {
 }
 /* The search bar stuff*/
 .nav-search {
-    display: flex; 
+    display: flex;
+    margin-left: 1rem;
+    align-items: stretch;
+    height: 3.75rem;
 }
 .nav-search input {
     background: var(--card);
     width: 31.25rem;
     border: 1px solid var(--yellow);
     border-radius: 0.5rem 0 0 0.5rem;
-    padding: 0.5rem;
-    color: var(--text)
+    height: 100%;
+    padding: 0 1rem;
+    color: var(--text);
+    font-size: 1.1rem;
 }
 .nav-search button {
-    padding: 0.5rem 0.8rem;
+    height: 100%;
+    padding: 0 1.4rem;
     background: var(--yellow);
     border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
     font-weight: 700;
     border: none;
+    font-size: 1.1rem;
+}
+
+.dash-header .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.75rem;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.search-wrapper {
+    position: relative;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 0.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.search-dropdown.active {
+    display: block;
+}
+
+.search-result {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+.search-result:last-child {
+    border-bottom: none;
+}
+
+.search-result:hover {
+    background: rgba(245, 197, 24, 0.1);
+}
+
+.search-result-type {
+    color: var(--yellow);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.search-result-meta {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.search-empty {
+    padding: 1rem;
+    color: var(--text-muted);
+    text-align: center;
 }
 /* recent activity area*/
 .recentActivity {
-    display: flex;
-    padding: 1rem 5%;
-    gap: 2rem;
-    margin-top: 0;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 2rem 5% 4rem;
+    gap: 1.25rem;
+    align-items: stretch;
 }
 .activityLeft{
-    width: 70%;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 24rem;
 }
 .activityLeft h2 {
     margin-bottom: 1rem;
 }
 .activityRight{
-    width: 30%;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
+    min-height: 24rem;
+    text-align: center;
 }
-.recentCard img{
-    width: 25rem;
-    height: 18.75rem;
-    border-radius: 1rem;
-    border: 1px solid var(--border);
+.activityRight p {
+    color: var(--text-muted);
+}
+.activityRight .btn {
+    align-self: center;
+}
+.activityLeft > p {
+    margin-bottom: 1rem;
+}
+.recentMeta {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.recentbtn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.recentfooter {
+    display: flex;
+    gap: 0.8rem;
 }
 .recentfooter p{
     font-size: 1.3rem;
 
-}
-.recentfooter{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    
 }
 .recentfooter a{
     color: var(--yellow);
@@ -308,37 +587,56 @@ nav ul a:hover {
 }
 .recentCard {
     display: none;
+    width: 25rem
 }
 
 .recentCard.active {
     display: block;
 }
+.recentCard img{
+    width: 100%;
+    height: 300px;
+    border-radius: 10px ;
+    border: 1px solid var(--border);
+    object-fit: cover;
+}
+.recentCardBody {
+    padding: 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recentCardBody h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
 .carousel{
     display: flex;
     width: 25rem;
 }
-.carouselbtn{
+.carouselbtn {
     background: var(--yellow);
     border: none;
-    color:#000000;
+    color: #000000;
     border-radius: 50%;
-    width: 3.125rem;
-    height: 3.125rem;
+    width: 50px;
+    height: 50px;
     font-size: 1.5rem;
     cursor: pointer;
     font-weight: bold;
     line-height: 1;
+    margin-top: 125px;
 }
 .carouselbtn:hover {
     background: var(--bg);
     color: var(--yellow);
     border: 2px solid var(--yellow);
 }
-.carouselall{
+.carouselall {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
-    align-self: center;
 }
 /* The stats section*/
 
@@ -355,7 +653,7 @@ nav ul a:hover {
     padding: 1.5rem;
     border-radius: 0.5rem;
     border: 2px solid var(--border);
-    cursor: pointer;
+    cursor: default;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -407,13 +705,13 @@ nav ul a:hover {
     display: flex;
     gap: 5rem;
 }
-.upcomingraces, .pastraces{
+.upcomingraces, .pastraces {
     padding: 2rem 5%;
     border: 3px solid var(--border);
     border-radius: 0.5rem;
     background: var(--card);
-    width: 70%;
-    margin: 1rem 2%
+    width: 100%;
+    margin: 0;
 }
 table {
     width: 100%;
@@ -433,18 +731,163 @@ td{
 .pbrow{
     background: rgb(198, 198, 20);
 }
-.deletebtn {
+.delete-btn {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.4rem 0.7rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: default;
+}
+
+.deletebtn-upcoming {
     background: rgba(162, 10, 10, 0.15);
-    color: #ff4d4d;
+    color: #ff6b6b;
     padding: 0.3rem 0.6rem;
     border-radius: 0.25rem;
     text-decoration: none;
     font-size: 1rem;
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.deletebtn-upcoming:hover {
+    background: #ff6b6b;
+    color: white;
+    cursor: pointer;
+    transform: scale(1.15);
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.delete-btn:hover {
+    background: rgba(245, 197, 24, 0.15);
+    color: var(--yellow);
+    border-color: var(--yellow);
+    box-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
+}
+.countdown {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--yellow);
+    font-weight: 700;
+    margin-top: 2px;
+}
+.racetracker-layout {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2%;
+    align-items: flex-start;
+}
+
+.racetracker-tables {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.dayssince {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.nextrace-panel {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: sticky;
+    top: 2rem;
+}
+.nextrace-panel:hover {
+    border-color: var(--yellow);
+}
+tr {
+    transition: all 0.2s;
+}
+tr:hover td  {
+    border-bottom: 1px solid var(--yellow);
+    color: var(--yellow);
+}
+.nextrace-label {
+    color: var(--yellow);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.nextrace-sport {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+}
+.nextrace-detail {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.nextrace-countdown {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--yellow);
+    margin-top: 0.5rem;
+}
+
+.nextrace-empty {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.deletebtn-plan {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: default;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.deletebtn-plan:hover {
+    background: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+}
+
+.deletebtn {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: default;
+    transition: all 0.2s ease;
+    border: none;
 }
 
 .deletebtn:hover {
     background: #ff4d4d;
     color: white;
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
 }
 /*addraces css*/
 /* Add Race page */
@@ -571,4 +1014,94 @@ td{
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+/* Feed Styles */
+.feed-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.feed-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 0.625rem;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+}
+
+.feed-card:hover {
+    border-color: var(--yellow);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.feed-user-action {
+    font-size: 1.1rem;
+}
+
+.feed-user-action strong {
+    color: var(--text);
+}
+
+.feed-sport {
+    color: var(--yellow);
+    font-weight: 700;
+}
+
+.feed-meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.feed-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.feed-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.feed-notes {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.feed-map {
+    width: 100%;
+    height: 250px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.feed-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    padding: 3rem;
 }

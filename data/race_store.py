@@ -8,7 +8,7 @@ def create_race(user_id, name, race_type, location, date, finish_time, is_pb, st
     cursor.execute(
         """
         INSERT INTO races (name, race_type, location, date, finish_time, is_pb, status, user_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
         (name, race_type, location, date, finish_time, is_pb, status, user_id)
     )
@@ -21,14 +21,15 @@ def get_races_for_user(user_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    rows = cursor.execute(
+    cursor.execute(
         """
         SELECT * FROM races
-        WHERE user_id = ?
+        WHERE user_id = %s
         ORDER BY date ASC
         """,
         (user_id,)
-    ).fetchall()
+    )
+    rows = cursor.fetchall()
 
     connection.close()
 
@@ -57,7 +58,7 @@ def delete_race(race_id, user_id):
     cursor.execute(
         """
         DELETE FROM races
-        WHERE id = ? AND user_id = ?
+        WHERE id = %s AND user_id = %s
         """,
         (race_id, user_id)
     )
@@ -90,3 +91,23 @@ def get_race_summary(user_id):
         "past_races": past_races,
         "personal_bests": personal_bests
     }
+
+#function that auto sends races from upcoming to past when date passes
+def update_race_statuses(user_id):
+    from datetime import date
+    today = str(date.today())
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE races
+        SET status = 'past'
+        WHERE user_id = %s AND status = 'upcoming' AND date < %s
+        """,
+        (user_id, today)
+    )
+
+    connection.commit()
+    connection.close()

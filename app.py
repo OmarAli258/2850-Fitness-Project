@@ -1,8 +1,13 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, session, redirect, render_template
 from routes.auth import auth
 from routes.activities import activities
 from routes.dashboard import dashboard
 from routes.races import races
+from routes.feed import feed
+from routes.plans import plans
 from data.database import setup_database
 
 app = Flask(__name__)
@@ -13,7 +18,9 @@ setup_database()
 app.register_blueprint(auth)
 app.register_blueprint(activities)
 app.register_blueprint(dashboard)
-app.register_blueprint(races) 
+app.register_blueprint(races)
+app.register_blueprint(feed) 
+app.register_blueprint(plans) 
 
 @app.route("/")
 def home():
@@ -22,4 +29,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8080)
+    app.run(debug=True, host="0.0.0.0", port=8081)

@@ -27,14 +27,14 @@
                 <div class="auth-error">⚠ {{ error }}</div>
             {% endif %}
 
-            <!-- Signup form used to create a new user account -->
+            <!-- accessibility - for and id attributes connect each label to its input
+screen readers announce each label when user focuses on each input field -->
             <form action="/signup" method="post" class="auth-form">
                 <div class="form-group">
-                    <label>Full name</label>
-
-                    <!-- User's full name is saved with the account -->
+                    <label for="signup-name">Full name</label>
                     <input
                         type="text"
+                        id="signup-name"
                         name="name"
                         placeholder="Alex Johnson"
                         value="{{ prefill_name or '' }}"
@@ -43,11 +43,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Email</label>
-
-                    <!-- Email is used as the unique login identifier -->
+                    <label for="signup-email">Email</label>
                     <input
                         type="email"
+                        id="signup-email"
                         name="email"
                         placeholder="alex@example.com"
                         value="{{ prefill_email or '' }}"
@@ -56,17 +55,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Password</label>
-
-                    <!-- Password is hashed in user_store.py before being saved -->
-                    <input type="password" name="password" placeholder="At least 6 characters" required>
+                    <label for="signup-password">Password</label>
+                    <!-- accessibility - for/id connects this label to the password input above -->
+                    <input type="password" id="signup-password" name="password" placeholder="At least 6 characters" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Confirm password</label>
-
-                    <!-- Confirmation field helps prevent typing mistakes -->
-                    <input type="password" name="confirm" placeholder="••••••••" required>
+                    <!-- accessibility - for/id connects this label to the confirm password input -->
+                    <label for="signup-confirm">Confirm password</label>
+                    <input type="password" id="signup-confirm" name="confirm" placeholder="••••••••" required>
                 </div>
 
                 <!-- Submits signup details to the /signup POST route -->

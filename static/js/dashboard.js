@@ -1,9 +1,10 @@
+//first thing in the javascript is the carousel 
 const backbtn = document.getElementById("previous")
 const forwardbtn = document.getElementById("next")
 const cards = document.querySelectorAll(".recentCard")
-
+// getting the buttons to work with in js
 let currentindex = 0
-
+// if the buttons exist on the page aka there is an activity then move forward or back till you make it to last or first
 if (forwardbtn && backbtn && cards.length > 0) {
     forwardbtn.addEventListener("click", function () {
         if (currentindex < cards.length - 1) {
@@ -19,26 +20,24 @@ if (forwardbtn && backbtn && cards.length > 0) {
         }
     })
 }
-
+// hide all the cards then show the one with the specifed index 
 function carousel(index) {
     cards.forEach(function (card) {
         card.style.display = "none"
     })
-
     cards[index].style.display = "block"
 }
-
-
+// second part is the Stats cards
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
 const distancebtn = document.getElementById("distance")
 const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
-
+//get the cards so that when theyre clicked they work
 let currenttype = null
 let currentchart = null
-
+//when button clicked show the chart
 if (workoutbtn) {
     workoutbtn.addEventListener("click", function () {
         showchart("workouts")
@@ -68,13 +67,13 @@ if (favoritebtn) {
         showchart("favorite")
     })
 }
-
+//The function that shows and builds the charts based on whats clicked  
 function showchart(type) {
     if (!mycanvas) {
         return
     }
 
-    if (currenttype == type && currentchart != null) {
+    if (currenttype == type && currentchart != null) { //if the same card is clicked twice destroy the chart
         currentchart.destroy()
         currentchart = null
         currenttype = null
@@ -82,25 +81,25 @@ function showchart(type) {
         return
     }
 
-    if (currentchart != null) {
+    if (currentchart != null) { //destroy previous chart 
         currentchart.destroy()
     }
 
     let chartData = {}
-
+    //chart data is gotten from flask in the html and the data is used to build the charts labels, data etc
     if (type == "workouts") {
-        chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [1, 0, 2, 0, 1, 2, 0],
-            label: "Workouts This Week",
-            type: "bar"
-        }
+    chartData = {
+        labels: CHART_DATA.labels,
+        data: CHART_DATA.workouts,
+        label: "Workouts This Week",
+        type: "bar"
     }
+}
 
     if (type == "time") {
         chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [45, 0, 60, 0, 30, 50, 0],
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.minutes,
             label: "Minutes Spent This Week",
             type: "bar"
         }
@@ -108,29 +107,34 @@ function showchart(type) {
 
     if (type == "distance") {
         chartData = {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            data: [5, 0, 8, 0, 3, 6, 0],
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.distance,
             label: "Distance This Week (km)",
             type: "line"
         }
     }
-    if (type == "races") {
-        chartData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            data: [1, 0, 2, 1, 0, 1],
-            label: "Races Completed",
-            type: 'bar'
-        }
-    }
+
     if (type == "favorite") {
         chartData = {
-            labels: ["Running", "Swimming", "Cycling", "Weightlifting", "Crossfit"],
-            data: [12, 8, 5, 3, 2],
+            labels: CHART_DATA.type_labels,
+            data: CHART_DATA.type_counts,
             label: "Exercise Breakdown",
             type: "doughnut"
         }
     }
-
+    if (type == "races") {
+    chartData = {
+        labels: ["Upcoming", "Past", "PBs"],
+        data: [
+            CHART_DATA.upcoming_races,
+            CHART_DATA.past_races,
+            CHART_DATA.personal_bests
+        ],
+        label: "Race Summary",
+        type: "bar"
+    }
+}
+//adding some nice colors to me the charts look nice using the same yellow as the rest of the site
     let chartColours = "#f5c518"
     let borderColours = "#f5c518"
 
@@ -145,19 +149,18 @@ function showchart(type) {
     }
 
     if (type == "races") {
-        chartColours = "#ff9f40"
-        borderColours = "#ff9f40"
+        chartColours = ["#ff9f40", "#f5c518", "#2ecc71"]
+        borderColours = ["#0a0a0a", "#0a0a0a", "#0a0a0a"]
     }
 
     if (type == "favorite") {
         chartColours = [
-            "#f5c518", // Running
-            "#3498db", // Swimming
-            "#2ecc71", // Cycling
-            "#e74c3c", // Weightlifting
-            "#9b59b6"  // Crossfit
+            "#f5c518",
+            "#2c80b8",
+            "#2ecc55",
+            "#3ce7b7",
+            "#c31b1b"
         ]
-
         borderColours = [
             "#0a0a0a",
             "#0a0a0a",
@@ -166,7 +169,7 @@ function showchart(type) {
             "#0a0a0a"
         ]
     }
-
+    //actually making the chart that the data was enterd in above using Chart.js library
     currentchart = new Chart(mycanvas, {
         type: chartData.type,
         data: {
@@ -190,25 +193,91 @@ function showchart(type) {
             },
             scales: chartData.type === "doughnut" ? {} : {
                 x: {
-                    ticks: {
-                        color: "#ffffff"
-                    },
-                    grid: {
-                        color: "#222222"
-                    }
+                    ticks: { color: "#ffffff" },
+                    grid: { color: "#222222" }
                 },
                 y: {
-                    ticks: {
-                        color: "#ffffff"
+                    ticks: { 
+                        color: "#ffffff",
+                        stepSize: 1
                     },
-                    grid: {
-                        color: "#222222"
-                    }
+                    grid: { color: "#222222" }
                 }
             }
         }
     })
 
-    document.querySelector("#chartArea").classList.add("active")
+    document.querySelector("#chartArea").classList.add("active") //show the area around the chart
     currenttype = type
+}
+//The Drop Down search bar which was made instead of a seperate page for searching
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+let searchTimer = null; //make search bar a bit delayed so its not instant after every stroke
+
+if (searchInput) {
+    searchInput.addEventListener("input", function () { //activate if typing
+        const query = searchInput.value.trim();
+
+        clearTimeout(searchTimer); //cancel a search until user is done typing
+
+        if (query === "") { //hide if the input is empty 
+            hideDropdown();
+            return;
+        }
+
+        searchTimer = setTimeout(function () { //search the database only after 250ms after the last letter typed to not waste database searches on every letter
+            fetchSearchResults(query);
+        }, 250);
+    });
+
+    document.addEventListener("click", function (event) { //if the user clicks off get rid of dropdown
+        if (!event.target.closest(".search-wrapper")) {
+            hideDropdown();
+        }
+    });
+}
+//calls the flask api and passes results to the renderresults function
+function fetchSearchResults(query) {
+    fetch("/api/search?q=" + encodeURIComponent(query))
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (results) {
+            renderResults(results);
+        })
+        .catch(function (error) {
+            console.error("Search failed:", error);
+            hideDropdown();
+        });
+}
+//makes the html for the drop down using the search results 
+function renderResults(results) {
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-empty">No activities found</div>';
+        showDropdown();
+        return;
+    }
+
+    let html = ""; //go through and make a clickable link to the its view activity page
+    for (const activity of results) {
+        const distance = activity.distance ? activity.distance + " km" : "No distance";
+        html += `
+            <a href="/activities/${activity.id}" class="search-result">
+                <div class="search-result-type">${activity.type}</div>
+                <div class="search-result-meta">${activity.date} | ${activity.duration} min | ${distance}</div>
+            </a>
+        `;
+    }
+
+    searchResults.innerHTML = html;
+    showDropdown();
+}
+//helper functions for showing and hiding the dropdown 
+function showDropdown() {
+    searchResults.classList.add("active");
+}
+
+function hideDropdown() {
+    searchResults.classList.remove("active");
 }
