@@ -139,7 +139,9 @@
         <!-- this section gives the user buttons to edit or delete the activity -->
         <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
             <a href="/activities/{{ activity.id }}/edit" class="btn btna">Edit</a>
-            <a href="/activities/{{ activity.id }}/delete" class="btn btna btn-delete">Delete</a>
+            <form method="POST" action="/activities/{{ activity.id }}/delete" style="display: inline;">
+                <button type="submit" class="btn btna btn-delete">Delete</button>
+            </form>
         </div>
     </main>
 

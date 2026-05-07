@@ -61,53 +61,73 @@
         <canvas id="chart"></canvas>
     </section>
 
-    <section class="recentActivity">
-        <div class="activityLeft">
-            <h2>Recent Activity</h2>
+<section class="recentActivity">
+        <div class="activityLeft" style="text-align: center;">
+            <h2 style="text-align: center;">Recent Activity</h2>
 
             {% if recent_activities %}
-            <div class="carouselall">
-                <button class="carouselbtn" id="previous" type="button"><</button>
-                <div class="carousel">
-                    {% for activity in recent_activities %}
-                    <div class="recentCard {% if loop.first %}active{% endif %}">
-                        {% if activity.type == "Running" %}
-                            <img src="/static/images/Pic1.jpg" alt="Running">
-                        {% elif activity.type == "Swimming" %}
-                            <img src="/static/images/Pic2.jpg" alt="Swimming">
-                        {% elif activity.type == "Cycling" %}
-                            <img src="/static/images/Pic4.jpg" alt="Cycling">
-                        {% elif activity.type == "Gym" %}
-                            <img src="/static/images/Pic5.jpg" alt="Gym">
-                        {% else %}
-                            <img src="/static/images/Pic3.jpg" alt="Activity">
-                        {% endif %}
-                        <div class="recentCardBody">
-                            <h3>{{ activity.type }}</h3>
-                            <p class="recentMeta">
-                                {{ activity.date }} | {{ activity.duration }} min |
-                                {% if activity.distance %}{{ activity.distance }}{% else %}No distance{% endif %}
-                            </p>
-                            <div class="recentfooter">
-                                <a href="/activities/{{ activity.id }}" class="btn btnb recentbtn">View</a>
-                                <a href="/activities/{{ activity.id }}/edit" class="btn btnb recentbtn">Edit</a>
-                            </div>
-                        </div>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1; overflow-y: auto;">
+                {% for activity in recent_activities %}
+                <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: left;">
+                        <strong>{{ activity.type }}</strong>
+                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">
+                            {{ activity.date }} · {{ activity.duration }} min
+                            {% if activity.distance %} · {{ activity.distance }} km{% endif %}
+                        </p>
                     </div>
-                    {% endfor %}
+                    <a href="/activities/{{ activity.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
                 </div>
-                <button class="carouselbtn" id="next" type="button">></button>
+                {% endfor %}
             </div>
+            <a href="/activities" class="btn btna" style="margin-top: auto; padding: 0.5rem 1rem; font-size: 0.85rem; display: inline-block;">View All</a>
             {% else %}
-                <p>No recent activities yet.</p>
-                <a href="/activities/new" class="btn btna">Log your first activity</a>
+            <p>No recent activities yet.</p>
+            <a href="/activities/new" class="btn btna">Log your first activity</a>
             {% endif %}
         </div>
 
-        <div class="activityRight">
-            <h2>View All Activities</h2>
-            <p>See your full workout history</p>
-            <a href="/activities" class="btn btna">View All</a>
+        <div class="activityRight" style="text-align: center;">
+            <h2>Upcoming Activities</h2>
+            {% if upcoming_activities %}
+            <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for activity in upcoming_activities %}
+                <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: left;">
+                        <strong>{{ activity.type }}</strong>
+                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">
+                            {{ activity.date }} · {{ activity.duration }} min
+                            {% if activity.distance %} · {{ activity.distance }} km{% endif %}
+                        </p>
+                    </div>
+                    <a href="/activities/{{ activity.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No upcoming activities.</p>
+            {% endif %}
+            <a href="/activities" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
+        </div>
+
+        <div class="activityRight" style="text-align: center;">
+            <h2>Recent Plans</h2>
+            {% if plans %}
+            <div style="width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for plan in plans[:5] %}
+                <div style="background: var(--bg-raised); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>{{ plan.name }}</strong>
+                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem;">{{ plan.exercise }}</p>
+                    </div>
+                    <a href="/plans/{{ plan.id }}" class="btn btnb" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No plans yet.</p>
+            {% endif %}
+            <a href="/plans" class="btn btna" style="margin-top: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem;">View All</a>
         </div>
     </section>
 </main>
