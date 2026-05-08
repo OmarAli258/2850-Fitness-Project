@@ -149,11 +149,13 @@ def add_race():
             "addrace.html", error="Please fill in all required fields."
         )
 
+    if float(race_type) > 100:
+        return render_template(
+            "addrace.html", error="Distance cannot exceed 100km."
+        )
+
     if any(char.isdigit() for char in location):
         return render_template("addrace.html", error="Location cannot contain numbers.")
-
-    if finish_time and race_store.parse_finish_time(finish_time) is None:
-        return render_template("addrace.html", error="Finish time must be minutes, MM:SS, or HH:MM:SS.")
 
     status = 'upcoming' if date >= str(today_date.today()) else 'past'
 

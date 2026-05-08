@@ -57,7 +57,7 @@
             <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
                 <label style="display:flex; align-items:center; gap:0.75rem;">
                     <span style="color: var(--text-muted);">Search:</span>
-                    <input type="text" name="search" form="activities-filter" placeholder="Search activities..." value="{{ search }}" style="padding:0.85rem 1rem; border-radius:12px; border:1px solid var(--border); background: var(--bg-card); color: var(--text); min-width:260px;">
+                    <input type="text" name="search" form="activities-filter" placeholder="Search activities..." value="{{ search }}" pattern="^[a-zA-Z0-9\s\-_]+$" title="Only letters, numbers, spaces, hyphens and underscores allowed" style="padding:0.85rem 1rem; border-radius:12px; border:1px solid var(--border); background: var(--bg-card); color: var(--text); min-width:260px;">
                 </label>
                 <label style="display:flex; align-items:center; gap:0.75rem;">
                     <span style="color: var(--text-muted);">Filter:</span>

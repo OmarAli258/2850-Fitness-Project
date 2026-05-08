@@ -127,6 +127,54 @@ h1 {
     outline: none;
 }
 
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    padding-right: 3rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    color: var(--text-muted);
+}
+
+.password-toggle:hover {
+    color: var(--text);
+}
+
+.password-requirements {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.password-requirements li::before {
+    content: "○ ";
+}
+
+.password-requirements li.met {
+    color: #22c55e;
+}
+
+.password-requirements li.met::before {
+    content: "✓ ";
+}
+
 .btn {
     display: inline-flex;
     align-items: center;

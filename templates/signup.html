@@ -39,6 +39,8 @@ screen readers announce each label when user focuses on each input field -->
                         name="name"
                         placeholder="Alex Johnson"
                         value="{{ prefill_name or '' }}"
+                        pattern="^[a-zA-Z\s\-]+$"
+                        title="Name cannot contain numbers or special characters"
                         required
                     >
                 </div>
@@ -57,14 +59,24 @@ screen readers announce each label when user focuses on each input field -->
 
                 <div class="form-group">
                     <label for="signup-password">Password</label>
-                    <!-- accessibility - for/id connects this label to the password input above -->
-                    <input type="password" id="signup-password" name="password" placeholder="At least 6 characters" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="signup-password" name="password" placeholder="Enter password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('signup-password')">👁</button>
+                    </div>
+                    <ul class="password-requirements">
+                        <li id="req-length">At least 8 characters</li>
+                        <li id="req-lower">One lowercase letter</li>
+                        <li id="req-upper">One uppercase letter</li>
+                        <li id="req-special">One special character</li>
+                    </ul>
                 </div>
 
                 <div class="form-group">
-                    <!-- accessibility - for/id connects this label to the confirm password input -->
                     <label for="signup-confirm">Confirm password</label>
-                    <input type="password" id="signup-confirm" name="confirm" placeholder="••••••••" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="signup-confirm" name="confirm" placeholder="••••••••" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('signup-confirm')">👁</button>
+                    </div>
                 </div>
 
                 <!-- Submits signup details to the /signup POST route -->
@@ -81,5 +93,21 @@ screen readers announce each label when user focuses on each input field -->
 
         </div>
     </div>
+
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        const passwordInput = document.getElementById('signup-password');
+        passwordInput.addEventListener('input', function() {
+            const val = this.value;
+            document.getElementById('req-length').classList.toggle('met', val.length >= 8);
+            document.getElementById('req-lower').classList.toggle('met', /[a-z]/.test(val));
+            document.getElementById('req-upper').classList.toggle('met', /[A-Z]/.test(val));
+            document.getElementById('req-special').classList.toggle('met', /[ !\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(val));
+        });
+    </script>
 </body>
 </html>
