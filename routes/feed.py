@@ -39,7 +39,7 @@ def index():
             SELECT activities.*, users.name as user_name
             FROM activities
             JOIN users ON activities.user_id = users.id
-            WHERE activities.is_public = 1 AND activities.user_id IN ({placeholders})
+            WHERE activities.is_public IN (1, 2) AND activities.user_id IN ({placeholders})
             ORDER BY activities.date DESC
         """,
             friend_ids,
@@ -50,7 +50,7 @@ def index():
             SELECT activities.*, users.name as user_name
             FROM activities
             JOIN users ON activities.user_id = users.id
-            WHERE activities.is_public = 1 AND activities.user_id = %s
+            WHERE activities.is_public IN (1, 2) AND activities.user_id = %s
             ORDER BY activities.date DESC
         """, (user_id,))
         activities = [dict(row) for row in cursor.fetchall()]

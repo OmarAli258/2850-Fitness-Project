@@ -83,7 +83,9 @@
         <div class="detail-header">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <h1>{{ activity.type }}</h1>
-                {% if activity.is_public %}
+                {% if activity.is_public == 2 %}
+                <span style="background: #9b59b6; color: #fff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600;">Friends Only</span>
+                {% elif activity.is_public %}
                 <span style="background: #2ecc71; color: #fff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600;">Public</span>
                 {% else %}
                 <span style="background: var(--yellow); color: #000; padding: 0.5rem 1rem; border-radius: 12px; font-size: 1rem; font-weight: 600;">Private</span>
