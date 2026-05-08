@@ -1,95 +1,99 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <link rel="stylesheet" href="/static/css/style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>FitTrack</title> 
-        <link rel="icon" href="/static/images/favicon.ico">
-    </head> <!--Linking to the correct css page linking to icon etc-->
-    <body>
-        {% include "navbar.html" %} {# connecting the nav bar#}
-        <main>  
-            <section class="banner">
-                <p id="quotes">One Day Or Day One</p>
-            </section> <!--The banner is hooked up to a javascript array that rotates thru some quotes-->
-            <section class="hero"> <!-- The hero section, login signup buttons that rotate with logous and dashboard -->
-                <div class="hero-text">
-                    <h1>Your fitness <span>journey</span></h1>
-                    <p>Track Workouts, develop new skills, level up.</p>
-                    <div class="hero-buttons">
-                        {% if not session.get('user_id') %}
-                            <a href="/signup" class="btn btna">Sign Up</a>
-                            <a href="/login" class="btn btnb">Login</a>
-                        {% else %}
-                            <a href="/dashboard" class="btn btna">Go to Dashboard</a>
-                            <form method="POST" action="/logout">
-                                <button type="submit" class="btn btnb">Sign Out</button>
-                            </form>
-                        {% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack</title> 
+    <link rel="icon" href="/static/images/favicon.ico">
+</head> <!--Linking to the correct css page linking to icon etc-->
+<body>
+    {% include "navbar.html" %} {# connecting the nav bar#}
+    <main>  
+        <section class="banner">
+            <p id="quotes">One Day Or Day One</p>
+        </section> <!--The banner is hooked up to a javascript array that rotates thru some quotes-->
+
+        <section class="hero"> <!-- The hero section, login signup buttons that rotate with logout and dashboard -->
+            <div class="hero-text">
+                <h1>Your fitness <span>journey</span></h1>
+                <p>Track Workouts, develop new skills, level up.</p>
+                <div class="hero-buttons">
+                    {% if not session.get('user_id') %}
+                        <a href="/signup" class="btn btna">Sign Up</a>
+                        <a href="/login" class="btn btnb">Login</a>
+                    {% else %}
+                        <a href="/dashboard" class="btn btna">Go to Dashboard</a>
+                        <form method="POST" action="/logout">
+                            <button type="submit" class="btn btnb">Sign Out</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/static/images/Hero.jpg" alt="Fitness"> <!--the main image on the homepage from unsplash-->
+            </div>
+        </section>
+
+        <section class="activities"> <!--scrollable cards that show all available activities -->
+            <div class="activitiesLeft">
+                <h2>Explore Activities</h2>
+                <div class="exerciseCards">
+                    <div class="exerciseCard"> <!--images for the activities come from unsplash or google (mostly unsplash)-->
+                        <img src="/static/images/Pic1.jpg" alt="Running">
+                        <p>Running</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic2.jpg" alt="Swimming">
+                        <p>Swimming</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic3.jpg" alt="Crossfit">
+                        <p>Crossfit</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic4.jpg" alt="Cycling">
+                        <p>Cycling</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic5.jpg" alt="Weight Lifting">
+                        <p>Weight Lifting</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic6.jpg" alt="Football">
+                        <p>Football</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic10.jpg" alt="Walking">
+                        <p>Walking</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic7.jpg" alt="Yoga">
+                        <p>Yoga</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic8.jpg" alt="Hiking">
+                        <p>Hiking</p>
+                    </div>
+                    <div class="exerciseCard">
+                        <img src="/static/images/Pic9.jpg" alt="Rowing">
+                        <p>Rowing</p>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <img src="/static/images/Hero.jpg" alt="Fitness"> <!--the main image you have in the homepage from unsplash-->
-                </div>
-            </section>
-            <section class="activities"> <!--the scrollable cards that display all available activities -->
-                <div class="activitiesLeft">
-                    <h2>Explore Activities</h2>
-                    <div class="exerciseCards">
-                        <div class="exerciseCard"> <!--The images for all the possible exercises come from unsplash or google(mostly unsplash)-->
-                            <img src="/static/images/Pic1.jpg" alt="Running">
-                            <p>Running</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic2.jpg" alt="Swimming">
-                            <p>Swimming</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic3.jpg" alt="Crossfit">
-                            <p>Crossfit</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic4.jpg" alt="Cycling">
-                            <p>Cycling</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic5.jpg" alt="Weight Lifting">
-                            <p>Weight Lifting</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic6.jpg" alt="Football">
-                            <p>Football</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic10.jpg" alt="Walking">
-                            <p>Walking</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic7.jpg" alt="Yoga">
-                            <p>Yoga</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic8.jpg" alt="Hiking">
-                            <p>Hiking</p>
-                        </div>
-                        <div class="exerciseCard">
-                            <img src="/static/images/Pic9.jpg" alt="Rowing">
-                            <p>Rowing</p>
-                        </div>
-                    </div>
-                </div> <!--the button on the rightside that takes you to the logging activites page-->
-                <div class="activitesRight">
-                    <p>Track your workouts here</p>
-                    <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
-                </div>
-            </section>
-        </main>
+            </div> <!--button on the right side that takes you to the log activity page-->
+            <div class="activitesRight">
+                <p>Track your workouts here</p>
+                <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
+            </div>
+        </section>
+    </main>
+
+<!--scrolling banner with some amazing quotes -->
 <script>
     const quotes = [
         "One Day Or Day One",
-        "The Only Bad Workout Is The One That Didn't Happen",
+        "Without Discipline You Lose Your Ability To Dream",
         "Sweat Is Just Fat Crying",
         "No Pain No Gain",
         "Train Insane Or Remain The Same",
@@ -100,9 +104,10 @@
         "Results Happen Over Time Not Overnight"
     ];
     
+    //joins all the quotes together with spacers between them and puting them in the banner
     const quotesHtml = quotes.map(q => `<span>${q}</span>`).join('<span class="quote-sep">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
     document.getElementById('quotes').innerHTML = quotesHtml;
 </script>
 <script src="/static/js/main.js"></script>
-    </body>
-    </html>
+</body>
+</html>

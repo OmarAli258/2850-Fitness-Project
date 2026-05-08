@@ -4,6 +4,7 @@ from data import friends_store
 friends = Blueprint("friends", __name__)
 
 
+#/friends just redirects to /feed since the friends UI is on the feed page now
 @friends.route("/friends")
 def friends_page():
     if "user_id" not in session:
@@ -11,6 +12,7 @@ def friends_page():
     return redirect("/feed")
 
 
+# sends a friend request to another user
 @friends.route("/friends/request/<user_id>", methods=["POST"])
 def send_friend_request(user_id):
     if "user_id" not in session:
@@ -20,6 +22,7 @@ def send_friend_request(user_id):
     return redirect("/feed")
 
 
+# accepts an incoming friend request
 @friends.route("/friends/accept/<request_id>", methods=["POST"])
 def accept_friend_request(request_id):
     if "user_id" not in session:
@@ -29,6 +32,7 @@ def accept_friend_request(request_id):
     return redirect("/feed")
 
 
+# rejects an incoming friend request
 @friends.route("/friends/reject/<request_id>", methods=["POST"])
 def reject_friend_request(request_id):
     if "user_id" not in session:
@@ -38,6 +42,7 @@ def reject_friend_request(request_id):
     return redirect("/feed")
 
 
+# api endpoint for the friends search dropdown returns matching users as JSON
 @friends.route("/api/users/search")
 def search_users_api():
     if "user_id" not in session:

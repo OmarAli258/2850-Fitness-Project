@@ -4,6 +4,7 @@ from datetime import date as today_date, datetime
 
 races = Blueprint("races", __name__)
 
+# strips everything except numbers and dots from a string, used to clean the race length input
 
 def check_valid(value):
     import re
@@ -18,6 +19,7 @@ def check_valid(value):
     return str(distance).rstrip("0").rstrip(".")
 
 
+# main race tracker page -shows upcoming/past races, next race panel and Personal Best comparison
 @races.route("/racetracker")
 def racetracker():
     if "user_id" not in session:
@@ -29,6 +31,7 @@ def racetracker():
     today = today_date.today()
     races_with_countdown = []
 
+    # build the countdown text for each upcoming race like like Today! or Tomorrow!
     for race in user_races:
         race_dict = dict(race)
         if race_dict["status"] == "upcoming":
@@ -44,6 +47,7 @@ def racetracker():
             race_dict["countdown"] = ""
         races_with_countdown.append(race_dict)
 
+    # find out how many days since the most recent past race
     races_with_countdown = race_store.add_race_rankings(races_with_countdown)
 
     days_since_last = None
@@ -53,11 +57,19 @@ def racetracker():
         last_date = datetime.strptime(most_recent_past["date"], "%Y-%m-%d").date()
         days_since_last = (today - last_date).days
 
+    # get pb comparison data for the user and their friends
+    friends_pbs = race_store.get_friends_pbs(session["user_id"])
+
     return render_template(
         "racetracker.html",
         races=races_with_countdown,
         summary=summary,
         days_since_last=days_since_last,
+        friends_pbs=friends_pbs
+    )
+
+
+# shows the edit race form already filled with the exsisting race info
     )
 
 
@@ -74,6 +86,7 @@ def edit_race_page(race_id):
     return render_template("editrace.html", race=race, error="")
 
 
+# saves changes from the edit race form
 @races.route("/races/<race_id>/edit", methods=["POST"])
 def edit_race_submit(race_id):
     if "user_id" not in session:
@@ -95,7 +108,8 @@ def edit_race_submit(race_id):
             "editrace.html", race=race, error="Please fill in all required fields."
         )
 
-    status = "upcoming" if date >= str(today_date.today()) else "past"
+    # decide if the race is past or upcoming based on its date
+    status = 'upcoming' if date >= str(today_date.today()) else 'past'
 
     race_store.update_race(
         race_id=race_id,
@@ -111,6 +125,7 @@ def edit_race_submit(race_id):
 
     return redirect("/racetracker")
 
+# shows the empty add race form
 
 @races.route("/addrace", methods=["GET"])
 def addrace_page():
@@ -118,15 +133,14 @@ def addrace_page():
         return redirect("/login")
     return render_template("addrace.html", error="")
 
-
+# saves a new race from the add race form
 @races.route("/addrace", methods=["POST"])
 def add_race():
     if "user_id" not in session:
         return redirect("/login")
-
-    name = request.form.get("name", "").strip()
-    location = request.form.get("location", "").strip()
-    date = request.form.get("date", "").strip()
+    name        = request.form.get("name", "").strip()
+    location    = request.form.get("location", "").strip()
+    date        = request.form.get("date", "").strip()
     finish_time = request.form.get("finish_time", "").strip()
     race_type   = check_valid(request.form.get("race_type", "").strip())
 
@@ -156,7 +170,7 @@ def add_race():
 
     return redirect("/racetracker")
 
-
+# deletes a race when user clicks the delete button 
 @races.route("/races/<race_id>/delete", methods=["POST"])
 def delete_race(race_id):
     if "user_id" not in session:

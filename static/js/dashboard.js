@@ -4,7 +4,7 @@ const forwardbtn = document.getElementById("next")
 const cards = document.querySelectorAll(".recentCard")
 // getting the buttons to work with in js
 let currentindex = 0
-// if the buttons exist on the page aka there is an activity then move forward or back till you make it to last or first
+// if the buttons exist on the page (aka there is an activity) move forward or back till you make it to last or first
 if (forwardbtn && backbtn && cards.length > 0) {
     forwardbtn.addEventListener("click", function () {
         if (currentindex < cards.length - 1) {
@@ -20,23 +20,25 @@ if (forwardbtn && backbtn && cards.length > 0) {
         }
     })
 }
-// hide all the cards then show the one with the specifed index 
+// hide all cards then show the one with the specifed index 
 function carousel(index) {
     cards.forEach(function (card) {
         card.style.display = "none"
     })
     cards[index].style.display = "block"
 }
-// second part is the Stats cards
+
+// second part is the stats cards
 const workoutbtn = document.getElementById("workouts")
 const timebtn = document.getElementById("time")
 const distancebtn = document.getElementById("distance")
 const racesbtn = document.getElementById("races")
 const favoritebtn = document.getElementById("favorite")
 const mycanvas = document.getElementById("chart")
-//get the cards so that when theyre clicked they work
+//get the cards so when theyre clicked they work
 let currenttype = null
 let currentchart = null
+
 //when button clicked show the chart
 if (workoutbtn) {
     workoutbtn.addEventListener("click", function () {
@@ -67,13 +69,15 @@ if (favoritebtn) {
         showchart("favorite")
     })
 }
-//The function that shows and builds the charts based on whats clicked  
+
+//builds and shows the chart based on which card is clicked  
 function showchart(type) {
     if (!mycanvas) {
         return
     }
 
-    if (currenttype == type && currentchart != null) { //if the same card is clicked twice destroy the chart
+    //if the same card is clicked twice destroy the chart
+    if (currenttype == type && currentchart != null) {
         currentchart.destroy()
         currentchart = null
         currenttype = null
@@ -81,20 +85,21 @@ function showchart(type) {
         return
     }
 
-    if (currentchart != null) { //destroy previous chart 
+    //destroy previous chart before drawing a new one
+    if (currentchart != null) {
         currentchart.destroy()
     }
 
     let chartData = {}
-    //chart data is gotten from flask in the html and the data is used to build the charts labels, data etc
+    //chart data comes from flask via the html and is used to build the chart labels and values etc
     if (type == "workouts") {
-    chartData = {
-        labels: CHART_DATA.labels,
-        data: CHART_DATA.workouts,
-        label: "Workouts This Week",
-        type: "bar"
+        chartData = {
+            labels: CHART_DATA.labels,
+            data: CHART_DATA.workouts,
+            label: "Workouts This Week",
+            type: "bar"
+        }
     }
-}
 
     if (type == "time") {
         chartData = {
@@ -122,19 +127,21 @@ function showchart(type) {
             type: "doughnut"
         }
     }
+
     if (type == "races") {
-    chartData = {
-        labels: ["Upcoming", "Past", "PBs"],
-        data: [
-            CHART_DATA.upcoming_races,
-            CHART_DATA.past_races,
-            CHART_DATA.personal_bests
-        ],
-        label: "Race Summary",
-        type: "bar"
+        chartData = {
+            labels: ["Upcoming", "Past", "PBs"],
+            data: [
+                CHART_DATA.upcoming_races,
+                CHART_DATA.past_races,
+                CHART_DATA.personal_bests
+            ],
+            label: "Race Summary",
+            type: "bar"
+        }
     }
-}
-//adding some nice colors to me the charts look nice using the same yellow as the rest of the site
+
+    //adding colors to make the charts look nice, default is the yellow used on the rest of the site
     let chartColours = "#f5c518"
     let borderColours = "#f5c518"
 
@@ -169,7 +176,8 @@ function showchart(type) {
             "#0a0a0a"
         ]
     }
-    //actually making the chart that the data was enterd in above using Chart.js library
+
+    //actually building the chart using the Chart.js library
     currentchart = new Chart(mycanvas, {
         type: chartData.type,
         data: {
@@ -207,37 +215,42 @@ function showchart(type) {
         }
     })
 
-    document.querySelector("#chartArea").classList.add("active") //show the area around the chart
+    //show the area around the chart
+    document.querySelector("#chartArea").classList.add("active")
     currenttype = type
 }
-//The Drop Down search bar which was made instead of a seperate page for searching
+
+//drop down search bar (made instead of a seperate page for searching)
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
-let searchTimer = null; //make search bar a bit delayed so its not instant after every stroke
+let searchTimer = null; //makes search a bit delayed so it doesnt fire on every keystroke
 
 if (searchInput) {
-    searchInput.addEventListener("input", function () { //activate if typing
+    searchInput.addEventListener("input", function () { //runs when typing
         const query = searchInput.value.trim();
 
-        clearTimeout(searchTimer); //cancel a search until user is done typing
+        clearTimeout(searchTimer); //cancel pending search if user keeps typing
 
-        if (query === "") { //hide if the input is empty 
+        if (query === "") { //hide if input is empty 
             hideDropdown();
             return;
         }
 
-        searchTimer = setTimeout(function () { //search the database only after 250ms after the last letter typed to not waste database searches on every letter
+        //wait 250ms after last keystroke before actually searching to avoid wasting database queries
+        searchTimer = setTimeout(function () {
             fetchSearchResults(query);
         }, 250);
     });
 
-    document.addEventListener("click", function (event) { //if the user clicks off get rid of dropdown
+    //if user clicks off get rid of dropdown
+    document.addEventListener("click", function (event) {
         if (!event.target.closest(".search-wrapper")) {
             hideDropdown();
         }
     });
 }
-//calls the flask api and passes results to the renderresults function
+
+//calls the flask api and passes results to renderResults
 function fetchSearchResults(query) {
     fetch("/api/search?q=" + encodeURIComponent(query))
         .then(function (response) {
@@ -251,7 +264,8 @@ function fetchSearchResults(query) {
             hideDropdown();
         });
 }
-//makes the html for the drop down using the search results 
+
+//builds the html for the dropdown using the search results 
 function renderResults(results) {
     if (results.length === 0) {
         searchResults.innerHTML = '<div class="search-empty">No activities found</div>';
@@ -259,7 +273,8 @@ function renderResults(results) {
         return;
     }
 
-    let html = ""; //go through and make a clickable link to the its view activity page
+    let html = "";
+    //loop through results and make each one a clickable link to its view activity page
     for (const activity of results) {
         const distance = activity.distance ? activity.distance + " km" : "No distance";
         html += `
@@ -273,7 +288,8 @@ function renderResults(results) {
     searchResults.innerHTML = html;
     showDropdown();
 }
-//helper functions for showing and hiding the dropdown 
+
+//helper functions to show and hide the dropdown 
 function showDropdown() {
     searchResults.classList.add("active");
 }

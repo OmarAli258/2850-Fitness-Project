@@ -22,7 +22,7 @@
                 <a href="/activities/new" class="btn btna" style="padding: 1rem 1.5rem; font-size: 1.1rem;">Log Activity</a>
             </div>
         </section>
-
+        <!-- Friends Section -->
         <section class="friends-page">
             <div class="friends-section">
                 <h2>Find Friends</h2>
@@ -34,7 +34,7 @@
                     <div id="friendSearchResults" class="search-dropdown"></div>
                 </div>
             </div>
-
+            <!-- only shows if user has incoming friend requests -->
             {% if pending %}
             <div class="friends-section">
                 <h2>Pending Requests</h2>
@@ -58,7 +58,7 @@
                 </div>
             </div>
             {% endif %}
-
+            <!--list of friends youve accepted-->>
             <div class="friends-section">
                 <h2>Your Friends ({{ friends|length }})</h2>
                 {% if friends %}

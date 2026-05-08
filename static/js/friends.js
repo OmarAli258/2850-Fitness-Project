@@ -1,22 +1,25 @@
+//search system for finding users to add as friends, similar to the dashboard search but for users instead of activites
 const friendSearchInput = document.getElementById("friendSearchInput");
 const friendSearchResults = document.getElementById("friendSearchResults");
-let friendSearchTimer = null;
+let friendSearchTimer = null; //delays the search so its not firing on every letter typed
 
 if (friendSearchInput) {
-    friendSearchInput.addEventListener("input", function () {
+    friendSearchInput.addEventListener("input", function () { //runs when user types in the boxx
         const query = friendSearchInput.value.trim();
-        clearTimeout(friendSearchTimer);
+        clearTimeout(friendSearchTimer); //cancels any pending search
 
-        if (query === "") {
+        if (query === "") { //hide dropdown if empty
             friendSearchResults.classList.remove("active");
             return;
         }
 
+        //wait 0.25s after typing stops before actually searching
         friendSearchTimer = setTimeout(function () {
             fetchUserResults(query);
         }, 250);
     });
 
+    //hide dropdown if user clicks outside the search area
     document.addEventListener("click", function (event) {
         if (!event.target.closest(".search-wrapper")) {
             friendSearchResults.classList.remove("active");
@@ -24,6 +27,7 @@ if (friendSearchInput) {
     });
 }
 
+//calls the flask api to search for users by name
 function fetchUserResults(query) {
     fetch("/api/users/search?q=" + encodeURIComponent(query))
         .then(function (response) {
@@ -37,6 +41,7 @@ function fetchUserResults(query) {
         });
 }
 
+//builds the dropdown showing each matching user with a send eequest button
 function renderUserResults(results) {
     if (results.length === 0) {
         friendSearchResults.innerHTML = '<div class="search-empty">No users found</div>';
@@ -45,6 +50,7 @@ function renderUserResults(results) {
     }
 
     let html = "";
+    //loop through all the users and create a clickable card with a send request button
     for (const user of results) {
         let actionHtml = `
             <form method="POST" action="/friends/request/${user.id}" style="margin-top: 0.5rem;">
