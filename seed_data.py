@@ -14,11 +14,11 @@ from werkzeug.security import generate_password_hash
 def create_users(cursor):
     """Create sample users"""
     users = [
-        {"id": str(uuid.uuid4()), "name": "Justin Doe", "email": "justin@example.com", "password": "password123"},
-        {"id": str(uuid.uuid4()), "name": "Sofia Garcia", "email": "sofia@example.com", "password": "password123"},
-        {"id": str(uuid.uuid4()), "name": "Layla Smith", "email": "layla@example.com", "password": "password123"},
-        {"id": str(uuid.uuid4()), "name": "Keith Johnson", "email": "keith@example.com", "password": "password123"},
-        {"id": str(uuid.uuid4()), "name": "Noah Williams", "email": "noah@example.com", "password": "password123"},
+        {"id": str(uuid.uuid4()), "name": "Justin Doe", "email": "justin@example.com", "password": "Password123!"},
+        {"id": str(uuid.uuid4()), "name": "Sofia Garcia", "email": "sofia@example.com", "password": "Password123!"},
+        {"id": str(uuid.uuid4()), "name": "Layla Smith", "email": "layla@example.com", "password": "Password123!"},
+        {"id": str(uuid.uuid4()), "name": "Keith Johnson", "email": "keith@example.com", "password": "Password123!"},
+        {"id": str(uuid.uuid4()), "name": "Noah Williams", "email": "noah@example.com", "password": "Password123!"},
     ]
 
     for user in users:
@@ -223,11 +223,11 @@ def main():
     connection.close()
     print("\n[OK] Database seeded successfully!")
     print("\nTest accounts:")
-    print("  Email: justin@example.com  |  Password: password123")
-    print("  Email: sofia@example.com  |  Password: password123")
-    print("  Email: layla@example.com   |  Password: password123")
-    print("  Email: keith@example.com   |  Password: password123")
-    print("  Email: noah@example.com    |  Password: password123")
+    print("  Email: justin@example.com  |  Password: Password123!")
+    print("  Email: sofia@example.com  |  Password: Password123!")
+    print("  Email: layla@example.com   |  Password: Password123!")
+    print("  Email: keith@example.com   |  Password: Password123!")
+    print("  Email: noah@example.com    |  Password: Password123!")
 
 
 if __name__ == "__main__":

@@ -170,25 +170,25 @@ See [Git Workflow](https://github.com/OmarAli258/2850-Fitness-Project/wiki/Git-W
 
 The following test accounts can be used to explore the application if they are available in the shared database. Each account represents one of the project personas.
 
-**Account 1: Justin**  
-- Email: `justin123@gmail.com`  
-- Password: `Justin123`
+**Account 1: Justin**
+- Email: `justin@example.com`
+- Password: `Password123!`
 
-**Account 2: Sofia**  
-- Email: `sofia.persona@gmail.com`  
-- Password: `Sofia123`
+**Account 2: Sofia**
+- Email: `sofia@example.com`
+- Password: `Password123!`
 
-**Account 3: Noah**  
-- Email: `noah.persona@gmail.com`  
-- Password: `Noah123`
+**Account 3: Noah**
+- Email: `noah@example.com`
+- Password: `Password123!`
 
-**Account 4: Keith**  
-- Email: `keith.persona@gmail.com`  
-- Password: `Keith123`
+**Account 4: Keith**
+- Email: `keith@example.com`
+- Password: `Password123!`
 
-**Account 5: Layla**  
-- Email: `layla.persona@gmail.com`  
-- Password: `Layla123`
+**Account 5: Layla**
+- Email: `layla@example.com`
+- Password: `Password123!`
 
 If these accounts are not available, a new account can be created through the **Sign Up** page.
 
