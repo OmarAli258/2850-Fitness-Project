@@ -6,6 +6,7 @@ from data import user_store
 auth = Blueprint("auth", __name__)
 
 # this file handles account signup, login, logout, validation and session setup
+# AI support was used to help plan the authentication flow, including signup validation, login checks and session handling.
 
 
 
