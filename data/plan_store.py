@@ -237,7 +237,11 @@ def get_plan_completion(user_id, plan_id):
         activities.append(activity)
         total_duration += int(row["duration"])
 
-    created_date = datetime.strptime(plan["created_at"], "%Y-%m-%d %H:%M:%S")
+    created_date_str = plan["created_at"]
+    try:
+        created_date = datetime.strptime(created_date_str, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        created_date = datetime.fromisoformat(created_date_str)
     now = datetime.now()
     days_since_created = max((now - created_date).days, 1)
 
