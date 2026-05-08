@@ -60,7 +60,7 @@
                     <label for="activity-duration">Duration</label>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                         <input type="number" id="activity-duration" name="duration" value="{{ form_data.duration }}" placeholder="e.g. 45" min="0" step="0.01" style="flex:2; min-width:160px;">
-                        <select name="duration_unit" style="flex:1; min-width:120px;">
+                        <select name="duration_unit" aria-label="Duration unit" style="flex:1; min-width:120px;">
                             <option value="minutes" {% if form_data.duration_unit != "hours" %}selected{% endif %}>minutes</option>
                             <option value="hours" {% if form_data.duration_unit == "hours" %}selected{% endif %}>hours</option>
                         </select>

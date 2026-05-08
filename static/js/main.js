@@ -26,3 +26,30 @@ function initFeedMaps() {
         map.fitBounds(map.getBounds());
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const exerciseCards = document.querySelector('.exerciseCards');
+    if (exerciseCards) {
+        exerciseCards.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') {
+                this.scrollLeft += 200;
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft') {
+                this.scrollLeft -= 200;
+                e.preventDefault();
+            }
+        });
+    }
+
+    document.querySelectorAll('[style*="overflow-x:auto"]').forEach(function(el) {
+        el.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') {
+                this.scrollLeft += 200;
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft') {
+                this.scrollLeft -= 200;
+                e.preventDefault();
+            }
+        });
+    });
+});
