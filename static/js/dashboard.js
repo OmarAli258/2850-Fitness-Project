@@ -1,3 +1,5 @@
+// used Claude to explain the chart switching logic with Chart.js, the carousel index tracking for prev/next buttons,
+// and the fetch API call to the search endpoint
 //first thing in the javascript is the carousel 
 const backbtn = document.getElementById("previous")
 const forwardbtn = document.getElementById("next")

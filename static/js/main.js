@@ -1,4 +1,5 @@
-const quotes=["Discipline Is The Gateway To Your Dreams","Dont Dream Of Winning Train For it","Get Comfortable With Being Uncomfortable","Make Excuses Or Make Progress"]
+// Used Claude to brainstorm ideas and eventually led to the moving banner
+ quotes=["Discipline Is The Gateway To Your Dreams","Dont Dream Of Winning Train For it","Get Comfortable With Being Uncomfortable","Make Excuses Or Make Progress"]
 //above are the quotes in the banner
 const quoteelement= document.getElementById("quotes")
 let index = 0

@@ -1,3 +1,5 @@
+# used Claude to explain how to filter the feed by friend IDs using IN with placeholders, and how to handle the like and comment functionality with separate database tables
+
 from flask import Blueprint, render_template, redirect, session, request, jsonify
 from data.database import get_connection
 from data import friends_store
@@ -7,6 +9,7 @@ import uuid
 feed = Blueprint("feed", __name__)
 
 
+# main feed page route, shows friends section, view toggle, and activities with likes and comments
 @feed.route("/feed")
 def index():
     if "user_id" not in session:
@@ -23,6 +26,7 @@ def index():
     connection = get_connection()
     cursor = connection.cursor()
 
+    # decide which activities to show based on the view toggle
     if view == "everyone":
         cursor.execute("""
             SELECT activities.*, users.name as user_name
@@ -55,6 +59,7 @@ def index():
         """, (user_id,))
         activities = [dict(row) for row in cursor.fetchall()]
 
+    # for each activity, fetch its likes and comments to display
     for activity in activities:
         cursor.execute("SELECT COUNT(*) as count FROM activity_likes WHERE activity_id = %s", (activity['id'],))
         activity['like_count'] = cursor.fetchone()['count']
@@ -97,6 +102,7 @@ def index():
     )
 
 
+# toggles a like on an activity if the user already liked it removes it. if not it adds a new like
 @feed.route('/feed/<activity_id>/like', methods=['POST'])
 def toggle_like(activity_id):
     if "user_id" not in session:
@@ -107,6 +113,7 @@ def toggle_like(activity_id):
         connection = get_connection()
         cursor = connection.cursor()
 
+        # check if user has already liked this activity
         cursor.execute("SELECT id FROM activity_likes WHERE activity_id = %s AND user_id = %s", (activity_id, user_id))
         existing_like = cursor.fetchone()
 
@@ -129,6 +136,7 @@ def toggle_like(activity_id):
     return redirect(f"/feed?view={view}")
 
 
+# adds a new comment to an activity from the comment form
 @feed.route('/feed/<activity_id>/comments', methods=['POST'])
 def add_comment(activity_id):
     if "user_id" not in session:
@@ -144,6 +152,7 @@ def add_comment(activity_id):
         connection = get_connection()
         cursor = connection.cursor()
 
+        # save the comment with a unique id and current timestamp
         comment_id = str(uuid.uuid4())
         cursor.execute("""
             INSERT INTO activity_comments (id, activity_id, user_id, body, created_at)
@@ -160,6 +169,7 @@ def add_comment(activity_id):
     return redirect(f"/feed?view={view}")
 
 
+# deletes a comment - only allowed if the current user is the one who wrote it
 @feed.route('/feed/comments/<comment_id>/delete', methods=['POST'])
 def delete_comment(comment_id):
     if "user_id" not in session:
@@ -173,6 +183,7 @@ def delete_comment(comment_id):
         cursor.execute("SELECT user_id FROM activity_comments WHERE id = %s", (comment_id,))
         comment = cursor.fetchone()
 
+        # only delete if current user is the comment author for security 
         if comment and comment['user_id'] == user_id:
             cursor.execute("DELETE FROM activity_comments WHERE id = %s", (comment_id,))
             connection.commit()

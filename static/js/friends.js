@@ -1,3 +1,6 @@
+// used Claude to explain how to build the user search dropdown using the same fetch and dropdown pattern from the activity search, 
+// and how to show each result as a card with a Send Request form
+
 //search system for finding users to add as friends, similar to the dashboard search but for users instead of activites
 const friendSearchInput = document.getElementById("friendSearchInput");
 const friendSearchResults = document.getElementById("friendSearchResults");
