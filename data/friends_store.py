@@ -122,7 +122,7 @@ def get_friend_ids(user_id):
 
 
 def search_users(query, current_user_id):
-    # search users by name, excludes current user from results
+    # search users by name and include existing friendship status for the current user
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -130,11 +130,26 @@ def search_users(query, current_user_id):
 
     cursor.execute(
         """
-        SELECT id, name, email FROM users
-        WHERE LOWER(name) LIKE %s AND id != %s
+        SELECT
+            users.id,
+            users.name,
+            users.email,
+            CASE
+                WHEN friendships.status = 'accepted' THEN 'friends'
+                WHEN friendships.status = 'pending' AND friendships.from_user_id = %s THEN 'request_sent'
+                WHEN friendships.status = 'pending' AND friendships.to_user_id = %s THEN 'request_received'
+                ELSE 'none'
+            END as friendship_status
+        FROM users
+        LEFT JOIN friendships ON (
+            (friendships.from_user_id = %s AND friendships.to_user_id = users.id)
+            OR
+            (friendships.to_user_id = %s AND friendships.from_user_id = users.id)
+        )
+        WHERE LOWER(users.name) LIKE %s AND users.id != %s
         LIMIT 10
         """,
-        (search, current_user_id),
+        (current_user_id, current_user_id, current_user_id, current_user_id, search, current_user_id),
     )
 
     users = [dict(row) for row in cursor.fetchall()]
