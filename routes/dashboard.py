@@ -4,6 +4,7 @@ from data import activity_store, race_store, plan_store
 dashboard = Blueprint("dashboard", __name__)
 
 #main dashboard route shows stats, recent activities, plans and chart data
+
 @dashboard.route("/dashboard")
 def show_dashboard():
     if "user_id" not in session:
@@ -18,6 +19,7 @@ def show_dashboard():
 
     #split activities into past and upcoming 
     from datetime import date
+
     today = date.today().isoformat()
     past_activities = [a for a in all_activities if a["date"] < today][:4]
     upcoming_activities = [a for a in all_activities if a["date"] >= today]
@@ -40,7 +42,7 @@ def show_dashboard():
         upcoming_activities=upcoming_activities,
         plans=plans,
         race_summary=race_summary,
-        chart_data=chart_data
+        chart_data=chart_data,
     )
 
 
@@ -53,14 +55,16 @@ def api_search():
     query = request.args.get("q", "").strip()
     results = activity_store.search_activities(session["user_id"], query)
 
-    return jsonify([
-        {
-            "id": activity["id"],
-            "type": activity["type"],
-            "date": activity["date"],
-            "duration": activity["duration"],
-            "distance": activity["distance"],
-            "notes": activity["notes"] or "",
-        }
-        for activity in results
-    ])
+    return jsonify(
+        [
+            {
+                "id": activity["id"],
+                "type": activity["type"],
+                "date": activity["date"],
+                "duration": activity["duration"],
+                "distance": activity["distance"],
+                "notes": activity["notes"] or "",
+            }
+            for activity in results
+        ]
+    )

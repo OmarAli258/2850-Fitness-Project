@@ -52,13 +52,25 @@ function renderUserResults(results) {
     let html = "";
     //loop through all the users and create a clickable card with a send request button
     for (const user of results) {
+        let actionHtml = `
+            <form method="POST" action="/friends/request/${user.id}" style="margin-top: 0.5rem;">
+                <button type="submit" class="btn btna" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Send Request</button>
+            </form>
+        `;
+
+        if (user.friendship_status === "friends") {
+            actionHtml = '<div class="search-result-meta" style="margin-top: 0.5rem; color: var(--yellow); font-weight: 700;">Already friends</div>';
+        } else if (user.friendship_status === "request_sent") {
+            actionHtml = '<div class="search-result-meta" style="margin-top: 0.5rem; color: var(--text-muted); font-weight: 700;">Request sent</div>';
+        } else if (user.friendship_status === "request_received") {
+            actionHtml = '<div class="search-result-meta" style="margin-top: 0.5rem; color: var(--text-muted); font-weight: 700;">Respond in pending requests</div>';
+        }
+
         html += `
             <div class="search-result">
                 <div class="search-result-type">${user.name}</div>
                 <div class="search-result-meta">${user.email}</div>
-                <form method="POST" action="/friends/request/${user.id}" style="margin-top: 0.5rem;">
-                    <button type="submit" class="btn btna" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Send Request</button>
-                </form>
+                ${actionHtml}
             </div>
         `;
     }

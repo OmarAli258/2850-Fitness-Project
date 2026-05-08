@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session, jsonify
+from flask import Blueprint, request, redirect, session, jsonify
 from data import friends_store
 
 friends = Blueprint("friends", __name__)
