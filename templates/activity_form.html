@@ -102,8 +102,9 @@
                 <div class="form-group">
                     <label for="activity-visibility">Activity Visibility</label>
                     <select id="activity-visibility" name="visibility" style="padding: 0.85rem 1rem; border-radius: 12px; border: 2px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 1rem; width: 100%;">
-                        <option value="Private" {% if not form_data.is_public %}selected{% endif %}>Private</option>
-                        <option value="Public" {% if form_data.is_public %}selected{% endif %}>Public</option>
+                        <option value="Private" {% if form_data.is_public == 0 %}selected{% endif %}>Private</option>
+                        <option value="Public" {% if form_data.is_public == 1 %}selected{% endif %}>Public</option>
+                        <option value="Friends" {% if form_data.is_public == 2 %}selected{% endif %}>Friends Only</option>
                     </select>
                 </div>
 
