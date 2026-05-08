@@ -78,7 +78,7 @@ def get_friends(user_id):
 
     cursor.execute(
         """
-        SELECT users.id, users.name, users.email
+        SELECT DISTINCT users.id, users.name, users.email
         FROM friendships
         JOIN users ON (
             (friendships.from_user_id = users.id AND friendships.to_user_id = %s)
@@ -86,6 +86,7 @@ def get_friends(user_id):
             (friendships.to_user_id = users.id AND friendships.from_user_id = %s)
         )
         WHERE friendships.status = 'accepted'
+        GROUP BY users.id
         """,
         (user_id, user_id),
     )
