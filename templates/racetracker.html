@@ -43,6 +43,9 @@
                                 </td>
                                 <td>{{ race['race_type'] }} km</td>
                                 <td>
+                                    <a href="/races/{{ race['id'] }}/edit" class="edit-btn">✏️</a>
+                                </td>
+                                <td>
                                     <form method="POST" action="/races/{{ race['id'] }}/delete">
                                         <button type="submit" class="delete-btn">🗑️</button>
                                     </form>
@@ -50,7 +53,7 @@
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="5">No upcoming races</td>
+                                <td colspan="6">No upcoming races</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -95,6 +98,9 @@
                                     {% endif %}
                                 </td>
                                 <td>
+                                    <a href="/races/{{ race['id'] }}/edit" class="edit-btn">✏️</a>
+                                </td>
+                                <td>
                                     <form method="POST" action="/races/{{ race['id'] }}/delete">
                                         <button type="submit" class="delete-btn">🗑️</button>
                                     </form>
@@ -102,7 +108,7 @@
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="8">No past races</td>
+                                <td colspan="9">No past races</td>
                             </tr>
                             {% endfor %}
                         </tbody>
