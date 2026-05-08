@@ -59,11 +59,47 @@ lets keyboard users skip past the navigation menu and go straight to main conten
 }
 
 body {
-    background: var(--bg);
+    background-color: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
 }
 
+body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(245, 197, 24, 0.15), transparent 70%);
+    z-index: -2;
+    pointer-events: none;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(245, 197, 24, 0.15), transparent 70%);
+    z-index: -2;
+    pointer-events: none;
+}
+main::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(245, 197, 24, 0.2), transparent);
+    transform: rotate(15deg);
+    transform-origin: top;
+    z-index: -1;
+    pointer-events: none;
+}
 nav {
     display: flex;
     align-items: center;
@@ -290,7 +326,7 @@ nav form {
 .banner p {
     display: inline-block;
     padding-left: 100%;
-    animation: slideQuotes 30s linear infinite;
+    animation: slideQuotes 60s linear infinite;
     -webkit-animation: slideQuotes 30s linear infinite;
     font-size: 1rem;
 }
@@ -322,7 +358,6 @@ nav form {
     border-radius: 20px;
     margin: 2rem 5%;
 }
-
 .activitesRight { 
     width: 30%;
     display: flex;
@@ -336,10 +371,12 @@ nav form {
 }
 
 .activitesRight p {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--text);
     text-align: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--yellow);
 }
 
 .activitiesLeft{
