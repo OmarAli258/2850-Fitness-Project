@@ -70,7 +70,7 @@ def racetracker():
 
 
 # shows the edit race form already filled with the exsisting race info
-    )
+    
 
 
 @races.route("/races/<race_id>/edit", methods=["GET"])
