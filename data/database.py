@@ -200,5 +200,7 @@ def setup_database():
 # - shows where the users table is created
 # - shows where the activities table is created
 # - handles older activity tables with missing columns
+# - shows where feed likes and comments are stored
 # - shows where race and plan tables are created
 # - shows where plan consistency records are stored
+# - shows where friendships and friend requests are stored

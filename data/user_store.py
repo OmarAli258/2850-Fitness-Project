@@ -2,8 +2,11 @@ import uuid
 from data.database import get_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# this file handles user account storage, password hashing and login checks
+
 
 def register(name, email, password):
+    # this creates a new user account only if the email is not already registered
     email = email.lower()
 
     connection = get_connection()
@@ -37,6 +40,7 @@ def register(name, email, password):
 
 
 def login(email, password):
+    # this loads a user by email and checks the typed password against the stored hash
     email = email.lower()
 
     connection = get_connection()
@@ -63,6 +67,7 @@ def login(email, password):
 
 
 def find_by_id(user_id):
+    # this finds a user from the session user id when the app needs account details
     connection = get_connection()
     cursor = connection.cursor()
 
