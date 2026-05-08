@@ -799,21 +799,6 @@ td {
     line-height: 1.5;
 }
 
-.pbrow:hover td {
-    color: #0a0a0a;
-    border-bottom: 1px solid #0a0a0a;
-}
-.pbrow td {
-    background: rgb(198, 198, 20);
-    color: #0a0a0a;
-    font-weight: 700;
-}
-
-.pbrow:hover td {
-    color: #0a0a0a;
-    border-bottom: 1px solid #0a0a0a;
-}
-
 .pbrow td:nth-last-child(1),
 .pbrow td:nth-last-child(2) {
     background: var(--card);
