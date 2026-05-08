@@ -1,4 +1,5 @@
-
+/* Used Claude to help brainstorm across the website, 
+and teaching us how to add anything we didnt know which properties represented, for example how to add styling on hover */
 
 :root {
     --bg: #0a0a0a;
@@ -8,13 +9,11 @@
     --card: #111111;
     --border: #333333;
 }
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 /* accessibility - focus styles for keyboard navigation
 shows a yellow outline around any element that is currently selected
 helps keyboard-only users see where they are on the page */
@@ -59,7 +58,7 @@ lets keyboard users skip past the navigation menu and go straight to main conten
 .skip-link:focus {
     top: 0;
 }
-
+/* BODY and background orbs in the corners */
 body {
     background-color: var(--bg);
     color: var(--text);
@@ -89,19 +88,7 @@ body::after {
     z-index: -2;
     pointer-events: none;
 }
-main::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 50%;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, rgba(245, 197, 24, 0.2), transparent);
-    transform: rotate(15deg);
-    transform-origin: top;
-    z-index: -1;
-    pointer-events: none;
-}
+/* Navbar Styling*/
 nav {
     display: flex;
     align-items: center;
@@ -164,6 +151,7 @@ nav form {
     margin: 0;
     padding: 0;
 }
+/* Hero Section on Home*/
 .hero {
     display: flex;
     align-items: center;
@@ -252,7 +240,7 @@ nav form {
     color: #0a0a0a !important;
 }
 
-
+/* Buttons across website */
 .btna {
     background: var(--yellow) !important;
     color: #0a0a0a !important;
