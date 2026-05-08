@@ -238,15 +238,15 @@ nav form {
 }
 
 .btn-delete {
-    background: #ff4d4d !important;
+    background: #c62828 !important;
     color: white !important;
-    border: 2px solid #ff4d4d !important;
+    border: 2px solid #c62828 !important;
     font-weight: 700;
 }
 
 .btn-delete:hover {
     background: transparent !important;
-    color: #ff4d4d !important;
+    color: #c62828 !important;
 }
 
 .btnb {
@@ -385,6 +385,12 @@ table th {
     width: 100%;
     padding: 1rem 5%;
     gap: 1rem;
+    scroll-behavior: smooth;
+}
+
+.exerciseCards:focus{
+    outline: 3px solid var(--accent, #f5c518);
+    outline-offset: -3px;
 }
 .exerciseCard{
     border-radius: 0.375rem;

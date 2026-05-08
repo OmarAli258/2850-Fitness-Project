@@ -108,12 +108,12 @@
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Rate Session Consistency</h2>
             <form action="/plans/{{ completion.plan.id }}/adherence" method="post" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;">
                 <div style="flex: 1; min-width: 200px;">
-                    <label style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">Session Date</label>
-                    <input type="date" name="session_date" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
+                    <label for="session_date" style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">Session Date</label>
+                    <input type="date" id="session_date" name="session_date" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
                 </div>
                 <div style="flex: 2; min-width: 280px;">
-                    <label style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">How well did you follow the plan?</label>
-                    <select name="rating" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
+                    <label for="rating" style="font-size: 1rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">How well did you follow the plan?</label>
+                    <select id="rating" name="rating" required style="width: 100%; padding: 1rem; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-raised); color: var(--text); font-size: 1.1rem;">
                         <option value="5">5 - Excellent (fully followed)</option>
                         <option value="4">4 - Good (mostly followed)</option>
                         <option value="3">3 - On Track (partially followed)</option>
@@ -132,7 +132,7 @@
         <!-- this section lists all saved consistency ratings for the plan -->
         <section style="padding: 3rem 5% 4rem;">
             <h2 style="margin-bottom: 2rem; font-size: 1.75rem; padding: 0 0.5rem;">Consistency Log</h2>
-            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1.5rem;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow-x:auto; padding: 1.5rem;" tabindex="0" aria-label="Consistency log table. Use left and right arrow keys to scroll.">
                 <table style="min-width: 700px; border-collapse: separate; border-spacing: 0 0.75rem;">
 <thead>
                             <tr>
