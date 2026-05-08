@@ -1,3 +1,4 @@
+import io
 from werkzeug.security import generate_password_hash
 
 
@@ -218,3 +219,149 @@ class TestActivityCRUD:
         )
         assert response.status_code == 302
         assert "/activities" in response.location
+
+
+class TestGPXUpload:
+    def test_create_activity_with_gpx_file(self, authenticated_client, db_connection):
+        gpx_content = b"""<?xml version="1.0" encoding="UTF-8"?>
+<gpx>
+  <trk>
+    <name>Test Run</name>
+    <trkseg>
+      <trkpt lat="51.5074" lon="-0.1278">
+        <ele>10.0</ele>
+        <time>2025-05-01T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="51.5084" lon="-0.1288">
+        <ele>12.0</ele>
+        <time>2025-05-01T10:30:00Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>"""
+
+        response = authenticated_client.post(
+            "/activities/new",
+            data={
+                "activity_type": "Running",
+                "date": "2025-05-01",
+                "duration": "",
+                "duration_unit": "minutes",
+                "distance": "",
+                "notes": "Morning run",
+                "visibility": "private",
+                "gpx_file": (io.BytesIO(gpx_content), "test.gpx"),
+            },
+            follow_redirects=True,
+        )
+
+        assert response.status_code == 200
+
+        cursor = db_connection.cursor()
+        cursor.execute("SELECT * FROM activities WHERE user_id = ?", ("test-user-id",))
+        activity = cursor.fetchone()
+
+        assert activity is not None
+        assert activity["type"] == "Running"
+        assert activity["route_data"] is not None
+
+    def test_edit_activity_preserves_route_data(self, authenticated_client, db_connection):
+        cursor = db_connection.cursor()
+        cursor.execute(
+            "INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, is_public) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                "activity-with-route",
+                "test-user-id",
+                "Running",
+                "2025-05-01",
+                30,
+                "5.0",
+                "Morning run",
+                "[[51.5074, -0.1278], [51.5084, -0.1288]]",
+                0,
+            ),
+        )
+        db_connection.commit()
+
+        response = authenticated_client.post(
+            "/activities/activity-with-route/edit",
+            data={
+                "activity_type": "Running",
+                "date": "2025-05-01",
+                "duration": "30",
+                "duration_unit": "minutes",
+                "distance": "5.0",
+                "notes": "Updated notes",
+                "visibility": "private",
+                "gpx_file": "",
+            },
+            follow_redirects=True,
+        )
+
+        assert response.status_code == 200
+
+        cursor.execute("SELECT route_data FROM activities WHERE id = ?", ("activity-with-route",))
+        activity = cursor.fetchone()
+
+        assert activity["route_data"] is not None
+        assert "[[51.5074" in activity["route_data"]
+
+    def test_edit_activity_with_new_gpx_replaces_route(
+        self, authenticated_client, db_connection
+    ):
+        cursor = db_connection.cursor()
+        cursor.execute(
+            "INSERT INTO activities (id, user_id, type, date, duration, distance, notes, route_data, is_public) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                "activity-old-route",
+                "test-user-id",
+                "Running",
+                "2025-05-01",
+                30,
+                "5.0",
+                "Morning run",
+                "[[51.5074, -0.1278], [51.5084, -0.1288]]",
+                0,
+            ),
+        )
+        db_connection.commit()
+
+        new_gpx_content = b"""<?xml version="1.0" encoding="UTF-8"?>
+<gpx>
+  <trk>
+    <name>New Route</name>
+    <trkseg>
+      <trkpt lat="52.5074" lon="-0.2278">
+        <ele>10.0</ele>
+        <time>2025-05-02T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="52.5084" lon="-0.2288">
+        <ele>12.0</ele>
+        <time>2025-05-02T10:30:00Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>"""
+
+        response = authenticated_client.post(
+            "/activities/activity-old-route/edit",
+            data={
+                "activity_type": "Running",
+                "date": "2025-05-02",
+                "duration": "30",
+                "duration_unit": "minutes",
+                "distance": "5.0",
+                "notes": "Updated",
+                "visibility": "private",
+                "gpx_file": (io.BytesIO(new_gpx_content), "new_route.gpx"),
+            },
+            follow_redirects=True,
+        )
+
+        assert response.status_code == 200
+
+        cursor.execute("SELECT route_data FROM activities WHERE id = ?", ("activity-old-route",))
+        activity = cursor.fetchone()
+
+        assert activity["route_data"] is not None
+        assert "[[52.5074" in activity["route_data"]

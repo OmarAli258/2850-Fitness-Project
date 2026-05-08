@@ -174,28 +174,50 @@ def update_activity(
     notes,
     is_public=0,
     plan_id=None,
+    route_data=None,
 ):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute(
-        """
-        UPDATE activities
-        SET type = %s, date = %s, duration = %s, distance = %s, notes = %s, is_public = %s, plan_id = %s
-        WHERE id = %s AND user_id = %s
-        """,
-        (
-            activity_type,
-            date,
-            int(duration),
-            distance,
-            notes,
-            is_public,
-            plan_id,
-            activity_id,
-            user_id,
-        ),
-    )
+    if route_data is not None:
+        cursor.execute(
+            """
+            UPDATE activities
+            SET type = %s, date = %s, duration = %s, distance = %s, notes = %s, is_public = %s, plan_id = %s, route_data = %s
+            WHERE id = %s AND user_id = %s
+            """,
+            (
+                activity_type,
+                date,
+                int(duration),
+                distance,
+                notes,
+                is_public,
+                plan_id,
+                route_data,
+                activity_id,
+                user_id,
+            ),
+        )
+    else:
+        cursor.execute(
+            """
+            UPDATE activities
+            SET type = %s, date = %s, duration = %s, distance = %s, notes = %s, is_public = %s, plan_id = %s
+            WHERE id = %s AND user_id = %s
+            """,
+            (
+                activity_type,
+                date,
+                int(duration),
+                distance,
+                notes,
+                is_public,
+                plan_id,
+                activity_id,
+                user_id,
+            ),
+        )
 
     connection.commit()
     connection.close()

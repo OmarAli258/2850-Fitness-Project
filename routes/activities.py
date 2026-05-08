@@ -234,6 +234,39 @@ def save_edited_activity(activity_id):
     form_data = _build_form_data(request.form)
     error = _validate_activity(form_data)
 
+    route_data_json = None
+    existing_activity = activity_store.get_activity(session["user_id"], activity_id)
+    gpx_file = request.files.get("gpx_file")
+    if gpx_file and gpx_file.filename.endswith(".gpx"):
+        try:
+            gpx = gpxpy.parse(gpx_file)
+            route_points = []
+            for track in gpx.tracks:
+                for segment in track.segments:
+                    for point in segment.points:
+                        route_points.append([point.latitude, point.longitude])
+
+            if route_points:
+                route_data_json = json.dumps(route_points)
+
+                moving_data = gpx.get_moving_data()
+                if moving_data and form_data["distance"] == "":
+                    distance_km = moving_data.moving_distance / 1000.0
+                    form_data["distance"] = str(round(distance_km, 2))
+
+                if form_data["duration"] == "":
+                    duration_min = (
+                        gpx.get_duration() / 60.0 if gpx.get_duration() else 0
+                    )
+                    form_data["duration"] = str(int(duration_min))
+
+                error = _validate_activity(form_data)
+        except Exception:
+            error = "Could not parse GPX file. Please ensure it's a valid GPX file."
+
+    elif not gpx_file and existing_activity and existing_activity.get("route_data"):
+        route_data_json = existing_activity["route_data"]
+
     if error:
         active_plans = plan_store.get_plans_for_user(session["user_id"])
         return render_template(
@@ -259,6 +292,7 @@ def save_edited_activity(activity_id):
         notes=form_data["notes"],
         is_public=form_data.get("is_public", 0),
         plan_id=plan_id,
+        route_data=route_data_json,
     )
 
     return redirect("/activities")
