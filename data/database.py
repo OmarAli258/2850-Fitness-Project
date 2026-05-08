@@ -16,7 +16,7 @@ def get_connection():
 
 # this function creates the database tables if they do not already exist
 def setup_database():
- 
+
     connection = get_connection()
     cursor = connection.cursor()
 

@@ -9,9 +9,7 @@ auth = Blueprint("auth", __name__)
 # AI support was used to help plan the authentication flow, including signup validation, login checks and session handling.
 
 
-
 # LOGIN
-
 
 
 @auth.route("/login", methods=["GET"])

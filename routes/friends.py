@@ -4,7 +4,7 @@ from data import friends_store
 friends = Blueprint("friends", __name__)
 
 
-#/friends just redirects to /feed since the friends UI is on the feed page now
+# /friends just redirects to /feed since the friends UI is on the feed page now
 @friends.route("/friends")
 def friends_page():
     if "user_id" not in session:

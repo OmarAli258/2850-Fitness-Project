@@ -150,7 +150,14 @@ def search_users(query, current_user_id):
         WHERE LOWER(users.name) LIKE %s AND users.id != %s
         LIMIT 10
         """,
-        (current_user_id, current_user_id, current_user_id, current_user_id, search, current_user_id),
+        (
+            current_user_id,
+            current_user_id,
+            current_user_id,
+            current_user_id,
+            search,
+            current_user_id,
+        ),
     )
 
     users = [dict(row) for row in cursor.fetchall()]

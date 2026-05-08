@@ -3,7 +3,8 @@ from data import activity_store, race_store, plan_store
 
 dashboard = Blueprint("dashboard", __name__)
 
-#main dashboard route shows stats, recent activities, plans and chart data
+# main dashboard route shows stats, recent activities, plans and chart data
+
 
 @dashboard.route("/dashboard")
 def show_dashboard():
@@ -13,11 +14,11 @@ def show_dashboard():
     user_name = session.get("user_name", "User")
     user_id = session["user_id"]
 
-    # get all the data needed 
+    # get all the data needed
     summary = activity_store.get_activity_summary(user_id)
     all_activities = activity_store.get_activities_for_user(user_id)
 
-    #split activities into past and upcoming 
+    # split activities into past and upcoming
     from datetime import date
 
     today = date.today().isoformat()

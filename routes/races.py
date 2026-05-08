@@ -6,8 +6,10 @@ races = Blueprint("races", __name__)
 
 # strips everything except numbers and dots from a string, used to clean the race length input
 
+
 def check_valid(value):
     import re
+
     match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*(?:km)?\s*", value, re.IGNORECASE)
     if match is None:
         return None
@@ -65,12 +67,11 @@ def racetracker():
         races=races_with_countdown,
         summary=summary,
         days_since_last=days_since_last,
-        friends_pbs=friends_pbs
+        friends_pbs=friends_pbs,
     )
 
 
 # shows the edit race form already filled with the exsisting race info
-    
 
 
 @races.route("/races/<race_id>/edit", methods=["GET"])
@@ -109,7 +110,7 @@ def edit_race_submit(race_id):
         )
 
     # decide if the race is past or upcoming based on its date
-    status = 'upcoming' if date >= str(today_date.today()) else 'past'
+    status = "upcoming" if date >= str(today_date.today()) else "past"
 
     race_store.update_race(
         race_id=race_id,
@@ -125,7 +126,9 @@ def edit_race_submit(race_id):
 
     return redirect("/racetracker")
 
+
 # shows the empty add race form
+
 
 @races.route("/addrace", methods=["GET"])
 def addrace_page():
@@ -133,16 +136,17 @@ def addrace_page():
         return redirect("/login")
     return render_template("addrace.html", error="")
 
+
 # saves a new race from the add race form
 @races.route("/addrace", methods=["POST"])
 def add_race():
     if "user_id" not in session:
         return redirect("/login")
-    name        = request.form.get("name", "").strip()
-    location    = request.form.get("location", "").strip()
-    date        = request.form.get("date", "").strip()
+    name = request.form.get("name", "").strip()
+    location = request.form.get("location", "").strip()
+    date = request.form.get("date", "").strip()
     finish_time = request.form.get("finish_time", "").strip()
-    race_type   = check_valid(request.form.get("race_type", "").strip())
+    race_type = check_valid(request.form.get("race_type", "").strip())
 
     if not name or not race_type or not date:
         return render_template(
@@ -150,14 +154,12 @@ def add_race():
         )
 
     if float(race_type) > 100:
-        return render_template(
-            "addrace.html", error="Distance cannot exceed 100km."
-        )
+        return render_template("addrace.html", error="Distance cannot exceed 100km.")
 
     if any(char.isdigit() for char in location):
         return render_template("addrace.html", error="Location cannot contain numbers.")
 
-    status = 'upcoming' if date >= str(today_date.today()) else 'past'
+    status = "upcoming" if date >= str(today_date.today()) else "past"
 
     race_store.create_race(
         user_id=session["user_id"],
@@ -167,12 +169,13 @@ def add_race():
         date=date,
         finish_time=finish_time,
         is_pb=0,
-        status=status
+        status=status,
     )
 
     return redirect("/racetracker")
 
-# deletes a race when user clicks the delete button 
+
+# deletes a race when user clicks the delete button
 @races.route("/races/<race_id>/delete", methods=["POST"])
 def delete_race(race_id):
     if "user_id" not in session:

@@ -36,7 +36,11 @@ def _build_form_data(request_form=None, activity=None):
         "duration_unit": request_form.get("duration_unit", "minutes").strip(),
         "distance": request_form.get("distance", "").strip(),
         "notes": request_form.get("notes", "").strip(),
-        "is_public": 2 if request_form.get("visibility", "").lower() == "friends" else (1 if request_form.get("visibility", "").lower() == "public" else 0),
+        "is_public": (
+            2
+            if request_form.get("visibility", "").lower() == "friends"
+            else (1 if request_form.get("visibility", "").lower() == "public" else 0)
+        ),
         "plan_id": request_form.get("plan_id", "").strip(),
     }
 

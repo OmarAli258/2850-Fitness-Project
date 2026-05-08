@@ -50,10 +50,13 @@ def recalculate_personal_bests(user_id):
         race_key = (race["name"], race["race_type"])
         current_fastest = fastest_by_race.get(race_key)
 
-        if current_fastest is None or finish_seconds < current_fastest["finish_seconds"]:
+        if (
+            current_fastest is None
+            or finish_seconds < current_fastest["finish_seconds"]
+        ):
             fastest_by_race[race_key] = {
                 "id": race["id"],
-                "finish_seconds": finish_seconds
+                "finish_seconds": finish_seconds,
             }
 
     connection = get_connection()
@@ -65,7 +68,7 @@ def recalculate_personal_bests(user_id):
         SET is_pb = 0
         WHERE user_id = %s
         """,
-        (user_id,)
+        (user_id,),
     )
 
     for fastest_race in fastest_by_race.values():
@@ -75,7 +78,7 @@ def recalculate_personal_bests(user_id):
             SET is_pb = 1
             WHERE id = %s AND user_id = %s
             """,
-            (fastest_race["id"], user_id)
+            (fastest_race["id"], user_id),
         )
 
     connection.commit()
@@ -95,13 +98,14 @@ def add_race_rankings(races):
             continue
 
         race_key = (race["name"], race["race_type"])
-        race_groups.setdefault(race_key, []).append({
-            "race": race,
-            "finish_seconds": finish_seconds
-        })
+        race_groups.setdefault(race_key, []).append(
+            {"race": race, "finish_seconds": finish_seconds}
+        )
 
     for grouped_races in race_groups.values():
-        grouped_races.sort(key=lambda item: (item["finish_seconds"], item["race"]["date"]))
+        grouped_races.sort(
+            key=lambda item: (item["finish_seconds"], item["race"]["date"])
+        )
         current_rank = 0
         previous_seconds = None
 
@@ -123,7 +127,7 @@ def create_race(user_id, name, race_type, location, date, finish_time, is_pb, st
         INSERT INTO races (name, race_type, location, date, finish_time, is_pb, status, user_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
-        (name, race_type, location, date, finish_time, 0, status, user_id)
+        (name, race_type, location, date, finish_time, 0, status, user_id),
     )
     connection.commit()
     connection.close()
@@ -164,6 +168,7 @@ def get_races_for_user(user_id):
 
     return races
 
+
 # deletes a race from the database, only if it belongs to the user
 def delete_race(race_id, user_id):
     connection = get_connection()
@@ -180,6 +185,7 @@ def delete_race(race_id, user_id):
     connection.commit()
     connection.close()
     recalculate_personal_bests(user_id)
+
 
 # counts how many total races, upcoming races, past races and PBs a user has
 def get_race_summary(user_id):
@@ -226,6 +232,8 @@ def update_race_statuses(user_id):
 
     connection.commit()
     connection.close()
+
+
 # fetches one race by id, used by the edit page
 
 
@@ -254,8 +262,12 @@ def get_race_by_id(race_id, user_id):
         "status": row["status"],
         "user_id": row["user_id"],
     }
+
+
 # updates an existing race with new info from the edit form
-def update_race(race_id, user_id, name, race_type, location, date, finish_time, is_pb, status):
+def update_race(
+    race_id, user_id, name, race_type, location, date, finish_time, is_pb, status
+):
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -271,22 +283,25 @@ def update_race(race_id, user_id, name, race_type, location, date, finish_time, 
 
     connection.commit()
     connection.close()
+
+
 # get Pbs for current user and their friends, grouped by race type and length
 def get_friends_pbs(user_id):
     from data import friends_store
-    
+
     friend_ids = friends_store.get_friend_ids(user_id)
     all_user_ids = [user_id] + friend_ids
-    
+
     if not all_user_ids:
         return {}
-    
+
     connection = get_connection()
     cursor = connection.cursor()
-    
-    placeholders = ','.join(['%s'] * len(all_user_ids))
-    
-    cursor.execute(f"""
+
+    placeholders = ",".join(["%s"] * len(all_user_ids))
+
+    cursor.execute(
+        f"""
         SELECT races.name, races.race_type, races.finish_time, races.user_id, users.name as user_name
         FROM races
         JOIN users ON races.user_id = users.id
@@ -295,8 +310,10 @@ def get_friends_pbs(user_id):
           AND races.finish_time IS NOT NULL
           AND races.finish_time != ''
         ORDER BY races.finish_time ASC
-    """, all_user_ids)
-    
+    """,
+        all_user_ids,
+    )
+
     rows = cursor.fetchall()
     connection.close()
     grouped = {}
@@ -304,10 +321,12 @@ def get_friends_pbs(user_id):
         key = f"{row['name']} {row['race_type']}km"
         if key not in grouped:
             grouped[key] = []
-        grouped[key].append({
-            'user_name': row['user_name'],
-            'finish_time': row['finish_time'],
-            'is_you': row['user_id'] == user_id
-        })
+        grouped[key].append(
+            {
+                "user_name": row["user_name"],
+                "finish_time": row["finish_time"],
+                "is_you": row["user_id"] == user_id,
+            }
+        )
     return grouped
     recalculate_personal_bests(user_id)
