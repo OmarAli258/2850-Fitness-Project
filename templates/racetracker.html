@@ -128,6 +128,24 @@
                 {% endif %}
             </div>
         </div>
+        {% if friends_pbs %}
+        <section class="friends-pbs">
+            <h2>PB Comparison with Friends</h2>
+            {% for race_key, results in friends_pbs.items() %}
+            <div class="pb-group">
+                <h3>{{ race_key }}</h3>
+                <ul class="pb-list">
+                    {% for result in results %}
+                    <li class="{% if result.is_you %}pb-you{% endif %}">
+                        <span class="pb-name">{{ result.user_name }}{% if result.is_you %} (You){% endif %}</span>
+                        <span class="pb-time">{{ result.finish_time }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
     </main>
 </body>
 </html> 
