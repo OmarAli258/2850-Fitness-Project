@@ -2,6 +2,7 @@
 # its used by the activity routes, dashboard and search features
 
 # import uuid for unique activity ids and get connection for database access
+import re
 import uuid
 from data.database import get_connection
 
@@ -88,6 +89,8 @@ def get_activities_for_user(user_id, activity_type=None, search=None):
         values.append(activity_type)
 
     if search:
+        if not re.match(r"^[a-zA-Z0-9\s\-_]+$", search):
+            return []
         query += " AND (LOWER(type) LIKE %s OR LOWER(notes) LIKE %s)"
         search_text = f"%{search.lower()}%"
         values.extend([search_text, search_text])

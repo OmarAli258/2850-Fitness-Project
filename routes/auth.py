@@ -1,3 +1,5 @@
+import re
+
 from flask import Blueprint, request, session, redirect, render_template
 from data import user_store
 
@@ -64,10 +66,18 @@ def signup_submit():
 
     if name == "":
         error = "Name is required."
+    elif not re.match(r"^[a-zA-Z\s\-]+$", name):
+        error = "Name cannot contain numbers or special characters."
     elif email == "":
         error = "Email is required."
-    elif len(password) < 6:
-        error = "Password must be at least 6 characters."
+    elif len(password) < 8:
+        error = "Password must be at least 8 characters."
+    elif not re.search(r"[a-z]", password):
+        error = "Password must contain at least one lowercase letter."
+    elif not re.search(r"[A-Z]", password):
+        error = "Password must contain at least one uppercase letter."
+    elif not re.search(r"[ !\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]", password):
+        error = "Password must contain at least one special character."
     elif password != confirm:
         error = "Passwords do not match."
 

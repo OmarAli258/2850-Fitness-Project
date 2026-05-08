@@ -76,8 +76,9 @@ def _validate_activity(form_data):
         if distance < 0:
             return "Distance cannot be negative."
 
+        # Cap distance at 100km
         if distance > 100:
-            return "Distance cannot exceed 100 km."
+            form_data["distance"] = "100"
 
     return ""
 
