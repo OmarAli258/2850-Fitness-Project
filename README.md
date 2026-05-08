@@ -82,7 +82,7 @@ pip install flask python-dotenv psycopg2-binary werkzeug gpxpy chart.js
 
 ### 4. Create a .env File
 
-Create a file called `.env` in the root directory of the project:
+Create a file called `.env` in the root directory of the project. A safe template is included as `.env.example`:
 
 **Windows:**
 ```powershell
@@ -105,7 +105,7 @@ Example for local PostgreSQL:
 DATABASE_URL="postgresql://postgres:password@localhost:5432/fittrack"
 ```
 
-**Important:** Do not commit the `.env` file to GitHub because it contains private database credentials. The file is already in `.gitignore`.
+**Important:** Do not commit the real `.env` file to GitHub because it contains private database credentials. The file is already in `.gitignore`. For assessment, use the provided `.env.example` format and share the real database connection string privately if graders need access.
 
 ### 5. Set Up the Database
 
