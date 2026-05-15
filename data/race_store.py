@@ -126,12 +126,15 @@ def create_race(user_id, name, race_type, location, date, finish_time, is_pb, st
         """
         INSERT INTO races (name, race_type, location, date, finish_time, is_pb, status, user_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        RETURNING id, name, race_type, location, date, finish_time, is_pb, status, user_id
         """,
-        (name, race_type, location, date, finish_time, 0, status, user_id),
+        (name, race_type, location, date, finish_time, is_pb, status, user_id),
     )
+    race = cursor.fetchone()
     connection.commit()
     connection.close()
     recalculate_personal_bests(user_id)
+    return race
 
 
 # returns a list of all races belonging to a user, sorted by date

@@ -179,6 +179,12 @@ def save_plan():
     if "user_id" not in session:
         return redirect("/login")
 
+    # Check user exists in database
+    user = user_store.find_by_id(session["user_id"])
+    if user is None:
+        session.clear()
+        return redirect("/login")
+
     form_data = _build_form_data(request.form)
     error = _validate_plan(form_data)
 
@@ -193,15 +199,26 @@ def save_plan():
             error=error,
         )
 
-    plan_store.create_plan(
-        user_id=session["user_id"],
-        name=form_data["name"],
-        exercise_type=form_data["exercise_type"],
-        frequency=_format_frequency(form_data),
-        target_duration=_duration_to_minutes(form_data),
-        target_distance=form_data["target_distance"],
-        notes=form_data["notes"],
-    )
+    try:
+        plan_store.create_plan(
+            user_id=session["user_id"],
+            name=form_data["name"],
+            exercise_type=form_data["exercise_type"],
+            frequency=_format_frequency(form_data),
+            target_duration=_duration_to_minutes(form_data),
+            target_distance=form_data["target_distance"],
+            notes=form_data["notes"],
+        )
+    except Exception as e:
+        return render_template(
+            "plan_form.html",
+            heading="Create Plan",
+            action="/plans/new",
+            submit_label="Create Plan",
+            activity_types=activity_store.ACTIVITY_TYPES,
+            form_data=form_data,
+            error="Unable to create plan. Please try again.",
+        )
 
     return redirect("/plans")
 

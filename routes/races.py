@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, session
-from data import race_store
+from data import race_store, user_store
 from datetime import date as today_date, datetime
 
 races = Blueprint("races", __name__)
@@ -142,6 +142,13 @@ def addrace_page():
 def add_race():
     if "user_id" not in session:
         return redirect("/login")
+
+    # Check user exists in database
+    user = user_store.find_by_id(session["user_id"])
+    if user is None:
+        session.clear()
+        return redirect("/login")
+
     name = request.form.get("name", "").strip()
     location = request.form.get("location", "").strip()
     date = request.form.get("date", "").strip()

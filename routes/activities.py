@@ -6,7 +6,7 @@
 import gpxpy
 import json
 from flask import Blueprint, request, session, redirect, render_template
-from data import activity_store, plan_store
+from data import activity_store, plan_store, user_store
 from datetime import date
 
 activities = Blueprint("activities", __name__)
@@ -122,6 +122,12 @@ def save_activity():
     if "user_id" not in session:
         return redirect("/login")
 
+    # Check user exists in database
+    user = user_store.find_by_id(session["user_id"])
+    if user is None:
+        session.clear()
+        return redirect("/login")
+
     form_data = _build_form_data(request.form)
     error = _validate_activity(form_data)
 
@@ -173,17 +179,28 @@ def save_activity():
 
     plan_id = form_data["plan_id"] if form_data["plan_id"] else None
 
-    activity_store.create_activity(
-        user_id=session["user_id"],
-        activity_type=form_data["activity_type"],
-        date=form_data["date"],
-        duration=_duration_to_minutes(form_data),
-        distance=form_data["distance"],
-        notes=form_data["notes"],
-        route_data=route_data_json,
-        is_public=form_data.get("is_public", 0),
-        plan_id=plan_id,
-    )
+    try:
+        activity_store.create_activity(
+            user_id=session["user_id"],
+            activity_type=form_data["activity_type"],
+            date=form_data["date"],
+            duration=_duration_to_minutes(form_data),
+            distance=form_data["distance"],
+            notes=form_data["notes"],
+            route_data=route_data_json,
+            is_public=form_data.get("is_public", 0),
+            plan_id=plan_id,
+        )
+    except Exception as e:
+        return render_template(
+            "activity_form.html",
+            heading="Log Activity",
+            action="/activities/new",
+            submit_label="Log Activity",
+            activity_types=activity_store.ACTIVITY_TYPES,
+            form_data=form_data,
+            error="Unable to log activity. Please try again.",
+        )
 
     return redirect("/activities")
 
